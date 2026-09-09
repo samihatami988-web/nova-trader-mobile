@@ -1,22 +1,27 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06101e"><title>NOVA TRADER V4 CLOUD</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06101e">
+<title>NOVA TRADER V4.1 LONG + SHORT</title>
 <style>
-:root{--bg:#06101e;--p:#0c1a2d;--p2:#0a1525;--l:#183552;--t:#edf7ff;--m:#90a5ba;--c:#36c7ff;--g:#31d47f;--r:#ff5c74;--y:#f4c754}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#123157,#071225 35%,#050b15 80%);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;padding-bottom:92px}.w{max-width:820px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.title{font-size:21px;font-weight:950}.title b{color:var(--c)}.badge{padding:7px 10px;border:1px solid #20526e;border-radius:99px;font-size:10px;color:#a8e7ff}.card{background:linear-gradient(180deg,rgba(13,30,52,.97),rgba(8,18,32,.97));border:1px solid var(--l);border-radius:19px;padding:14px;margin-top:11px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat .v{font-weight:900;font-size:22px}.k{font-size:11px;color:var(--m);margin-bottom:5px}.row{display:flex;justify-content:space-between;align-items:center;gap:9px}.g{color:var(--g)}.r{color:var(--r)}.c{color:var(--c)}.y{color:var(--y)}button,input{font:inherit}button{border:1px solid #285071;background:#12304b;color:#fff;border-radius:13px;padding:11px 12px;font-weight:850}.green{background:#116840}.red{background:#7c2535}.cyan{background:#155a77}.full{width:100%}input{width:100%;background:#06101e;border:1px solid #24425f;border-radius:12px;color:#fff;padding:11px;margin-top:6px;direction:ltr}.settings{display:grid;grid-template-columns:1fr 1fr;gap:8px}.small{font-size:11px;color:var(--m)}.status{display:flex;align-items:center;gap:7px}.dot{width:9px;height:9px;border-radius:50%;background:#677}.dot.on{background:var(--g);box-shadow:0 0 10px var(--g)}.candidate{padding:10px 0;border-bottom:1px solid #162c44}.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.score{background:#071322;border:1px solid #16334f;border-radius:10px;padding:7px;text-align:center;font-size:11px}.pos{border-bottom:1px solid #18314c;padding:9px 0}.logline{font-size:11px;padding:7px 0;border-bottom:1px dashed #18314c}.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(4,10,18,.94);backdrop-filter:blur(13px);border-top:1px solid #18314c;padding:9px 10px calc(9px + env(safe-area-inset-bottom))}.bin{max-width:820px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}.notice{background:#2b230b;border:1px solid #6a571a;color:#f5db75;border-radius:12px;padding:10px;font-size:11px;line-height:1.6}@media(min-width:700px){.grid4{grid-template-columns:repeat(4,1fr)}} 
+:root{--bg:#06101e;--p:#0c1a2d;--p2:#0a1525;--l:#183552;--t:#edf7ff;--m:#90a5ba;--c:#36c7ff;--g:#31d47f;--r:#ff5c74;--y:#f4c754;--v:#bd7cff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:radial-gradient(circle at 50% -10%,#123157,#071225 35%,#050b15 80%);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;padding-bottom:94px}.w{max-width:860px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.title{font-size:21px;font-weight:950}.title b{color:var(--c)}.badge{padding:7px 10px;border:1px solid #20526e;border-radius:99px;font-size:10px;color:#a8e7ff}.card{background:linear-gradient(180deg,rgba(13,30,52,.97),rgba(8,18,32,.97));border:1px solid var(--l);border-radius:19px;padding:14px;margin-top:11px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat .v{font-weight:900;font-size:22px}.k{font-size:11px;color:var(--m);margin-bottom:5px}.row{display:flex;justify-content:space-between;align-items:center;gap:9px}.g{color:var(--g)}.r{color:var(--r)}.c{color:var(--c)}.y{color:var(--y)}.vlt{color:var(--v)}button,input{font:inherit}button{border:1px solid #285071;background:#12304b;color:#fff;border-radius:13px;padding:11px 12px;font-weight:850}.green{background:#116840}.red{background:#7c2535}.cyan{background:#155a77}.full{width:100%}input{width:100%;background:#06101e;border:1px solid #24425f;border-radius:12px;color:#fff;padding:11px;margin-top:6px;direction:ltr}.settings{display:grid;grid-template-columns:1fr 1fr;gap:8px}.small{font-size:11px;color:var(--m)}.status{display:flex;align-items:center;gap:7px}.dot{width:9px;height:9px;border-radius:50%;background:#677}.dot.on{background:var(--g);box-shadow:0 0 10px var(--g)}.candidate{padding:11px 0;border-bottom:1px solid #162c44}.scores{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}.score{background:#071322;border:1px solid #16334f;border-radius:10px;padding:7px 2px;text-align:center;font-size:10px}.pos{border-bottom:1px solid #18314c;padding:10px 0}.logline{font-size:11px;padding:7px 0;border-bottom:1px dashed #18314c}.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(4,10,18,.94);backdrop-filter:blur(13px);border-top:1px solid #18314c;padding:9px 10px calc(9px + env(safe-area-inset-bottom))}.bin{max-width:860px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}.notice{background:#2b230b;border:1px solid #6a571a;color:#f5db75;border-radius:12px;padding:10px;font-size:11px;line-height:1.6}.pill{display:inline-block;border:1px solid #27506c;border-radius:999px;padding:3px 7px;font-size:9px;margin-right:5px}.longPill{color:#7ff0ae;border-color:#1e7950}.shortPill{color:#ff95a7;border-color:#823448}.perpPill{color:#d7aaff;border-color:#68448b}.direction{font-size:11px;font-weight:900}.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sidebox{background:#071322;border:1px solid #173752;border-radius:14px;padding:10px}.bar{height:6px;border-radius:99px;background:#06101b;overflow:hidden;margin-top:6px}.fill{height:100%}.longfill{background:#31d47f}.shortfill{background:#ff5c74}@media(min-width:700px){.grid4{grid-template-columns:repeat(4,1fr)}}@media(max-width:420px){.scores{grid-template-columns:repeat(5,1fr)}.score{font-size:9px}}
 </style>
 </head>
-<body><div class="w">
-<div class="top"><div><div class="title">NOVA TRADER <b>V4 CLOUD</b></div><div class="small">24/7-ready Cloud Engine • Paper Trading</div></div><div class="badge">NO REAL MONEY</div></div>
+<body>
+<div class="w">
+<div class="top">
+  <div><div class="title">NOVA TRADER <b>V4.1</b></div><div class="small">LONG + SHORT • Cloud Paper Engine</div></div>
+  <div class="badge">NO REAL MONEY</div>
+</div>
 
-<div class="card" id="connectCard">
+<div class="card">
 <div class="row"><b>Cloud Connection</b><span id="conn" class="r">DISCONNECTED</span></div>
 <label class="small">Render Server URL<input id="server" placeholder="https://nova-trader-cloud.onrender.com"></label>
-<label class="small">NOVA Admin Key<input id="key" type="password" placeholder="private key you set in Render"></label>
+<label class="small">NOVA Admin Key<input id="key" type="password" placeholder="private admin key"></label>
 <button class="cyan full" style="margin-top:9px" onclick="saveConnect()">CONNECT</button>
-<div class="small" style="margin-top:7px">آدرس سرور و کلید فقط داخل Local Storage همین مرورگر ذخیره می‌شوند.</div>
 </div>
 
 <div class="grid grid4">
@@ -28,38 +33,146 @@
 
 <div class="card">
 <div class="row"><div class="status"><span id="dot" class="dot"></span><div><b>Cloud Auto Trader</b><div id="bot" class="small">UNKNOWN</div></div></div><span id="refresh" class="small">—</span></div>
-<div class="notice" style="margin-top:10px">V4 فقط Paper Trading است. «Market Risk» جایگزین audit امنیتی نیست و هیچ سودی تضمین نمی‌شود.</div>
+<div class="notice" style="margin-top:10px">SHORT فقط برای بازارهای Paper-Perp مجاز است. میم‌کوین Spot بدون بازار Perp هرگز Short نمی‌شود. Leverage آزمایشی حداکثر 2x است.</div>
+</div>
+
+<div class="card">
+<b>LONG / SHORT Performance</b>
+<div class="duo" style="margin-top:10px">
+<div class="sidebox"><div class="row"><b class="g">LONG</b><span id="longTrades" class="small">0 trades</span></div><div id="longPnl" style="font-size:20px;font-weight:900;margin-top:5px">$0.00</div><div id="longWr" class="small">Win 0%</div></div>
+<div class="sidebox"><div class="row"><b class="r">SHORT</b><span id="shortTrades" class="small">0 trades</span></div><div id="shortPnl" style="font-size:20px;font-weight:900;margin-top:5px">$0.00</div><div id="shortWr" class="small">Win 0%</div></div>
+</div>
 </div>
 
 <div class="card"><div class="row"><b>Open Positions</b><span id="pc" class="small">0</span></div><div id="positions"><div class="small">—</div></div></div>
 
 <div class="card"><div class="row"><b>Top Candidates</b><button onclick="load()">REFRESH</button></div><div id="cands"><div class="small">—</div></div></div>
 
-<div class="card"><b>Risk Settings</b><div class="settings" style="margin-top:10px">
+<div class="card">
+<b>Risk & Direction Settings</b>
+<div class="settings" style="margin-top:10px">
 <label class="small">Risk / Trade %<input id="risk" type="number" value=".75" step=".05"></label>
 <label class="small">Stop Loss %<input id="sl" type="number" value="4" step=".5"></label>
-<label class="small">Min Pump Score<input id="pump" type="number" value="80"></label>
+<label class="small">Min Pump Score<input id="pump" type="number" value="72"></label>
+<label class="small">Min Scalp Score<input id="scalp" type="number" value="74"></label>
+<label class="small">Min LONG Score<input id="longScore" type="number" value="72"></label>
+<label class="small">Min SHORT Score<input id="shortScore" type="number" value="72"></label>
+<label class="small">Perp Leverage<input id="lev" type="number" value="1" min="1" max="2" step=".25"></label>
 <label class="small">Min Liquidity $<input id="liq" type="number" value="20000"></label>
-</div><button class="full" style="margin-top:9px" onclick="saveSettings()">SAVE SETTINGS</button></div>
+</div>
+<button class="full" style="margin-top:9px" onclick="saveSettings()">SAVE SETTINGS</button>
+</div>
 
 <div class="card"><div class="row"><b>Recent Trades</b><span id="tradesN" class="small">0</span></div><div id="trades"></div></div>
 </div>
 
 <div class="bottom"><div class="bin"><button class="green" onclick="control('start')">▶ START</button><button onclick="control('stop')">■ STOP</button><button class="red" onclick="control('kill')">⛔ KILL</button></div></div>
+
 <script>
 const $=x=>document.getElementById(x), money=x=>'$'+Number(x||0).toFixed(2);
 let base=localStorage.getItem('nova_v4_server')||'', key=localStorage.getItem('nova_v4_key')||'';
 $('server').value=base;$('key').value=key;
-function saveConnect(){base=$('server').value.trim().replace(/\/$/,'');key=$('key').value;localStorage.setItem('nova_v4_server',base);localStorage.setItem('nova_v4_key',key);load()}
-async function req(path,opt={}){if(!base)throw Error('Server URL missing');opt.headers={...(opt.headers||{}),'Content-Type':'application/json','X-NOVA-Key':key};let r=await fetch(base+path,opt);if(!r.ok)throw Error(await r.text());return r.json()}
-async function load(){try{let d=await req('/api/dashboard');$('conn').textContent='CONNECTED';$('conn').className='g';$('dot').className='dot '+(d.bot_enabled?'on':'');$('bot').textContent=d.killed?'KILLED':d.bot_enabled?'RUNNING':'STOPPED';$('refresh').textContent=d.last_refresh?new Date(d.last_refresh).toLocaleTimeString():'waiting';
-let m=d.metrics;$('equity').textContent=money(m.equity);$('pnl').textContent=(m.pnl>=0?'+':'')+money(m.pnl);$('pnl').className='v '+(m.pnl>=0?'g':'r');$('wr').textContent=m.win_rate.toFixed(1)+'%';$('pf').textContent=m.profit_factor>100?'∞':m.profit_factor.toFixed(2);$('pc').textContent=m.open_positions;$('tradesN').textContent=m.trades;
-$('risk').value=d.settings.risk_pct;$('sl').value=d.settings.stop_loss_pct;$('pump').value=d.settings.min_pump_score;$('liq').value=d.settings.min_liquidity;
-$('positions').innerHTML=d.positions.length?d.positions.map(p=>`<div class="pos"><div class="row"><b>${p.symbol} • ${p.strategy}</b><b class="${p.return_pct>=0?'g':'r'}">${p.return_pct>=0?'+':''}${p.return_pct.toFixed(2)}%</b></div><div class="small">Entry ${p.entry.toPrecision(6)} • Now ${p.price.toPrecision(6)} • value ${money(p.market_value)}</div></div>`).join(''):'<div class="small">No open positions</div>';
-$('cands').innerHTML=d.candidates.slice(0,12).map(c=>`<div class="candidate"><div class="row"><b>${c.symbol} <span class="small">${c.name}</span></b><span class="small">${money(c.liquidity)} liq.</span></div><div class="scores"><div class="score">PUMP<br><b class="c">${c.pump_score}</b></div><div class="score">SCALP<br><b>${c.scalp_score}</b></div><div class="score">RISK<br><b class="${c.market_risk>=70?'g':'y'}">${c.market_risk}</b></div></div><div class="small" style="margin-top:6px">5m ${c.m5.toFixed(2)}% • Buy ${c.buy_pressure.toFixed(0)}% • VolAccel ${c.volume_accel.toFixed(0)}</div></div>`).join('');
-$('trades').innerHTML=d.trades.length?d.trades.slice(0,15).map(t=>`<div class="logline"><b>${t.symbol}</b> ${t.strategy} • <span class="${t.pnl>=0?'g':'r'}">${t.pnl>=0?'+':''}${money(t.pnl)} (${t.pnl_pct.toFixed(2)}%)</span> • ${t.reason}</div>`).join(''):'<div class="small">No closed trades yet</div>';
-}catch(e){$('conn').textContent='ERROR';$('conn').className='r';$('bot').textContent=e.message.slice(0,120)}}
+
+function saveConnect(){
+  base=$('server').value.trim().replace(/\/$/,'');
+  key=$('key').value;
+  localStorage.setItem('nova_v4_server',base);
+  localStorage.setItem('nova_v4_key',key);
+  load();
+}
+async function req(path,opt={}){
+  if(!base)throw Error('Server URL missing');
+  opt.headers={...(opt.headers||{}),'Content-Type':'application/json','X-NOVA-Key':key};
+  let r=await fetch(base+path,opt);
+  if(!r.ok)throw Error(await r.text());
+  return r.json();
+}
+function sideClass(side){return side==='SHORT'?'r':'g'}
+function candidateDirection(c){
+  if(c.perp_eligible){
+    if(c.short_score>=c.long_score && c.short_score>=72)return '🔴 SHORT';
+    if(c.long_score>c.short_score && c.long_score>=72)return '🟢 LONG';
+    return '⚪ WAIT';
+  }
+  if(Math.max(c.pump_score,c.scalp_score)>=72)return '🟢 LONG ONLY';
+  return '⚪ WAIT';
+}
+async function load(){
+try{
+  let d=await req('/api/dashboard');
+  $('conn').textContent='CONNECTED';$('conn').className='g';
+  $('dot').className='dot '+(d.bot_enabled?'on':'');
+  $('bot').textContent=d.killed?'KILLED':d.bot_enabled?'RUNNING':'STOPPED';
+  $('refresh').textContent=d.last_refresh?new Date(d.last_refresh).toLocaleTimeString():'waiting';
+
+  let m=d.metrics;
+  $('equity').textContent=money(m.equity);
+  $('pnl').textContent=(m.pnl>=0?'+':'')+money(m.pnl);$('pnl').className='v '+(m.pnl>=0?'g':'r');
+  $('wr').textContent=m.win_rate.toFixed(1)+'%';
+  $('pf').textContent=m.profit_factor>100?'∞':m.profit_factor.toFixed(2);
+  $('pc').textContent=m.open_positions;$('tradesN').textContent=m.trades;
+
+  let L=m.long||{trades:0,pnl:0,win_rate:0},S=m.short||{trades:0,pnl:0,win_rate:0};
+  $('longTrades').textContent=L.trades+' trades';$('longPnl').textContent=(L.pnl>=0?'+':'')+money(L.pnl);$('longPnl').className=L.pnl>=0?'g':'r';$('longWr').textContent='Win '+L.win_rate.toFixed(1)+'%';
+  $('shortTrades').textContent=S.trades+' trades';$('shortPnl').textContent=(S.pnl>=0?'+':'')+money(S.pnl);$('shortPnl').className=S.pnl>=0?'g':'r';$('shortWr').textContent='Win '+S.win_rate.toFixed(1)+'%';
+
+  $('risk').value=d.settings.risk_pct;$('sl').value=d.settings.stop_loss_pct;
+  $('pump').value=d.settings.min_pump_score;$('scalp').value=d.settings.min_scalp_score;
+  $('longScore').value=d.settings.min_long_score;$('shortScore').value=d.settings.min_short_score;
+  $('lev').value=d.settings.perp_leverage;$('liq').value=d.settings.min_liquidity;
+
+  $('positions').innerHTML=d.positions.length?d.positions.map(p=>`
+    <div class="pos">
+      <div class="row">
+        <div><b>${p.symbol}</b><span class="pill ${p.side==='SHORT'?'shortPill':'longPill'}">${p.side}</span>${p.strategy.startsWith('PERP_')?'<span class="pill perpPill">PERP '+p.leverage+'x</span>':''}</div>
+        <b class="${sideClass(p.side)}">${p.return_pct>=0?'+':''}${p.return_pct.toFixed(2)}%</b>
+      </div>
+      <div class="small">Entry ${Number(p.entry).toPrecision(6)} • Now ${Number(p.price).toPrecision(6)} • Value ${money(p.market_value)}</div>
+    </div>`).join(''):'<div class="small">No open positions</div>';
+
+  $('cands').innerHTML=d.candidates.slice(0,18).map(c=>{
+    let dir=candidateDirection(c);
+    return `<div class="candidate">
+      <div class="row">
+        <div><b>${c.symbol} <span class="small">${c.name}</span></b>${c.perp_eligible?'<span class="pill perpPill">'+c.perp_market+'</span>':''}</div>
+        <span class="direction">${dir}</span>
+      </div>
+      <div class="small">${money(c.liquidity)} liquidity • 5m ${c.m5.toFixed(2)}% • Buy ${c.buy_pressure.toFixed(0)}%</div>
+      <div class="scores">
+        <div class="score">PUMP<br><b class="c">${c.pump_score}</b></div>
+        <div class="score">SCALP<br><b>${c.scalp_score}</b></div>
+        <div class="score">LONG<br><b class="g">${c.long_score}</b></div>
+        <div class="score">SHORT<br><b class="r">${c.short_score}</b></div>
+        <div class="score">RISK<br><b class="${c.market_risk>=70?'g':'y'}">${c.market_risk}</b></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('trades').innerHTML=d.trades.length?d.trades.slice(0,20).map(t=>`
+    <div class="logline">
+      <b>${t.symbol}</b>
+      <span class="pill ${t.side==='SHORT'?'shortPill':'longPill'}">${t.side}</span>
+      ${t.strategy} • <span class="${t.pnl>=0?'g':'r'}">${t.pnl>=0?'+':''}${money(t.pnl)} (${t.pnl_pct.toFixed(2)}%)</span> • ${t.reason}
+    </div>`).join(''):'<div class="small">No closed trades yet</div>';
+}catch(e){
+  $('conn').textContent='ERROR';$('conn').className='r';$('bot').textContent=e.message.slice(0,140);
+}}
 async function control(a){try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}}
-async function saveSettings(){try{await req('/api/settings',{method:'POST',body:JSON.stringify({risk_pct:+$('risk').value,stop_loss_pct:+$('sl').value,min_pump_score:+$('pump').value,min_liquidity:+$('liq').value})});await load()}catch(e){alert(e.message)}}
+async function saveSettings(){
+try{
+  await req('/api/settings',{method:'POST',body:JSON.stringify({
+    risk_pct:+$('risk').value,
+    stop_loss_pct:+$('sl').value,
+    min_pump_score:+$('pump').value,
+    min_scalp_score:+$('scalp').value,
+    min_long_score:+$('longScore').value,
+    min_short_score:+$('shortScore').value,
+    perp_leverage:Math.max(1,Math.min(2,+$('lev').value)),
+    min_liquidity:+$('liq').value
+  })});
+  await load();
+}catch(e){alert(e.message)}
+}
 setInterval(load,5000);if(base)load();
-</script></body></html>
+</script>
+</body></html>
