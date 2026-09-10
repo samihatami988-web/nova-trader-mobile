@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.6.1 SIMPLE+</title>
+<title>NOVA TRADER V6.0 ALPHA CORE</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.6.1</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.0</b></div><div class="sub">Alpha Core • Multi-Engine Trader</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -87,6 +87,18 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div><div class="k">Daily Loss Limit</div><b id="dailyLimit">—</b></div>
     </div>
     <div id="dailyGuardText" class="small" style="margin-top:9px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><b>Daily Profit Target</b><div class="small">هدف روزانه — بدون اجبار به معامله</div></div><span id="targetBadge" class="badge">0%</span></div>
+    <div style="margin-top:10px"><div class="bar"><div id="targetBar" class="fill" style="width:0%"></div></div></div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">Target</div><b id="targetPct">10%</b></div>
+      <div class="mini"><div class="k">Combined P&L</div><b id="targetCombined">$0.00</b></div>
+      <div class="mini"><div class="k">Risk Mode</div><b id="targetRiskMode">NORMAL</b></div>
+      <div class="mini"><div class="k">Open Risk</div><b id="openRisk">0%</b></div>
+    </div>
+    <div id="targetText" class="small" style="margin-top:9px">NOVA دنبال فرصت خوب می‌گردد؛ برای رسیدن به هدف وارد معامله ضعیف نمی‌شود.</div>
   </div>
 
   <div id="openPositionsCard" class="card hidden">
@@ -141,6 +153,11 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   </div>
 
   <div class="card">
+    <div class="row"><div><b>Sniper Signals</b><div class="small">فقط فرصت‌های مخصوص Micro-Pump Sniper</div></div><span id="sniperSignalCount" class="badge">0</span></div>
+    <div id="sniperSignals"><div class="small" style="margin-top:9px">Waiting for sniper candidates...</div></div>
+  </div>
+
+  <div class="card">
     <div class="row"><div><b>Engine Protection</b><div class="small">همه محافظت‌های مهم پشت صحنه</div></div><span id="protection" class="badge">CHECKING</span></div>
     <div class="grid" style="margin-top:10px">
       <div><div class="k">System</div><b id="sys">—</b></div>
@@ -148,7 +165,13 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div><div class="k">Portfolio</div><b id="port">—</b></div>
       <div><div class="k">Adaptive</div><b id="adapt">—</b></div>
     </div>
-    <div class="notice" style="margin-top:10px"><b>SNIPER + CAPITAL SHIELD</b><br><span id="sniperText">Sniper checking...</span><br><span id="watcherText">Watcher checking...</span><br>Sniper، استاپ داخلی، Profit Lock، Early Break-even و Liquidity Emergency پشت صحنه فعال‌اند.</div>
+    <div class="notice" style="margin-top:10px"><b>ALPHA CORE PROTECTION</b><br><span id="sniperText">Sniper checking...</span><br><span id="watcherText">Watcher checking...</span><br>Sniper + Scalp + Pump + Perp LONG/SHORT + Capital Shield + Daily Target Lock پشت صحنه فعال‌اند.</div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">Sniper Candidates</div><b id="sniperCandidates">0</b></div>
+      <div class="mini"><div class="k">Best Sniper Score</div><b id="bestSniperScore">—</b></div>
+      <div class="mini"><div class="k">Last Sniper Scan</div><b id="lastSniperScan">—</b></div>
+      <div class="mini"><div class="k">Sniper Entries</div><b id="sniperEntries">0</b></div>
+    </div>
     <div class="small" style="margin-top:10px">LIVE execution remains locked. این صفحه فقط PAPER / SHADOW را کنترل می‌کند.</div>
   </div>
 
@@ -266,6 +289,9 @@ function friendlyReason(reason){
   'spot move too extreme':'حرکت ۵ دقیقه‌ای بیش از حد شدید است؛ NOVA از تعقیب این حرکت خودداری کرد.',
   'low spot liquidity':'نقدینگی برای Capital Shield کافی نیست و ورود رد شد.',
   'low spot market quality':'کیفیت بازار برای ورود محافظت‌شده کافی نیست.',
+  'daily profit target locked':'هدف سود روزانه Secure شده؛ ورود جدید برای حفظ سود متوقف است.',
+  'portfolio open risk cap':'ریسک مجموع پوزیشن‌های باز به سقف محافظتی رسیده.',
+  'DAILY_TARGET_SECURE':'هدف روزانه به محدوده Secure رسید؛ NOVA سود را بانکی کرد و ورود جدید را قفل کرد.',
   'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
   'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
   'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
@@ -364,6 +390,34 @@ async function resetPaper(){
  }catch(e){alert(e.message)}
 }
 
+
+function renderDailyTarget(t,risk){
+  t=t||{};risk=risk||{};
+  let progress=Number(t.progress_pct||0);
+  $('targetBadge').textContent=Math.min(progress,100).toFixed(0)+'%';
+  $('targetBar').style.width=Math.min(progress,100)+'%';
+  $('targetPct').textContent=Number(t.target_pct||10).toFixed(1)+'%';
+  $('targetCombined').textContent=(Number(t.combined||0)>=0?'+':'')+money(t.combined||0);
+  $('targetCombined').className=Number(t.combined||0)>=0?'g':'r';
+  $('openRisk').textContent=Number(risk.open_risk_pct||0).toFixed(2)+'%';
+  let mode=t.locked?'LOCKED':t.de_risk?'DE-RISK':'NORMAL';
+  $('targetRiskMode').textContent=mode;
+  $('targetRiskMode').className=t.locked?'g':t.de_risk?'y':'c';
+  $('targetText').textContent=t.locked?
+    'هدف روزانه Secure شده؛ NOVA ورود جدید را برای باقی روز متوقف کرده.':
+    t.de_risk?
+    'به ناحیه سود بالا رسیدیم؛ NOVA ریسک معاملات جدید را کاهش داده تا سود روز حفظ شود.':
+    'هدف روزانه فقط Objective است؛ NOVA برای رسیدن به آن معامله ضعیف یا Martingale انجام نمی‌دهد.';
+}
+function sniperSignalCard(c){
+  let score=Number(c.sniper_score||0),m5=Number(c.m5||0),bp=Number(c.buy_pressure||0),va=Number(c.volume_accel||0);
+  return `<div class="signal">
+    <div class="row"><div><b>${c.symbol}</b><span class="pill">SNIPER_LONG</span></div><b class="score c">${score.toFixed(0)}</b></div>
+    <div class="small">5m ${m5.toFixed(2)}% • Buy ${bp.toFixed(0)}% • VolAccel ${va.toFixed(0)} • Liq ${money(c.liquidity||0)}</div>
+    <div class="bar"><div class="fill" style="width:${Math.min(score,100)}%"></div></div>
+  </div>`;
+}
+
 function signalCard(c,s){
  let strategy=c.best_strategy||((c.perp_eligible&&c.direction==='SHORT')?'PERP_SHORT':c.perp_eligible?'PERP_LONG':(c.pump_score>=c.scalp_score?'PUMP_LONG':'SCALP_LONG'));
  let score=strategyScore(c,strategy),th=thresholdFor(strategy,s||{});
@@ -409,8 +463,17 @@ async function load(){
   $('exec').textContent=d.execution?.fills>=0?'ACTIVE':'—';$('exec').className='g';
   $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
   $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
+  renderDailyTarget(d.daily_target||{},d.risk_status||{});
   let sn=d.sniper||{};
   $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
+  let snCands=sn.candidates||[];
+  $('sniperCandidates').textContent=snCands.length;
+  let bestSn=snCands.length?Math.max(...snCands.map(x=>Number(x.sniper_score||0))):null;
+  $('bestSniperScore').textContent=bestSn==null?'—':bestSn.toFixed(0);
+  $('lastSniperScan').textContent=sn.last_scan_age_sec==null?'—':Number(sn.last_scan_age_sec).toFixed(1)+'s ago';
+  $('sniperEntries').textContent=sn.entries||0;
+  $('sniperSignalCount').textContent=snCands.length;
+  $('sniperSignals').innerHTML=snCands.length?snCands.map(sniperSignalCard).join(''):'<div class="small" style="margin-top:9px">No sniper setup right now.</div>';
   let fw=d.fast_watcher||{};
   if(!fw.alive){
     $('watcherText').textContent='Fast Watcher warming up';
