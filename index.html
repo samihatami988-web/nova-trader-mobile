@@ -3,283 +3,269 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.6.1 FREE-LITE</title>
+<meta name="theme-color" content="#050b13">
+<title>NOVA TRADER V6.7.0 FINAL</title>
 <style>
-:root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
+:root{
+  --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
+  --text:#f5f9fd;--muted:#8fa7bd;--cyan:#42d3ff;--green:#3ddd8c;
+  --red:#ff6379;--yellow:#f1c85b;--blue:#6ea8ff;
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:linear-gradient(180deg,#10294a 0,#081426 35%,#050b13 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;padding-bottom:96px}
-.wrap{max-width:760px;margin:auto;padding:14px}
-.head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 2px 4px}
-.brand{font-size:23px;font-weight:950}.brand b{color:var(--cyan)}.sub{font-size:11px;color:var(--muted);margin-top:2px}
-.badge{font-size:10px;border:1px solid #2c5a7a;padding:6px 9px;border-radius:99px;color:#bcecff}
-.card{background:linear-gradient(180deg,rgba(14,32,55,.98),rgba(8,20,35,.98));border:1px solid var(--line);border-radius:20px;padding:14px;margin-top:11px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.small{font-size:11px;color:var(--muted)}.g{color:var(--green)}.r{color:var(--red)}.y{color:var(--yellow)}.c{color:var(--cyan)}
-.dot{width:10px;height:10px;border-radius:50%;background:#68798c}.dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
-.statusline{display:flex;align-items:center;gap:8px}.statusname{font-weight:900;font-size:17px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{padding:15px}.k{font-size:11px;color:var(--muted);margin-bottom:5px}.v{font-size:26px;font-weight:950}
-.modegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+html{background:var(--bg)}
+body{
+  margin:0;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;
+  background:
+    radial-gradient(circle at 10% -10%,rgba(66,211,255,.15),transparent 30%),
+    radial-gradient(circle at 100% 5%,rgba(91,104,255,.12),transparent 28%),
+    linear-gradient(180deg,#0c213b 0,#07111f 34%,#04090f 100%);
+  min-height:100vh;padding-bottom:104px
+}
+.wrap{max-width:780px;margin:auto;padding:14px}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 2px 5px}
+.brand{font-size:24px;font-weight:950;letter-spacing:-.4px}
+.brand b{color:var(--cyan)} .sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+.card{
+  background:linear-gradient(180deg,rgba(13,30,49,.97),rgba(7,18,31,.97));
+  border:1px solid var(--line);border-radius:20px;padding:14px;margin-top:11px;
+  box-shadow:0 10px 35px rgba(0,0,0,.18)
+}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{padding:15px}.k{font-size:10px;color:var(--muted);margin-bottom:5px}
+.v{font-size:25px;font-weight:950}
+.small{font-size:11px;color:var(--muted);line-height:1.55}
+.g{color:var(--green)}.r{color:var(--red)}.y{color:var(--yellow)}.c{color:var(--cyan)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:9px;border:1px solid #2b5677;
+  padding:5px 8px;border-radius:999px;color:#c7ecff;white-space:nowrap
+}
+.badge.ok{border-color:#25714e;color:#72eca9}.badge.warn{border-color:#765f20;color:#f4d36b}
+.badge.bad{border-color:#7b2d3c;color:#ff7c8f}
+.dot{width:10px;height:10px;border-radius:50%;background:#667b8c}
+.dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
+.status{display:flex;align-items:center;gap:8px}.status b{font-size:17px}
 button,input,select{font:inherit}
-button{border:1px solid #2c5775;background:#143451;color:white;border-radius:14px;padding:12px;font-weight:900}
-button.active{outline:2px solid var(--cyan)}button.green{background:#12653f}button.red{background:#7f2638}button.dark{background:#10253b}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-label{font-size:11px;color:var(--muted)}
-input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;border-radius:12px;padding:11px;margin-top:6px;direction:ltr}
+button{
+  border:1px solid #2b5878;background:#12334d;color:#fff;border-radius:13px;
+  padding:11px 12px;font-weight:900
+}
+button:active{transform:scale(.985)}
+button.active{outline:2px solid var(--cyan)}
+button.green{background:#11633e}.redbtn{background:#7b2738}.dark{background:#0d2539}
+button.ghost{background:transparent;color:var(--cyan);padding:4px 0;border:0}
+.full{width:100%;margin-top:9px}
+label{font-size:10px;color:var(--muted)}
+input,select{
+  width:100%;background:#05111d;color:#fff;border:1px solid #274864;border-radius:12px;
+  padding:11px;margin-top:6px;direction:ltr
+}
+.hidden{display:none!important}
+.mini{background:#061421;border:1px solid #173650;border-radius:12px;padding:9px;font-size:10px}
+.notice{
+  margin-top:9px;background:#082236;border:1px solid #1b5473;border-radius:13px;
+  padding:10px;font-size:11px;color:#d4ebf8;line-height:1.55
+}
+.bar{height:7px;background:#06111c;border-radius:99px;overflow:hidden;margin-top:7px}
+.fill{height:100%;background:linear-gradient(90deg,var(--cyan),#74a8ff);width:0}
+.pill{font-size:9px;padding:3px 7px;border:1px solid #2b506d;border-radius:99px;margin-right:5px}
+.signal,.trade,.pos{padding:10px 0;border-bottom:1px solid #153048}.signal:last-child,.trade:last-child,.pos:last-child{border-bottom:0}
+.score{font-weight:950;font-size:20px}
+.sectionTitle{font-weight:900;font-size:15px}
+.connectionGrid,.controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
 .profile{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
-.profile button{font-size:11px;padding:10px 4px}.profile button.sel{background:#195879;border-color:#42cfff}
-.notice{font-size:11px;color:#cfe8f7;background:#0a2438;border:1px solid #1d5575;border-radius:13px;padding:10px;line-height:1.55;margin-top:10px}
-.signal{padding:11px 0;border-bottom:1px solid #17314a}.signal:last-child{border-bottom:0}
-.score{font-size:20px;font-weight:950}.pill{font-size:9px;border:1px solid #2d526e;border-radius:99px;padding:3px 7px;margin-right:5px}
-.bar{height:7px;background:#07111d;border-radius:99px;overflow:hidden;margin-top:7px}.fill{height:100%;background:var(--cyan)}
-.full{width:100%;margin-top:9px}.hidden{display:none}
-.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(4,10,18,.95);backdrop-filter:blur(14px);border-top:1px solid #17304a;padding:9px 10px calc(9px + env(safe-area-inset-bottom))}
-.bin{max-width:760px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.conn input{direction:ltr}.toggle{font-size:11px;color:var(--cyan);background:none;border:0;padding:0}
-.decision{font-size:22px;font-weight:950}.reason{margin-top:7px;font-size:12px;line-height:1.55;color:#c9d9e8}
-.decisionMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.mini{background:#071322;border:1px solid #183650;border-radius:11px;padding:8px;font-size:10px}
-.posrow,.traderow{padding:9px 0;border-bottom:1px solid #173149}.posrow:last-child,.traderow:last-child{border-bottom:0}
-.signalState{font-size:9px;border-radius:99px;padding:3px 7px;border:1px solid #28526e}.pass{color:#75edaa;border-color:#267a51}.wait{color:#f1c857;border-color:#745f1e}
-.dirLong{color:#32d17d}.dirShort{color:#ff7185}.autosaved{color:#32d17d;font-size:10px;margin-top:7px;text-align:center;min-height:14px}
-@media(max-width:420px){.v{font-size:23px}.controls{grid-template-columns:1fr 1fr}}
-
-.entryLine{margin-top:7px;font-size:12px;font-weight:800}
-.entryReady{color:#56e39f}
-.entrySoft{color:#ffd166}
-.entryBlock{color:#ff6b81}
+.profile button{font-size:10px;padding:9px 5px}
+.profile button.sel{background:#175878;border-color:#47d2ff}
+.state{font-size:10px;font-weight:900}
+.bottom{
+  position:fixed;bottom:0;left:0;right:0;background:rgba(3,9,15,.95);
+  backdrop-filter:blur(16px);border-top:1px solid #17314a;
+  padding:9px 10px calc(9px + env(safe-area-inset-bottom));z-index:30
+}
+.bin{max-width:780px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+hr{border:0;border-top:1px solid #173149;margin:12px 0}
+.ltr{direction:ltr;text-align:left}
+.pre{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;direction:ltr;text-align:left;
+  white-space:pre-wrap;word-break:break-word;background:#04101a;border:1px solid #18364c;border-radius:10px;padding:9px
+}
+@media(max-width:430px){.v{font-size:22px}.grid3{grid-template-columns:1fr 1fr}.connectionGrid,.controls{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.6.1</b></div><div class="sub">Free-Lite • First-Seconds Launch Sniper</div></div>
-    <div class="badge">PAPER / SHADOW</div>
+    <div>
+      <div class="brand">NOVA TRADER <b>V6.7.0</b></div>
+      <div class="sub">FINAL MOBILE DASHBOARD • Northflank • PAPER / SHADOW</div>
+    </div>
+    <span id="liveLock" class="badge ok">LIVE LOCKED</span>
   </div>
 
   <div class="card">
     <div class="row">
-      <div class="statusline"><span id="dot" class="dot"></span><div><div id="bot" class="statusname">CONNECTING</div><div id="health" class="small">Cloud status</div></div></div>
-      <div><div id="conn" class="g" style="font-weight:900">—</div><button class="toggle" onclick="toggleConn()">Connection</button></div>
+      <div class="status">
+        <span id="dot" class="dot"></span>
+        <div><b id="botState">CONNECTING</b><div id="cloudHealth" class="small">Cloud status</div></div>
+      </div>
+      <div style="text-align:left">
+        <div id="connState" class="c" style="font-weight:900">—</div>
+        <button class="ghost" onclick="toggleConn()">Connection</button>
+      </div>
     </div>
-    <div id="connBox" class="conn hidden" style="margin-top:10px">
-      <label>Render URL<input id="server" placeholder="https://nova-trader-cloud.onrender.com"></label>
-      <label>NOVA Admin Key<input id="key" type="password" placeholder="private admin key"></label>
-      <button class="full" onclick="saveConnect()">CONNECT</button>
+    <div id="connBox" class="hidden">
+      <div class="connectionGrid">
+        <label>Northflank URL
+          <input id="server" placeholder="https://...code.run">
+        </label>
+        <label>NOVA Admin Key
+          <input id="key" type="password" autocomplete="off" placeholder="private admin key">
+        </label>
+      </div>
+      <button class="full" onclick="saveConnect()">CONNECT / SAVE</button>
+      <div class="small" style="margin-top:7px">API Key یا Private Key کیف پول را اینجا وارد نکن. این فیلد فقط NOVA Admin Key است.</div>
     </div>
   </div>
 
-  <div class="grid">
-    <div class="card stat"><div class="k">Equity</div><div id="equity" class="v">$—</div></div>
-    <div class="card stat"><div class="k">P&L</div><div id="pnl" class="v">$—</div></div>
-    <div class="card stat"><div class="k">Win Rate</div><div id="wr" class="v">—</div></div>
-    <div class="card stat"><div class="k">Open Positions</div><div id="positionsN" class="v">0</div></div>
+  <div class="grid2">
+    <div class="card stat"><div class="k">EQUITY</div><div id="equity" class="v">$—</div></div>
+    <div class="card stat"><div class="k">TOTAL P&L</div><div id="pnl" class="v">$—</div></div>
+    <div class="card stat"><div class="k">WIN RATE</div><div id="wr" class="v">—</div></div>
+    <div class="card stat"><div class="k">OPEN POSITIONS</div><div id="positionsN" class="v">0</div></div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>NOVA Decision</b><div class="small">آخرین تصمیم واقعی موتور</div></div><span id="decisionAge" class="small">—</span></div>
-    <div id="decisionTitle" class="decision c" style="margin-top:9px">SCANNING...</div>
-    <div id="decisionReason" class="reason">در حال بررسی بازار و Gateهای ورود.</div>
-    <div class="decisionMeta">
-      <div class="mini"><div class="k">Best Opportunity</div><b id="bestOpp">—</b></div>
-      <div class="mini"><div class="k">Last Update</div><b id="lastUpdate">—</b></div>
+    <div class="row"><div><div class="sectionTitle">Realtime Core</div><div class="small">PumpPortal WebSocket + Event-Driven Exit</div></div><span id="rtBadge" class="badge warn">CHECKING</span></div>
+    <div class="grid2" style="margin-top:10px">
+      <div class="mini"><div class="k">FEED MODE</div><b id="rtMode">—</b></div>
+      <div class="mini"><div class="k">HTTP HANDSHAKE</div><b id="rtHttp">—</b></div>
+      <div class="mini"><div class="k">LAST EVENT</div><b id="rtLast">—</b></div>
+      <div class="mini"><div class="k">ATTEMPTS</div><b id="rtAttempts">0</b></div>
+      <div class="mini"><div class="k">SUBSCRIPTIONS</div><b id="rtSubs">0</b></div>
+      <div class="mini"><div class="k">EVENTS</div><b id="rtEvents">0</b></div>
+    </div>
+    <div id="rtText" class="notice">Checking realtime connection…</div>
+    <div class="grid2" style="margin-top:9px">
+      <div class="mini"><div class="k">REALTIME EXIT</div><b id="rtExit">—</b></div>
+      <div class="mini"><div class="k">RETRY</div><b id="rtRetry">—</b></div>
+    </div>
+    <button class="full dark" onclick="loadDiagnostics()">REFRESH REALTIME DIAGNOSTICS</button>
+    <div id="diagBox" class="pre hidden"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><div class="sectionTitle">NOVA Decision</div><div class="small">آخرین تصمیم موتور</div></div><span id="decisionAge" class="small">—</span></div>
+    <div id="decisionTitle" class="v c" style="font-size:21px;margin-top:8px">SCANNING…</div>
+    <div id="decisionReason" class="small" style="margin-top:6px;color:#d1e3ef">در حال بررسی Gateهای ورود.</div>
+    <div class="grid2" style="margin-top:9px">
+      <div class="mini"><div class="k">BEST OPPORTUNITY</div><b id="bestOpp">—</b></div>
+      <div class="mini"><div class="k">LAST REFRESH</div><b id="lastUpdate">—</b></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Daily Guard</b><div class="small">محافظ ضرر روزانه</div></div><span id="dailyGuardBadge" class="badge">—</span></div>
-    <div class="grid" style="margin-top:10px">
-      <div><div class="k">Today P&L</div><b id="todayPnl">—</b></div>
-      <div><div class="k">Daily Loss Limit</div><b id="dailyLimit">—</b></div>
+    <div class="row"><div><div class="sectionTitle">Daily Guard + Target</div><div class="small">محافظ سرمایه و هدف روزانه</div></div><span id="guardBadge" class="badge ok">ACTIVE</span></div>
+    <div class="grid2" style="margin-top:10px">
+      <div class="mini"><div class="k">TODAY P&L</div><b id="todayPnl">—</b></div>
+      <div class="mini"><div class="k">LOSS LIMIT</div><b id="dailyLimit">—</b></div>
+      <div class="mini"><div class="k">TARGET</div><b id="targetPct">—</b></div>
+      <div class="mini"><div class="k">OPEN RISK</div><b id="openRisk">—</b></div>
     </div>
-    <div id="dailyGuardText" class="small" style="margin-top:9px"></div>
+    <div class="bar"><div id="targetBar" class="fill"></div></div>
+    <div id="targetText" class="small" style="margin-top:8px"></div>
+  </div>
+
+  <div id="positionsCard" class="card hidden">
+    <div class="row"><div class="sectionTitle">Open Positions</div><span id="openCount" class="badge">0</span></div>
+    <div id="positions"></div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Daily Profit Target</b><div class="small">هدف روزانه — بدون اجبار به معامله</div></div><span id="targetBadge" class="badge">0%</span></div>
-    <div style="margin-top:10px"><div class="bar"><div id="targetBar" class="fill" style="width:0%"></div></div></div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">Target</div><b id="targetPct">10%</b></div>
-      <div class="mini"><div class="k">Combined P&L</div><b id="targetCombined">$0.00</b></div>
-      <div class="mini"><div class="k">Risk Mode</div><b id="targetRiskMode">NORMAL</b></div>
-      <div class="mini"><div class="k">Open Risk</div><b id="openRisk">0%</b></div>
-    </div>
-    <div id="targetText" class="small" style="margin-top:9px">NOVA دنبال فرصت خوب می‌گردد؛ برای رسیدن به هدف وارد معامله ضعیف نمی‌شود.</div>
-  </div>
-
-  <div id="openPositionsCard" class="card hidden">
-    <div class="row"><div><b>Open Positions</b><div class="small">پوزیشن‌های فعال Paper/Shadow</div></div><span id="openCount" class="badge">0</span></div>
-    <div id="openPositions"></div>
-  </div>
-
-  <div class="card">
-    <div class="row"><div><b>Trading Mode</b><div class="small">برای تست: PAPER • برای تست نزدیک‌تر به بازار: SHADOW</div></div><span id="modeBadge" class="badge">PAPER</span></div>
-    <div class="modegrid">
+    <div class="row"><div><div class="sectionTitle">Trading Mode</div><div class="small">LIVE execution در Backend قفل است.</div></div><span id="modeBadge" class="badge">PAPER</span></div>
+    <div class="grid2" style="margin-top:9px">
       <button id="paperBtn" onclick="setMode('PAPER')">PAPER</button>
       <button id="shadowBtn" onclick="setMode('SHADOW')">SHADOW</button>
     </div>
   </div>
 
   <div class="card">
-    <b>Trading Sensitivity</b>
-    <div class="small" style="margin-top:4px">فقط این بخش را تغییر بده؛ بقیه موتورهای حرفه‌ای خودکار کار می‌کنند.</div>
+    <div class="sectionTitle">Trading Sensitivity</div>
+    <div class="small">پروفایل فقط Thresholdها را تغییر می‌دهد؛ Guardهای امنیتی و سرمایه دور زده نمی‌شوند.</div>
     <div class="profile">
       <button id="safeBtn" onclick="setProfile('SAFE')">SAFE</button>
-      <button id="balancedBtn" class="sel" onclick="setProfile('BALANCED')">BALANCED</button>
+      <button id="balancedBtn" onclick="setProfile('BALANCED')">BALANCED</button>
       <button id="fastBtn" onclick="setProfile('FAST')">FAST</button>
     </div>
-    <div class="notice" id="profileText">BALANCED: تعادل بین حساسیت و کیفیت سیگنال. برای شروع همین مناسب است.</div>
-    <div id="autoSaved" class="autosaved"></div>
-
+    <div id="profileText" class="notice"></div>
     <div class="controls">
-      <label>Risk / Trade %
-        <input id="risk" type="number" value="0.75" min="0.05" max="2" step="0.05">
-      </label>
-      <label>Stop Loss %
-        <input id="sl" type="number" value="4" min="0.5" max="15" step="0.5">
-      </label>
-      <label>Max Positions
-        <input id="maxPos" type="number" value="4" min="1" max="10" step="1">
-      </label>
+      <label>Risk / Trade %<input id="risk" type="number" min=".05" max="2" step=".05" value=".75"></label>
+      <label>Stop Loss %<input id="sl" type="number" min=".5" max="15" step=".5" value="4"></label>
+      <label>Max Positions<input id="maxPos" type="number" min="1" max="10" value="4"></label>
       <label>Perp Leverage
-        <select id="lev">
-          <option value="1">1x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-        </select>
+        <select id="lev"><option>1</option><option>1.25</option><option>1.5</option><option>2</option></select>
       </label>
     </div>
     <button class="full" onclick="saveSettings()">SAVE SETTINGS</button>
+    <div id="saved" class="small g" style="text-align:center;margin-top:6px;min-height:16px"></div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Selective Entry Router</b><div class="small">سیگنال خوب را وارد می‌کند؛ Near-miss امن را در PAPER با حجم کوچک تست می‌کند.</div></div><span id="routerBadge" class="badge">AUTO</span></div>
-    <div class="grid" style="margin-top:10px">
+    <div class="row"><div><div class="sectionTitle">Selective Entry Router</div><div class="small">Strict entries + controlled PAPER exploration</div></div><span id="routerBadge" class="badge ok">AUTO</span></div>
+    <div class="grid2" style="margin-top:10px">
       <div class="mini"><div class="k">READY</div><b id="routerReady">0</b></div>
       <div class="mini"><div class="k">CONTROLLED</div><b id="routerSoft">0</b></div>
       <div class="mini"><div class="k">BLOCKED</div><b id="routerBlocked">0</b></div>
-      <div class="mini"><div class="k">Soft Entries / Hour</div><b id="routerHour">0/2</b></div>
+      <div class="mini"><div class="k">SOFT / HOUR</div><b id="routerHour">0/0</b></div>
     </div>
-    <div id="routerText" class="small" style="margin-top:8px">Waiting for entry assessment...</div>
+    <div id="routerText" class="small" style="margin-top:8px"></div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Best Signals</b><div class="small">NOVA فقط مهم‌ترین گزینه‌ها را نشان می‌دهد.</div></div><button class="dark" onclick="load()">REFRESH</button></div>
-    <div id="signals"><div class="small" style="margin-top:10px">Waiting for data...</div></div>
+    <div class="row"><div><div class="sectionTitle">Launch Sniper</div><div class="small">First-Seconds PAPER engine</div></div><span id="launchBadge" class="badge warn">WATCHING</span></div>
+    <div class="grid2" style="margin-top:10px">
+      <div class="mini"><div class="k">NEW TOKENS</div><b id="launchNew">0</b></div>
+      <div class="mini"><div class="k">WATCHING</div><b id="launchWatching">0</b></div>
+      <div class="mini"><div class="k">TRADE EVENTS</div><b id="launchTrades">0</b></div>
+      <div class="mini"><div class="k">ENTRIES</div><b id="launchEntries">0</b></div>
+    </div>
+    <div class="notice">
+      <div id="launchBest" style="font-weight:900">Waiting for new token…</div>
+      <div id="launchMeta" class="small" style="margin-top:5px"></div>
+    </div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Render Free-Lite</b><div class="small">0.1 CPU protection • bounded realtime workload</div></div><span class="badge g">ACTIVE</span></div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">Subscriptions</div><b id="liteSubs">0</b></div>
-      <div class="mini"><div class="k">Pulse Buffers</div><b id="liteBuffers">0</b></div>
-      <div class="mini"><div class="k">Launch Objects</div><b id="liteLaunch">0</b></div>
-      <div class="mini"><div class="k">Cleanup Runs</div><b id="liteCleanup">0</b></div>
-    </div>
-    <div class="small" style="margin-top:8px">Free-Lite بار همزمان WebSocket/DB را محدود می‌کند تا روی Render Free پایدارتر بماند؛ PAPER Launch Sniper و Event-Driven Exit حفظ شده.</div>
+    <div class="row"><div><div class="sectionTitle">Best Signals</div><div class="small">بهترین فرصت‌های فعلی</div></div><button class="dark" onclick="load()">REFRESH</button></div>
+    <div id="signals"><div class="small" style="margin-top:9px">Waiting for data…</div></div>
   </div>
 
   <div class="card">
-    <div class="row">
-      <div><b>Launch Sniper</b><div class="small">توکن‌های تازه‌ساخته‌شده • First-Seconds PAPER Engine</div></div>
-      <span id="launchBadge" class="badge">WATCHING</span>
-    </div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">New Tokens</div><b id="launchNew">0</b></div>
-      <div class="mini"><div class="k">Watching</div><b id="launchWatching">0</b></div>
-      <div class="mini"><div class="k">Trade Events</div><b id="launchTrades">0</b></div>
-      <div class="mini"><div class="k">Entries</div><b id="launchEntries">0</b></div>
-    </div>
-    <div class="notice" style="margin-top:10px">
-      <div class="row"><b>BEST FIRST-SECONDS SETUP</b><span id="launchState" class="badge">—</span></div>
-      <div id="launchBestTitle" style="font-size:19px;font-weight:900;margin-top:7px">Waiting for new token...</div>
-      <div id="launchBestMeta" class="small" style="margin-top:5px">No launch burst yet.</div>
-      <div id="launchBestReason" class="small" style="margin-top:6px"></div>
-    </div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">Gate Pass</div><b id="launchGatePass">0</b></div>
-      <div class="mini"><div class="k">Confirmed</div><b id="launchConfirmed">0</b></div>
-      <div class="mini"><div class="k">Creator Sell</div><b id="launchCreatorSell">0</b></div>
-      <div class="mini"><div class="k">Spam/Duplicate</div><b id="launchSpam">0</b></div>
-    </div>
-    <div id="launchRules" class="small" style="margin-top:8px"></div>
-    <div class="small" style="margin-top:7px">Launch Sniper فقط در PAPER فعال است؛ توکن بدون چند خریدار مستقل یا با Creator/Concentration مشکوک خریده نمی‌شود.</div>
-  </div>
-
-  <div class="card">
-    <div class="row"><div><b>Realtime Sniper</b><div class="small">Pulse Stream + Micro-Pump Sniper</div></div><span id="pulseBadge" class="badge">CHECKING</span></div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">Feed</div><b id="pulseMode">—</b></div>
-      <div class="mini"><div class="k">Last Event</div><b id="pulseLast">—</b></div>
-      <div class="mini"><div class="k">Hot Pulses</div><b id="pulseHot">0</b></div>
-      <div class="mini"><div class="k">Pulse Entries</div><b id="pulseEntries">0</b></div>
-    </div>
-    <div id="pulseText" class="small" style="margin-top:9px">Realtime feed checking...</div>
-    <div class="notice" style="margin-top:10px"><b>REALTIME EXIT</b><br><span id="realtimeExitText">Exit engine checking...</span></div>
-
-    <div class="notice" style="margin-top:10px">
-      <div class="row"><b>BEST LIVE PULSE</b><span id="pulseAdaptiveBadge" class="badge">AUTO</span></div>
-      <div id="bestPulseTitle" style="font-size:19px;font-weight:900;margin-top:7px">Waiting...</div>
-      <div id="bestPulseMeta" class="small" style="margin-top:5px">No micro-burst observed yet.</div>
-      <div id="pulseThresholds" class="small" style="margin-top:7px"></div>
-    </div>
-
-    <div style="margin-top:12px"><b>Pulse Diagnostics • 5 min</b></div>
-    <div class="grid" style="margin-top:8px">
-      <div class="mini"><div class="k">Observed</div><b id="diagObserved">0</b></div>
-      <div class="mini"><div class="k">Front Pass</div><b id="diagPass">0</b></div>
-      <div class="mini"><div class="k">Low Events</div><b id="diagEvents">0</b></div>
-      <div class="mini"><div class="k">Low Buy Pressure</div><b id="diagPressure">0</b></div>
-      <div class="mini"><div class="k">Low Buyers</div><b id="diagBuyers">0</b></div>
-      <div class="mini"><div class="k">Low Score</div><b id="diagScore">0</b></div>
-      <div class="mini"><div class="k">Late Chase</div><b id="diagLate">0</b></div>
-      <div class="mini"><div class="k">Final Gate Pass</div><b id="diagFinal">0</b></div>
-    </div>
-    <div id="adaptiveAction" class="small" style="margin-top:8px">Adaptive Pulse waiting for enough data.</div>
-
-    <div style="margin-top:12px" class="row"><div><b>Sniper Signals</b><div class="small">فرصت‌های Sniper معمولی و fallback</div></div><span id="sniperSignalCount" class="badge">0</span></div>
-    <div id="sniperSignals"><div class="small" style="margin-top:9px">Waiting for sniper candidates...</div></div>
-  </div>
-
-  <div class="card">
-    <div class="row"><div><b>Edge Governor</b><div class="small">موتور زیان‌ده خودکار محدود یا Pause می‌شود.</div></div><span id="edgeBadge" class="badge">LEARNING</span></div>
-    <div class="grid" style="margin-top:10px">
+    <div class="row"><div><div class="sectionTitle">Edge Governor</div><div class="small">Scale فقط بعد از Edge مثبت</div></div><span id="edgeBadge" class="badge warn">LEARNING</span></div>
+    <div class="grid3" style="margin-top:10px">
       <div class="mini"><div class="k">LAUNCH</div><b id="govLaunch">—</b></div>
       <div class="mini"><div class="k">SNIPER</div><b id="govSniper">—</b></div>
       <div class="mini"><div class="k">SCALP</div><b id="govScalp">—</b></div>
       <div class="mini"><div class="k">PUMP</div><b id="govPump">—</b></div>
       <div class="mini"><div class="k">PERP L/S</div><b id="govPerp">—</b></div>
+      <div class="mini"><div class="k">RECOVERY</div><b id="recoveryState">—</b></div>
     </div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">Survival Loss Limit</div><b id="survivalLimit">—</b></div>
-      <div class="mini"><div class="k">Recovery State</div><b id="recoveryState">ACTIVE</b></div>
-    </div>
-    <div class="small" style="margin-top:8px">در مرحله PROBATION حجم خودکار کوچک است؛ فقط موتور دارای Edge مثبت اجازه Scale-up می‌گیرد.</div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Engine Protection</b><div class="small">همه محافظت‌های مهم پشت صحنه</div></div><span id="protection" class="badge">CHECKING</span></div>
-    <div class="grid" style="margin-top:10px">
-      <div><div class="k">System</div><b id="sys">—</b></div>
-      <div><div class="k">Execution</div><b id="exec">—</b></div>
-      <div><div class="k">Portfolio</div><b id="port">—</b></div>
-      <div><div class="k">Adaptive</div><b id="adapt">—</b></div>
+    <div class="row"><div><div class="sectionTitle">Cloud Free-Lite</div><div class="small">Northflank resource protection</div></div><span class="badge ok">ACTIVE</span></div>
+    <div class="grid2" style="margin-top:10px">
+      <div class="mini"><div class="k">SUBSCRIPTIONS</div><b id="liteSubs">0</b></div>
+      <div class="mini"><div class="k">PULSE BUFFERS</div><b id="liteBuffers">0</b></div>
+      <div class="mini"><div class="k">LAUNCH OBJECTS</div><b id="liteLaunch">0</b></div>
+      <div class="mini"><div class="k">CLEANUP RUNS</div><b id="liteCleanup">0</b></div>
     </div>
-    <div class="notice" style="margin-top:10px"><b>ALPHA CORE PROTECTION</b><br><span id="sniperText">Sniper checking...</span><br><span id="watcherText">Watcher checking...</span><br>Sniper + Scalp + Pump + Perp LONG/SHORT + Capital Shield + Daily Target Lock پشت صحنه فعال‌اند.</div>
-    <div class="grid" style="margin-top:10px">
-      <div class="mini"><div class="k">Sniper Candidates</div><b id="sniperCandidates">0</b></div>
-      <div class="mini"><div class="k">Best Sniper Score</div><b id="bestSniperScore">—</b></div>
-      <div class="mini"><div class="k">Last Sniper Scan</div><b id="lastSniperScan">—</b></div>
-      <div class="mini"><div class="k">Sniper Entries</div><b id="sniperEntries">0</b></div>
-    </div>
-    <div class="small" style="margin-top:10px">LIVE execution remains locked. این صفحه فقط PAPER / SHADOW را کنترل می‌کند.</div>
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Recent Results</b><div class="small">آخرین معاملات بسته‌شده</div></div><span id="recentCount" class="badge">0</span></div>
-    <div id="recentTrades"><div class="small" style="margin-top:9px">No trades yet.</div></div>
-    <button class="full dark" style="margin-top:12px" onclick="resetPaper()">RESET PAPER TEST</button>
-    <div class="small" style="margin-top:7px">برای شروع تست تمیز؛ Equity و تاریخچه معاملات Paper پاک می‌شود، تنظیمات ربات باقی می‌ماند.</div>
+    <div class="row"><div><div class="sectionTitle">Recent Results</div><div class="small">آخرین معاملات بسته‌شده</div></div><span id="recentCount" class="badge">0</span></div>
+    <div id="trades"><div class="small" style="margin-top:9px">No trades yet.</div></div>
+    <button class="full dark" onclick="resetPaper()">RESET PAPER TEST</button>
   </div>
 </div>
 
@@ -287,457 +273,228 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   <div class="bin">
     <button class="green" onclick="control('start')">START ▶</button>
     <button class="dark" onclick="control('stop')">STOP ■</button>
-    <button class="red" onclick="control('kill')">KILL ⛔</button>
+    <button class="redbtn" onclick="control('kill')">KILL ⛔</button>
   </div>
 </div>
 
 <script>
-const $=x=>document.getElementById(x), money=x=>'$'+Number(x||0).toFixed(2);
-let base=localStorage.getItem('nova_v4_server')||'https://nova-trader-cloud.onrender.com';
-let key=localStorage.getItem('nova_v4_key')||'';
-let profile=localStorage.getItem('nova_simple_profile')||'BALANCED';
+const $=id=>document.getElementById(id);
+const money=n=>'$'+Number(n||0).toFixed(2);
+const DEFAULT_SERVER='https://p01--nova-trader-cloud-v2--snkzwswjqkdc.code.run';
+let base=localStorage.getItem('nova_final_server')||localStorage.getItem('nova_v4_server')||DEFAULT_SERVER;
+let key=localStorage.getItem('nova_final_admin')||localStorage.getItem('nova_v4_key')||'';
+let profile=localStorage.getItem('nova_final_profile')||localStorage.getItem('nova_simple_profile')||'FAST';
+
 $('server').value=base;$('key').value=key;
 
 const profiles={
- SAFE:{sniper:84,pump:78,scalp:80,long:78,short:78,text:'SAFE: ورود کمتر، فیلتر سخت‌تر، مناسب وقتی می‌خواهی محافظه‌کارتر باشد.'},
- BALANCED:{sniper:78,pump:72,scalp:74,long:72,short:72,text:'BALANCED: تعادل بین حساسیت و کیفیت سیگنال. برای شروع همین مناسب است.'},
- FAST:{sniper:72,pump:68,scalp:70,long:68,short:68,text:'FAST: حساس‌تر و سریع‌تر؛ معاملات بیشتری می‌گیرد ولی نویز و ریسک سیگنال هم بیشتر می‌شود.'}
+ SAFE:{sniper:84,pump:78,scalp:80,long:78,short:78,text:'SAFE: ورود کمتر، Threshold سخت‌تر، مناسب تست محافظه‌کارانه.'},
+ BALANCED:{sniper:78,pump:72,scalp:74,long:72,short:72,text:'BALANCED: تعادل بین تعداد فرصت و کیفیت سیگنال.'},
+ FAST:{sniper:72,pump:68,scalp:70,long:68,short:68,text:'FAST: حساس‌تر و سریع‌تر؛ Guardهای سرمایه و امنیت همچنان فعال می‌مانند.'}
 };
 
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function ageText(iso){
+ if(!iso)return '—';const s=Math.max(0,(Date.now()-new Date(iso).getTime())/1000);
+ return s<60?Math.round(s)+'s ago':s<3600?Math.round(s/60)+'m ago':Math.round(s/3600)+'h ago'
+}
 function toggleConn(){$('connBox').classList.toggle('hidden')}
+function saveConnect(){
+ base=$('server').value.trim().replace(/\/$/,'');key=$('key').value;
+ localStorage.setItem('nova_final_server',base);localStorage.setItem('nova_final_admin',key);
+ $('connBox').classList.add('hidden');load()
+}
+async function req(path,opt={}){
+ if(!base)throw Error('Server URL missing');
+ opt.headers={...(opt.headers||{}),'Content-Type':'application/json'};
+ if(key)opt.headers['X-NOVA-Key']=key;
+ const r=await fetch(base+path,opt);
+ if(!r.ok)throw Error(`${r.status} ${await r.text()}`);
+ return r.json()
+}
 function markProfile(){
  ['safe','balanced','fast'].forEach(x=>$(x+'Btn').classList.remove('sel'));
- $(profile.toLowerCase()+'Btn').classList.add('sel');
- $('profileText').textContent=profiles[profile].text;
+ $(profile.toLowerCase()+'Btn').classList.add('sel');$('profileText').textContent=profiles[profile].text
 }
 async function setProfile(p){
- profile=p;localStorage.setItem('nova_simple_profile',p);markProfile();
- $('autoSaved').textContent='Applying '+p+'...';
- if(key){await saveSettings(true)}
- else{$('autoSaved').textContent='Connect first, then profile will auto-save.'}
+ profile=p;localStorage.setItem('nova_final_profile',p);markProfile();
+ if(key)await saveSettings(true)
 }
 markProfile();
 
-async function req(path,opt={}){
- if(!base)throw Error('Server URL missing');
- opt.headers={...(opt.headers||{}),'Content-Type':'application/json','X-NOVA-Key':key};
- let r=await fetch(base+path,opt);if(!r.ok)throw Error(await r.text());return r.json();
-}
-function saveConnect(){
- base=$('server').value.trim().replace(/\/$/,'');key=$('key').value;
- localStorage.setItem('nova_v4_server',base);localStorage.setItem('nova_v4_key',key);
- $('connBox').classList.add('hidden');load();
-}
-function renderMode(mode){
- mode=(mode||'PAPER').toUpperCase();$('modeBadge').textContent=mode;
- $('paperBtn').classList.toggle('active',mode==='PAPER');$('shadowBtn').classList.toggle('active',mode==='SHADOW');
-}
 async function setMode(mode){try{await req('/api/mode/'+mode,{method:'POST'});await load()}catch(e){alert(e.message)}}
 async function control(a){try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}}
-
+async function resetPaper(){
+ if(!confirm('RESET PAPER TEST؟ Equity و تاریخچه Paper پاک می‌شود.'))return;
+ try{await req('/api/control/reset-paper',{method:'POST'});await load()}catch(e){alert(e.message)}
+}
 async function saveSettings(silent=false){
  const p=profiles[profile];
  try{
-  await req('/api/settings',{method:'POST',body:JSON.stringify({
-   risk_pct:+$('risk').value,
-   stop_loss_pct:+$('sl').value,
-   max_positions:+$('maxPos').value,
-   perp_leverage:+$('lev').value,
-   min_sniper_score:p.sniper,
-   min_pump_score:p.pump,
-   min_scalp_score:p.scalp,
-   min_long_score:p.long,
-   min_short_score:p.short
-  })});
-  $('autoSaved').textContent=profile+' saved ✓';
-  setTimeout(()=>{$('autoSaved').textContent=''},1800);
-  await load();
- }catch(e){if(!silent)alert(e.message);$('autoSaved').textContent='Save failed'}
+   await req('/api/settings',{method:'POST',body:JSON.stringify({
+     risk_pct:+$('risk').value,stop_loss_pct:+$('sl').value,max_positions:+$('maxPos').value,
+     perp_leverage:+$('lev').value,min_sniper_score:p.sniper,min_pump_score:p.pump,
+     min_scalp_score:p.scalp,min_long_score:p.long,min_short_score:p.short
+   })});
+   $('saved').textContent=profile+' saved ✓';setTimeout(()=>$('saved').textContent='',1600);
+   await load()
+ }catch(e){$('saved').textContent='Save failed';if(!silent)alert(e.message)}
 }
-
-
-function friendlyReason(reason){
- const map={
-  'execution cost too high':'هزینه اجرای تخمینی بالاست؛ NOVA برای جلوگیری از ورود بد صبر می‌کند.',
-  'portfolio weight too low':'وزن این استراتژی در شرایط فعلی بازار پایین است.',
-  'correlation guard':'این ورود با ریسک پوزیشن‌های دیگر همبستگی زیادی دارد.',
-  'low perp open interest':'Open Interest بازار Perp برای ورود کافی نیست.',
-  'weak directional edge':'اختلاف قدرت LONG و SHORT هنوز برای ورود کافی نیست.',
-  'extreme funding':'Funding غیرعادی است؛ ورود فعلاً متوقف شده.',
-  'extreme volatility':'نوسان بازار بیش از حد بالاست.',
-  'low spot liquidity':'نقدینگی این توکن برای ورود NOVA کافی نیست.',
-  'low spot market quality':'کیفیت بازار Spot هنوز پایین‌تر از حد مورد نیاز است.',
-  'token security score too low':'فیلتر امنیتی توکن اجازه ورود نمی‌دهد.',
-  'stale market data':'داده بازار به‌اندازه کافی تازه نیست.',
-  'cooldown':'این بازار بعد از معامله قبلی در Cooldown است.',
-  'daily loss limit':'محافظ حد ضرر روزانه فعال شده و ورود جدید متوقف است.',
-  'strategy adaptive pause':'Adaptive Engine این استراتژی را موقتاً Pause کرده.',
-  'max positions':'حداکثر تعداد پوزیشن‌های همزمان پر شده.',
-  'already open':'برای این بازار از قبل پوزیشن باز وجود دارد.',
-  'route quality too low':'کیفیت منبع/مسیر اجرای این سیگنال کافی نیست.',
-  'shadow requires token security scan':'در SHADOW باید اسکن امنیتی توکن کامل شود.',
-  'shadow requires primary perp source':'برای Perp در SHADOW منبع اصلی داده باید در دسترس باشد.',
-  'position too small':'اندازه پوزیشن بعد از کنترل ریسک خیلی کوچک شده.',
-  'cash':'موجودی Paper آزاد برای این پوزیشن کافی نیست.',
-  'entry accepted':'تمام Gateهای ورود تأیید شدند.',
-  'PROFIT_LOCK':'محافظ سود فعال شد؛ NOVA اجازه نداد سود دیده‌شده به ضرر تبدیل شود.',
-  'CAPITAL_SHIELD_STOP':'Capital Shield معامله ضعیف را قبل از Stop اصلی بست.',
-  'SCRATCH_EXIT':'معامله بعد از ورود حرکت کافی نکرد؛ NOVA با ضرر کوچک خارج شد.',
-  'EARLY_BREAK_EVEN':'معامله وارد سود شد و NOVA نزدیک سر‌به‌سر از آن محافظت کرد.',
-  'GLOBAL_EQUITY_GUARD':'ریسک مجموع پوزیشن‌ها بالا رفت؛ NOVA برای محافظت از سرمایه خروج اضطراری زد.',
-  'LIQUIDITY_EMERGENCY':'نقدینگی بازار شدیداً ضعیف شد؛ NOVA خروج اضطراری زد.',
-  'spot move too extreme':'حرکت ۵ دقیقه‌ای بیش از حد شدید است؛ NOVA از تعقیب این حرکت خودداری کرد.',
-  'low spot liquidity':'نقدینگی برای Capital Shield کافی نیست و ورود رد شد.',
-  'low spot market quality':'کیفیت بازار برای ورود محافظت‌شده کافی نیست.',
-  'daily profit target locked':'هدف سود روزانه Secure شده؛ ورود جدید برای حفظ سود متوقف است.',
-  'portfolio open risk cap':'ریسک مجموع پوزیشن‌های باز به سقف محافظتی رسیده.',
-  'DAILY_TARGET_SECURE':'هدف روزانه به محدوده Secure رسید؛ NOVA سود را بانکی کرد و ورود جدید را قفل کرد.',
-  'pulse score':'شتاب لحظه‌ای هنوز به حد ورود Real-time Sniper نرسیده.',
-  'pulse event count':'تعداد معاملات در پنجره ۵ ثانیه‌ای هنوز کافی نیست.',
-  'pulse buy pressure':'فشار خرید لحظه‌ای کافی نیست.',
-  'pulse unique buyers':'تعداد خریداران مستقل در موج فعلی کافی نیست.',
-  'pulse late chase':'حرکت بیش از حد جلو رفته؛ NOVA برای جلوگیری از خرید در سقف وارد نشد.',
-  'REALTIME_PULSE_ENTRY':'Pulse لحظه‌ای تأیید شد و Real-time Sniper وارد Paper/Shadow شد.',
-  'pulse event count':'موج هنوز تعداد معامله کافی در پنجره ۵ ثانیه‌ای ندارد.',
-  'pulse buy pressure':'فشار خرید لحظه‌ای هنوز کافی نیست.',
-  'pulse unique buyers':'تعداد خریداران مستقل هنوز کافی نیست.',
-  'pulse score':'امتیاز ترکیبی Pulse هنوز به Gate ورود نرسیده.',
-  'edge governor paused strategy':'Edge این موتور منفی شده؛ Strategy Governor موقتاً ورود جدید را متوقف کرده.',
-  'survival loss guard':'سقف ضرر Recovery فعال شده و ورود جدید برای حفظ سرمایه متوقف است.',
-  'SURVIVAL_GUARD':'سقف ضرر Recovery فعال شد؛ NOVA پوزیشن‌های باز را برای حفظ سرمایه بست.',
-  'SCALP_SCRATCH_EXIT':'Scalp حرکت کافی نکرد؛ NOVA با ضرر کوچک زود خارج شد.',
-  'PUMP_SCRATCH_EXIT':'Pump ادامه پیدا نکرد؛ NOVA قبل از Stop کامل خارج شد.',
-  'signal below threshold':'امتیاز سیگنال هنوز کافی نیست.',
-  'all final gates passed':'تمام Gateهای ورود تأیید شده.',
-  'strong signal; controlled paper exploration':'سیگنال قوی است؛ با حجم کوچک در PAPER وارد می‌شود.',
-  'soft router needs stronger signal':'برای Controlled Entry باید Signal از Threshold فاصله امن داشته باشد.',
-  'liquidity below soft floor':'نقدینگی حتی برای Controlled Entry کافی نیست.',
-  'market quality below soft floor':'کیفیت بازار برای Controlled Entry پایین است.',
-  'soft router weak buy pressure':'فشار خرید برای ورود کنترل‌شده کافی نیست.',
-  'soft router momentum unsafe':'Momentum برای ورود Near-miss مناسب نیست.',
-  'soft-entry hourly limit':'سقف ورودهای کنترل‌شده این ساعت پر شده.',
-  'FIRST_SECONDS_ENTRY':'Launch Burst دو بار تأیید شد و ورود PAPER انجام شد.',
-  'launch low events':'در ۲ ثانیه هنوز تعداد معامله کافی نیست.',
-  'launch low buyers':'خریداران مستقل هنوز کافی نیستند.',
-  'launch low buy pressure':'فشار خرید First-Seconds کافی نیست.',
-  'launch low buy flow':'حجم SOL ورودی در ۲ ثانیه کافی نیست.',
-  'launch buyer concentration':'حجم خرید بیش از حد روی یک Wallet متمرکز است.',
-  'creator sold':'Creator شروع به فروش کرده؛ ورود ممنوع است.',
-  'creator spam':'Creator در زمان کوتاه توکن‌های زیادی ساخته.',
-  'duplicate ticker spam':'Ticker تکراری/اسپمی تشخیص داده شد.',
-  'launch late chase':'حرکت اولیه بیش از حد جلو رفته؛ NOVA در سقف تعقیب نمی‌کند.',
-  'launch already fading':'Market Cap از نقطه ایجاد در حال افت است.',
-  'LAUNCH_CREATOR_SELL':'Creator فروخت؛ خروج اضطراری First-Seconds.',
-  'LAUNCH_RAW_STOP':'حرکت خام Market Cap به Stop سریع رسید.',
-  'LAUNCH_SCRATCH_EXIT':'Launch ادامه نداد؛ خروج سریع برای محدودکردن ضرر.',
-  'LAUNCH_FLOW_REVERSAL':'جریان خرید به فروش برگشت؛ خروج Event-Driven.',
-  'LAUNCH_TIME_EXIT':'در پنجره First-Seconds ادامه حرکت کافی نبود؛ خروج زمانی.',
-  'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
-  'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
-  'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
-  'sniper momentum too weak':'حرکت قیمت هنوز برای Sniper شروع نشده.',
-  'sniper late chase':'پامپ زیادی جلو رفته؛ NOVA برای جلوگیری از خرید در سقف وارد نمی‌شود.',
-  'sniper market too old':'این بازار برای Launch Sniper قدیمی شده.',
-  'SNIPER_SCRATCH_EXIT':'حرکت سریع ادامه پیدا نکرد؛ Sniper با ضرر بسیار کوچک خارج شد.',
-  'SNIPER_MOMENTUM_FADE':'شتاب پامپ ضعیف شد؛ Sniper سریع خارج شد.',
-  'SNIPER_TAKE_PROFIT':'هدف سریع Sniper گرفته شد و باقی پوزیشن بسته شد.'
- };
- return map[reason]||reason||'NOVA در حال اسکن بازار است.';
+function renderMode(mode){
+ mode=(mode||'PAPER').toUpperCase();$('modeBadge').textContent=mode;
+ $('paperBtn').classList.toggle('active',mode==='PAPER');$('shadowBtn').classList.toggle('active',mode==='SHADOW')
 }
-function ageText(iso){
- if(!iso)return '—';
- let s=Math.max(0,(Date.now()-new Date(iso).getTime())/1000);
- if(s<60)return Math.round(s)+'s ago';
- if(s<3600)return Math.round(s/60)+'m ago';
- return Math.round(s/3600)+'h ago';
+function reasonFa(r){
+ const m={
+  'cooldown':'Cooldown فعال است.','low spot liquidity':'نقدینگی کافی نیست.',
+  'low spot market quality':'کیفیت بازار کافی نیست.','token security score too low':'فیلتر امنیتی توکن رد کرد.',
+  'daily loss limit':'Daily Guard ورود جدید را متوقف کرده.','daily profit target locked':'هدف روزانه Secure شده.',
+  'portfolio open risk cap':'ریسک کل پورتفو به سقف رسیده.','signal below threshold':'امتیاز سیگنال هنوز کافی نیست.',
+  'all final gates passed':'تمام Gateهای ورود تأیید شده.','FIRST_SECONDS_ENTRY':'First-Seconds entry تأیید شد.',
+  'pulse late chase':'حرکت زیادی جلو رفته؛ NOVA تعقیب نمی‌کند.','sniper late chase':'حرکت برای Sniper دیر شده.',
+  'edge governor paused strategy':'Edge Governor این موتور را Pause کرده.','survival loss guard':'Survival Guard فعال است.'
+ };return m[r]||r||'NOVA در حال اسکن بازار است.'
 }
-function strategyScore(c,strategy){
- if(strategy==='SNIPER_LONG')return Number(c.sniper_score||0);
- if(strategy==='PUMP_LONG')return Number(c.pump_score||0);
- if(strategy==='SCALP_LONG')return Number(c.scalp_score||0);
- if(strategy==='PERP_LONG')return Number(c.long_score||0);
- if(strategy==='PERP_SHORT')return Number(c.short_score||0);
- return 0;
+function strategyOf(c){
+ if(c.best_strategy)return c.best_strategy;
+ if(c.perp_eligible)return c.direction==='SHORT'?'PERP_SHORT':'PERP_LONG';
+ return Number(c.pump_score||0)>=Number(c.scalp_score||0)?'PUMP_LONG':'SCALP_LONG'
 }
-function thresholdFor(strategy,s){
- if(strategy==='SNIPER_LONG')return Number(s.min_sniper_score||78);
- if(strategy==='PUMP_LONG')return Number(s.min_pump_score||0);
- if(strategy==='SCALP_LONG')return Number(s.min_scalp_score||0);
- if(strategy==='PERP_LONG')return Number(s.min_long_score||0);
- if(strategy==='PERP_SHORT')return Number(s.min_short_score||0);
- return 100;
+function scoreOf(c,s){
+ return Number(s==='SNIPER_LONG'?c.sniper_score:s==='PUMP_LONG'?c.pump_score:s==='SCALP_LONG'?c.scalp_score:s==='PERP_SHORT'?c.short_score:c.long_score||0)
 }
-function renderDecision(d){
- let positions=d.positions||[],decisions=d.decisions||[],cands=d.candidates||[];
- let last=decisions[0],best=cands.slice().sort((a,b)=>(b.quality_score||0)-(a.quality_score||0))[0];
- $('bestOpp').textContent=best?`${best.symbol} • ${best.best_strategy||'—'} • Q${Number(best.quality_score||0).toFixed(0)}`:'No candidate';
- $('lastUpdate').textContent=d.last_refresh?new Date(d.last_refresh).toLocaleTimeString():'—';
- if(positions.length){
-   let p=positions[0];$('decisionTitle').textContent=`IN POSITION • ${p.symbol} ${p.side}`;$('decisionTitle').className='decision g';
-   $('decisionReason').textContent=`NOVA در معامله است. بازده فعلی ${Number(p.return_pct||0).toFixed(2)}%. مدیریت خروج کاملاً خودکار است.`;
-   $('decisionAge').textContent=ageText(p.opened_at);return;
- }
- if(d.killed){$('decisionTitle').textContent='KILL SWITCH ACTIVE';$('decisionTitle').className='decision r';$('decisionReason').textContent='ورود جدید متوقف است تا START را بزنید.';return}
- if(!d.bot_enabled){$('decisionTitle').textContent='BOT STOPPED';$('decisionTitle').className='decision y';$('decisionReason').textContent='برای شروع اسکن و ورود خودکار START را بزنید.';return}
- if(last){
-   $('decisionAge').textContent=ageText(last.created_at);
-   if(last.outcome==='OPENED'){
-     $('decisionTitle').textContent='LAST ENTRY ACCEPTED';$('decisionTitle').className='decision g';
-   }else{
-     $('decisionTitle').textContent='WAITING FOR BETTER ENTRY';$('decisionTitle').className='decision y';
-   }
-   $('decisionReason').textContent=friendlyReason(last.reason);return;
- }
- $('decisionTitle').textContent='SCANNING...';$('decisionTitle').className='decision c';
- $('decisionReason').textContent='هنوز تصمیم ورود ثبت نشده؛ NOVA در حال بررسی بازار است.';
+function renderSignals(cands){
+ const rows=(cands||[]).slice().sort((a,b)=>Number(b.quality_score||0)-Number(a.quality_score||0)).slice(0,6);
+ $('signals').innerHTML=rows.length?rows.map(c=>{
+   const st=strategyOf(c),sc=scoreOf(c,st),er=c.entry_router||{},state=er.state||'CHECKING';
+   const cls=state==='READY'?'g':state==='SOFT_PASS'?'y':'r';
+   return `<div class="signal">
+    <div class="row"><div><b>${esc(c.symbol)}</b><span class="pill">${esc(st)}</span></div><span class="score ${st.includes('SHORT')?'r':'g'}">${sc.toFixed(0)}</span></div>
+    <div class="small">Quality ${Number(c.quality_score||0).toFixed(0)} • Market ${Number(c.market_risk||0).toFixed(0)} • Liquidity ${money(c.liquidity||0)}</div>
+    <div class="state ${cls}" style="margin-top:5px">${esc(state)} • ${esc(er.reason||'final gates checking')}</div>
+    <div class="bar"><div class="fill" style="width:${Math.min(100,sc)}%"></div></div>
+   </div>`
+ }).join(''):'<div class="small" style="margin-top:9px">No strong signal right now.</div>'
 }
 function renderPositions(rows){
- let card=$('openPositionsCard');
- if(!rows||!rows.length){card.classList.add('hidden');return}
- card.classList.remove('hidden');$('openCount').textContent=rows.length;
- $('openPositions').innerHTML=rows.map(p=>{
-   let lock=p.profit_lock_armed?` • Profit Lock ≥ ${Number(p.profit_lock_floor_pct||0).toFixed(2)}%`:' • Profit Lock waiting';
-   return `<div class="posrow"><div class="row"><div><b>${p.symbol}</b> <span class="pill ${p.side==='SHORT'?'dirShort':'dirLong'}">${p.side}</span></div><b class="${p.return_pct>=0?'g':'r'}">${p.return_pct>=0?'+':''}${Number(p.return_pct||0).toFixed(2)}%</b></div><div class="small">${p.strategy} • Peak ${Number(p.peak_return_pct||0).toFixed(2)}%${lock}</div><div class="small">Entry ${Number(p.entry||0).toPrecision(6)} • Value ${money(p.market_value||0)}</div></div>`;
- }).join('');
+ rows=rows||[];$('openCount').textContent=rows.length;
+ if(!rows.length){$('positionsCard').classList.add('hidden');return}
+ $('positionsCard').classList.remove('hidden');
+ $('positions').innerHTML=rows.map(p=>`<div class="pos">
+   <div class="row"><div><b>${esc(p.symbol)}</b><span class="pill">${esc(p.side)}</span></div><b class="${Number(p.return_pct||0)>=0?'g':'r'}">${Number(p.return_pct||0).toFixed(2)}%</b></div>
+   <div class="small">${esc(p.strategy)} • Peak ${Number(p.peak_return_pct||0).toFixed(2)}% • Value ${money(p.market_value||0)}</div>
+ </div>`).join('')
 }
-function renderRecentTrades(rows){
- rows=(rows||[]).slice(0,5);$('recentCount').textContent=rows.length;
- $('recentTrades').innerHTML=rows.length?rows.map(t=>`<div class="traderow"><div class="row"><div><b>${t.symbol}</b> <span class="pill ${t.side==='SHORT'?'dirShort':'dirLong'}">${t.side}</span></div><b class="${t.pnl>=0?'g':'r'}">${t.pnl>=0?'+':''}${money(t.pnl)} • ${Number(t.pnl_pct||0).toFixed(2)}%</b></div><div class="small">${t.strategy} • ${t.reason}</div></div>`).join(''):'<div class="small" style="margin-top:9px">No closed trades yet.</div>';
+function renderTrades(rows){
+ rows=(rows||[]).slice(0,6);$('recentCount').textContent=rows.length;
+ $('trades').innerHTML=rows.length?rows.map(t=>`<div class="trade">
+   <div class="row"><div><b>${esc(t.symbol)}</b><span class="pill">${esc(t.side||'')}</span></div><b class="${Number(t.pnl||0)>=0?'g':'r'}">${money(t.pnl||0)} • ${Number(t.pnl_pct||0).toFixed(2)}%</b></div>
+   <div class="small">${esc(t.strategy)} • ${esc(t.reason)}</div>
+ </div>`).join(''):'<div class="small" style="margin-top:9px">No closed trades yet.</div>'
 }
-
-
-function renderDailyGuard(m){
- let blocked=!!m.blocked;
- $('todayPnl').textContent=(Number(m.today_pnl||0)>=0?'+':'')+money(m.today_pnl||0);
- $('todayPnl').className=Number(m.today_pnl||0)>=0?'g':'r';
- $('dailyLimit').textContent=money(m.loss_limit_usd||0);
- $('dailyGuardBadge').textContent=blocked?'BLOCKED':'ACTIVE';
- $('dailyGuardBadge').className='badge '+(blocked?'r':'g');
- let eg=m.equity_guard||{};
- $('dailyGuardText').textContent=eg.blocked?
-  'GLOBAL EQUITY GUARD فعال است؛ مجموع ضرر باز + بسته به حد محافظتی رسیده و ورود جدید متوقف می‌شود.':
-  blocked?
-  'حد ضرر روزانه فعال شده؛ NOVA تا Reset تست یا شروع روز جدید پوزیشن تازه باز نمی‌کند.':
-  'ورود جدید مجاز است؛ Daily Guard و Capital Shield هر دو فعال‌اند.';
+function renderDecision(d){
+ const positions=d.positions||[],decisions=d.decisions||[],cands=d.candidates||[];
+ const best=cands.slice().sort((a,b)=>Number(b.quality_score||0)-Number(a.quality_score||0))[0];
+ $('bestOpp').textContent=best?`${best.symbol} • ${strategyOf(best)} • Q${Number(best.quality_score||0).toFixed(0)}`:'—';
+ $('lastUpdate').textContent=d.last_refresh?new Date(d.last_refresh).toLocaleTimeString():'—';
+ if(positions.length){
+   const p=positions[0];$('decisionTitle').textContent=`IN POSITION • ${p.symbol} ${p.side}`;$('decisionTitle').className='v g';
+   $('decisionReason').textContent=`مدیریت خروج خودکار فعال است. بازده فعلی ${Number(p.return_pct||0).toFixed(2)}%.`;
+   $('decisionAge').textContent=ageText(p.opened_at);return
+ }
+ if(d.killed){$('decisionTitle').textContent='KILL SWITCH ACTIVE';$('decisionTitle').className='v r';$('decisionReason').textContent='ورود جدید متوقف است.';return}
+ if(!d.bot_enabled){$('decisionTitle').textContent='BOT STOPPED';$('decisionTitle').className='v y';$('decisionReason').textContent='برای شروع START را بزن.';return}
+ const last=decisions[0];
+ if(last){$('decisionAge').textContent=ageText(last.created_at);$('decisionTitle').textContent=last.outcome==='OPENED'?'LAST ENTRY ACCEPTED':'WAITING FOR BETTER ENTRY';$('decisionTitle').className='v '+(last.outcome==='OPENED'?'g':'y');$('decisionReason').textContent=reasonFa(last.reason);return}
+ $('decisionTitle').textContent='SCANNING…';$('decisionTitle').className='v c';$('decisionReason').textContent='NOVA در حال بررسی بازار است.'
 }
-async function resetPaper(){
- if(!confirm('Paper test reset شود؟ Equity و معاملات Paper پاک می‌شوند و موجودی به Start Balance برمی‌گردد.'))return;
- if(!confirm('تأیید نهایی: RESET PAPER TEST؟'))return;
+function renderRealtime(d,h){
+ const p=d.realtime_pulse||{},rx=d.realtime_exit||{};
+ const connected=!!p.connected||!!h?.pulse_connected;
+ const mode=p.mode||h?.pulse_mode||'OFF';
+ const http=h?.pulse_http_status ?? (connected?101:'—');
+ $('rtBadge').textContent=connected?'LIVE':mode;
+ $('rtBadge').className='badge '+(connected?'ok':String(mode).includes('REJECTED')||String(mode).includes('AUTH')?'bad':'warn');
+ $('rtMode').textContent=mode;$('rtHttp').textContent=http;
+ $('rtLast').textContent=p.last_event_age_sec==null?'—':Number(p.last_event_age_sec).toFixed(2)+'s ago';
+ $('rtAttempts').textContent=h?.pulse_attempts??'—';$('rtSubs').textContent=p.subscribed_tokens||0;$('rtEvents').textContent=p.events_total||0;
+ $('rtExit').textContent=rx.enabled?(rx.mode||'ON'):'OFF';
+ $('rtRetry').textContent=h?.pulse_retry_sec==null?'—':Number(h.pulse_retry_sec)+'s';
+ $('rtText').textContent=connected?
+   `Realtime stream LIVE • Event-driven Sniper/Exit فعال است.`:
+   String(mode).startsWith('REJECTED_HTTP_')?
+   `PumpPortal handshake را رد کرده (${mode}). NOVA طبق cooldown دوباره تلاش می‌کند؛ polling fallback فعال می‌ماند.`:
+   mode==='AUTH_REJECTED'?'PumpPortal authentication رد شده؛ API key/wallet association باید بررسی شود.':
+   mode==='RATE_LIMITED'?'PumpPortal rate-limit فعال است؛ NOVA منتظر retry window می‌ماند.':
+   mode==='KEY_READY_TRADE_STREAM_OFF'?'API key شناسایی شده ولی Trade Stream env خاموش است.':
+   'Realtime فعلاً متصل نیست؛ fallback scanner فعال است.'
+}
+async function loadDiagnostics(){
  try{
-   await req('/api/control/reset-paper',{method:'POST'});
-   await load();
-   alert('Paper test reset شد. برای شروع دوباره START را بزن.');
- }catch(e){alert(e.message)}
-}
-
-
-function renderDailyTarget(t,risk){
-  t=t||{};risk=risk||{};
-  let progress=Number(t.progress_pct||0);
-  $('targetBadge').textContent=Math.min(progress,100).toFixed(0)+'%';
-  $('targetBar').style.width=Math.min(progress,100)+'%';
-  $('targetPct').textContent=Number(t.target_pct||10).toFixed(1)+'%';
-  $('targetCombined').textContent=(Number(t.combined||0)>=0?'+':'')+money(t.combined||0);
-  $('targetCombined').className=Number(t.combined||0)>=0?'g':'r';
-  $('openRisk').textContent=Number(risk.open_risk_pct||0).toFixed(2)+'%';
-  let mode=t.locked?'LOCKED':t.de_risk?'DE-RISK':'NORMAL';
-  $('targetRiskMode').textContent=mode;
-  $('targetRiskMode').className=t.locked?'g':t.de_risk?'y':'c';
-  $('targetText').textContent=t.locked?
-    'هدف روزانه Secure شده؛ NOVA ورود جدید را برای باقی روز متوقف کرده.':
-    t.de_risk?
-    'به ناحیه سود بالا رسیدیم؛ NOVA ریسک معاملات جدید را کاهش داده تا سود روز حفظ شود.':
-    'هدف روزانه فقط Objective است؛ NOVA برای رسیدن به آن معامله ضعیف یا Martingale انجام نمی‌دهد.';
-}
-function sniperSignalCard(c){
-  let score=Number(c.sniper_score||0),m5=Number(c.m5||0),bp=Number(c.buy_pressure||0),va=Number(c.volume_accel||0);
-  return `<div class="signal">
-    <div class="row"><div><b>${c.symbol}</b><span class="pill">SNIPER_LONG</span></div><b class="score c">${score.toFixed(0)}</b></div>
-    <div class="small">5m ${m5.toFixed(2)}% • Buy ${bp.toFixed(0)}% • VolAccel ${va.toFixed(0)} • Liq ${money(c.liquidity||0)}</div>
-    <div class="bar"><div class="fill" style="width:${Math.min(score,100)}%"></div></div>
-  </div>`;
-}
-
-function signalCard(c,s){
- let strategy=c.best_strategy||((c.perp_eligible&&c.direction==='SHORT')?'PERP_SHORT':c.perp_eligible?'PERP_LONG':(c.pump_score>=c.scalp_score?'PUMP_LONG':'SCALP_LONG'));
- let score=strategyScore(c,strategy),th=thresholdFor(strategy,s||{});
- let passed=score>=th,dir=strategy.includes('SHORT')?'SHORT':'LONG';
- let sObj=c.security||{};
- let sec=c.perp_eligible?'PERP':(sObj.status==='UNKNOWN'||sObj.score==null?'UNKNOWN':Number(sObj.score).toFixed(0));
- let marketQ=Number(c.market_risk||0).toFixed(0);
- let er=c.entry_router||{};
- let state=er.state||(passed?'CHECKING':'BLOCKED');
- let stateClass=state==='READY'?'entryReady':state==='SOFT_PASS'?'entrySoft':'entryBlock';
- let stateLabel=state==='READY'?'READY TO ENTER':state==='SOFT_PASS'?'CONTROLLED ENTRY':'BLOCKED';
- let reason=er.reason||(!passed?'Signal below threshold':'Final gates checking');
- return `<div class="signal">
-  <div class="row"><div><b>${c.symbol}</b><span class="pill">${strategy}</span></div><div><span class="signalState ${passed?'pass':'wait'}">${passed?'SCORE PASS':'WAIT'}</span> <span class="score ${dir==='SHORT'?'dirShort':'dirLong'}">${score.toFixed(0)}</span></div></div>
-  <div class="small">${dir} • Base threshold ${th.toFixed(0)} • Market Quality ${marketQ} • Security ${sec}</div>
-  <div class="entryLine ${stateClass}">FINAL GATE: ${stateLabel} • ${reason}</div>
-  <div class="bar"><div class="fill" style="width:${Math.min(100,score)}%"></div></div>
- </div>`;
-}
-
-async function load(){
- try{
-  let d=await req('/api/dashboard');
-  $('conn').textContent='CONNECTED';$('conn').className='g';
-  $('dot').className='dot '+(d.bot_enabled&&!d.killed?'on':'');
-  $('bot').textContent=d.killed?'KILLED':d.bot_enabled?'RUNNING':'STOPPED';
-  $('health').textContent=d.system_health?.status==='OK'?'System healthy':'System '+(d.system_health?.status||'warming');
-  renderMode(d.mode);
-  let m=d.metrics||{};
-  renderDailyGuard(m);
-  $('equity').textContent=money(m.equity);
-  $('pnl').textContent=(m.pnl>=0?'+':'')+money(m.pnl);$('pnl').className='v '+(m.pnl>=0?'g':'r');
-  $('wr').textContent=Number(m.win_rate||0).toFixed(1)+'%';
-  $('positionsN').textContent=m.open_positions||0;
-
-  let s=d.settings||{};
-  if(s.risk_pct!=null)$('risk').value=s.risk_pct;
-  if(s.stop_loss_pct!=null)$('sl').value=s.stop_loss_pct;
-  if(s.max_positions!=null)$('maxPos').value=s.max_positions;
-  if(s.perp_leverage!=null)$('lev').value=String(s.perp_leverage);
-
-  renderDecision(d);renderPositions(d.positions||[]);renderRecentTrades(d.trades||[]);
-  let router=d.entry_router||{},rs=router.states||{};
-  $('routerReady').textContent=rs.READY||0;
-  $('routerSoft').textContent=rs.SOFT_PASS||0;
-  $('routerBlocked').textContent=rs.BLOCKED||0;
-  $('routerHour').textContent=`${router.soft_entries_last_hour||0}/${router.max_soft_entries_per_hour||2}`;
-  $('routerBadge').textContent=router.enabled?'AUTO':'OFF';
-  $('routerBadge').className='badge '+(router.enabled?'g':'y');
-  let le=router.last_entry;
-  $('routerText').textContent=le?`Last entry: ${le.symbol} • ${le.strategy} • ${le.mode}`:
-    'READY = strict gates passed. CONTROLLED = strong PAPER signal with reduced size. Hard safety gates are never bypassed.';
-  let candidates=(d.candidates||[]).slice().sort((a,b)=>(b.quality_score||0)-(a.quality_score||0)).slice(0,5);
-  $('signals').innerHTML=candidates.length?candidates.map(c=>signalCard(c,s)).join(''):'<div class="small" style="margin-top:10px">No strong signal right now.</div>';
-
-  let systemOk=d.system_health?.status==='OK';
-  $('protection').textContent=systemOk?'PROTECTED':'CHECK';
-  $('protection').className='badge '+(systemOk?'g':'y');
-  $('sys').textContent=d.system_health?.status||'—';$('sys').className=systemOk?'g':'y';
-  $('exec').textContent=d.execution?.fills>=0?'ACTIVE':'—';$('exec').className='g';
-  $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
-  $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
-  renderDailyTarget(d.daily_target||{},d.risk_status||{});
-
-  let lite=d.free_lite||{};
-  if($('liteSubs')) $('liteSubs').textContent=lite.pulse_subscriptions??0;
-  if($('liteBuffers')) $('liteBuffers').textContent=lite.pulse_buffers??0;
-  if($('liteLaunch')) $('liteLaunch').textContent=lite.launch_watch_objects??0;
-  if($('liteCleanup')) $('liteCleanup').textContent=lite.cleanup_runs??0;
-
-  let ls=d.launch_sniper||{},ld=ls.diag||{},lb=ls.best||null,lr=ls.rules||{};
-  $('launchNew').textContent=ls.new_tokens||0;
-  $('launchWatching').textContent=ls.watching||0;
-  $('launchTrades').textContent=ls.trades_seen||0;
-  $('launchEntries').textContent=ls.entries||0;
-  $('launchGatePass').textContent=ld.GATE_PASS||0;
-  $('launchConfirmed').textContent=ld.CONFIRMED||0;
-  $('launchCreatorSell').textContent=ld.CREATOR_SELL||0;
-  $('launchSpam').textContent=(ld.CREATOR_SPAM||0)+(ld.DUPLICATE_SYMBOL||0);
-  $('launchBadge').textContent=ls.enabled?'ACTIVE':'OFF';
-  $('launchBadge').className='badge '+(ls.enabled?'g':'y');
-
-  if(lb){
-    let sym=lb.symbol||((lb.mint||'').slice(0,5)+'…');
-    $('launchBestTitle').textContent=`${sym} • SCORE ${Number(lb.score||0).toFixed(0)} • ${Number(lb.age_sec||0).toFixed(1)}s`;
-    $('launchBestMeta').textContent=`2s ${lb.events_2s||0} trades • Buyers ${lb.unique_buyers_2s||0} • Buy ${Number(lb.buy_pressure_2s||0).toFixed(0)}% • Flow ${Number(lb.buy_sol_2s||0).toFixed(2)} SOL • Top ${Number(lb.top_buyer_share_pct||0).toFixed(0)}%`;
-    $('launchBestReason').textContent=`${lb.status||'WATCHING'} • ${lb.reason||''}${lb.mcap_multiple!=null?' • MC x'+Number(lb.mcap_multiple).toFixed(2):''}`;
-    $('launchState').textContent=lb.status||'WATCHING';
-    $('launchState').className='badge '+(lb.status==='READY'?'g':lb.status==='BLOCKED'?'r':'y');
-  }else{
-    $('launchBestTitle').textContent='Waiting for new token...';
-    $('launchBestMeta').textContent='No launch burst yet.';
-    $('launchBestReason').textContent='';
-    $('launchState').textContent='—';
-  }
-  $('launchRules').textContent=lr.score!=null?
-    `Gate → Score ${lr.score} • ${lr.events_2s} trades/2s • ${lr.buyers_2s} buyers • Buy ${lr.buy_pressure_2s}% • ≥${lr.min_buy_sol_2s} SOL • age ≤${lr.max_age_sec}s`:'';
-
-  let pulse=d.realtime_pulse||{};
-  $('pulseMode').textContent=pulse.mode||'—';
-  $('pulseLast').textContent=pulse.last_event_age_sec==null?'—':Number(pulse.last_event_age_sec).toFixed(2)+'s ago';
-  $('pulseHot').textContent=(pulse.hot||[]).length;
-  $('pulseEntries').textContent=pulse.entries||0;
-  $('pulseBadge').textContent=pulse.connected?'LIVE':(pulse.mode==='FALLBACK_ONLY'?'FALLBACK':'OFF');
-  $('pulseBadge').className='badge '+(pulse.connected?'g':'y');
-  $('pulseText').textContent=pulse.connected?
-    `Event-driven stream LIVE • ${pulse.subscribed_tokens||0} token subscriptions • ${pulse.events_total||0} events processed`:
-    pulse.mode==='KEY_READY_TRADE_STREAM_OFF'?
-    'API key detected but metered trade stream is OFF. Polling Sniper remains active.':
-    'Realtime trade stream unavailable; 8s polling Sniper remains active as fallback.';
-  let rx=d.realtime_exit||{};
-  $('realtimeExitText').textContent=rx.enabled?
-    `${rx.mode||'—'} • armed ${rx.armed_positions||0} • checks ${rx.checks||0} • direct ${rx.direct_marks||0} • REST backup ${rx.rest_checks||0}${rx.last_event_age_sec!=null?' • last '+Number(rx.last_event_age_sec).toFixed(2)+'s ago':''}`:
-    'Realtime Exit OFF';
-  let pi=d.pulse_intelligence||{};
-  let pc=pi.counts||{},best=pi.best_live||null,th=pi.effective_thresholds||{};
-  $('diagObserved').textContent=pi.observed_bursts||0;
-  $('diagPass').textContent=pi.front_gate_pass||0;
-  $('diagEvents').textContent=pc.LOW_EVENTS||0;
-  $('diagPressure').textContent=pc.LOW_BUY_PRESSURE||0;
-  $('diagBuyers').textContent=pc.LOW_UNIQUE_BUYERS||0;
-  $('diagScore').textContent=pc.LOW_SCORE||0;
-  $('diagLate').textContent=pc.LATE_CHASE||0;
-  $('diagFinal').textContent=pi.final_pass||0;
-  $('pulseAdaptiveBadge').textContent=pi.adaptive_enabled?'AUTO':'FIXED';
-  $('pulseAdaptiveBadge').className='badge '+(pi.adaptive_enabled?'g':'y');
-
-  if(best){
-    let label=best.symbol||((best.mint||'').slice(0,5)+'…'+(best.mint||'').slice(-4));
-    $('bestPulseTitle').textContent=`${label} • SCORE ${Number(best.score||0).toFixed(0)}`;
-    $('bestPulseMeta').textContent=`5s ${best.events_5s||0} events • Buy ${Number(best.buy_pressure_5s||0).toFixed(0)}% • Buyers ${best.unique_buyers_10s||0} • Confidence ${Number(best.sample_confidence||0).toFixed(0)}% • Accel ${Number(best.acceleration_score||0).toFixed(0)}`;
-  }else{
-    $('bestPulseTitle').textContent='Waiting...';
-    $('bestPulseMeta').textContent='No recent micro-burst observed.';
-  }
-
-  $('pulseThresholds').textContent=th.score!=null?
-    `Adaptive gates → Score ${th.score} • 5s Events ${th.events_5s} • Buy ${th.buy_pressure_5s}% • Buyers ${th.unique_buyers_10s}`:'';
-  let acts=pi.actions||[];
-  $('adaptiveAction').textContent=acts.length?`Last adaptive action: ${acts[acts.length-1].message}`:'Adaptive Pulse is collecting data; Capital Shield/Security never auto-relax.';
-
-  let sn=d.sniper||{};
-  $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
-  let snCands=sn.candidates||[];
-  $('sniperCandidates').textContent=snCands.length;
-  let bestSn=snCands.length?Math.max(...snCands.map(x=>Number(x.sniper_score||0))):null;
-  $('bestSniperScore').textContent=bestSn==null?'—':bestSn.toFixed(0);
-  $('lastSniperScan').textContent=sn.last_scan_age_sec==null?'—':Number(sn.last_scan_age_sec).toFixed(1)+'s ago';
-  $('sniperEntries').textContent=sn.entries||0;
-  $('sniperSignalCount').textContent=snCands.length;
-  $('sniperSignals').innerHTML=snCands.length?snCands.map(sniperSignalCard).join(''):'<div class="small" style="margin-top:9px">No sniper setup right now.</div>';
-  let eg=d.edge_governor||{},gs=eg.strategies||{},sv=d.survival_guard||{};
-  function gstate(k){return (gs[k]||{}).state||'—'}
-  $('govLaunch').textContent=gstate('LAUNCH_SNIPER');
-  $('govSniper').textContent=gstate('SNIPER_LONG');
-  $('govScalp').textContent=gstate('SCALP_LONG');
-  $('govPump').textContent=gstate('PUMP_LONG');
-  let pl=gstate('PERP_LONG'),ps=gstate('PERP_SHORT');
-  $('govPerp').textContent=pl===ps?pl:`${pl}/${ps}`;
-  let states=Object.values(gs).map(x=>x.state);
-  $('edgeBadge').textContent=states.includes('PAUSED')?'PROTECTING':states.includes('PROBATION')?'LEARNING':'EDGE OK';
-  $('edgeBadge').className='badge '+(states.includes('PAUSED')?'y':'g');
-  $('survivalLimit').textContent=money(Math.abs(Number(sv.combined_limit_usd||0)));
-  $('recoveryState').textContent=sv.blocked?'BLOCKED':'ACTIVE';
-  $('recoveryState').className=sv.blocked?'r':'g';
-
-  let fw=d.fast_watcher||{};
-  if(!fw.alive){
-    $('watcherText').textContent='Fast Watcher warming up';
-  }else if(Number(fw.open_positions||0)===0){
-    $('watcherText').textContent=`Fast Watcher ACTIVE • ${fw.interval_sec||4}s • IDLE — no open positions`;
-  }else{
-    $('watcherText').textContent=`Fast Watcher ACTIVE • ${fw.interval_sec||4}s position checks${fw.last_watch_age_sec!=null?' • last '+Number(fw.last_watch_age_sec).toFixed(1)+'s ago':''}`;
-  }
+   const x=await req('/api/diagnostics/pumpportal');
+   const safe={
+     version:x.version,connected:x.connected,mode:x.mode,http_status:x.http_status,
+     exception_type:x.exception_type,retry_sec:x.retry_sec,attempts:x.attempts,
+     last_attempt:x.last_attempt,last_connected:x.last_connected,stream_enabled:x.stream_enabled,
+     api_key_present:x.api_key_present,api_key_length:x.api_key_length,
+     env_has_outer_whitespace:x.env_has_outer_whitespace,env_looks_quoted:x.env_looks_quoted,
+     response_headers:x.response_headers,response_body:x.response_body,events_total:x.events_total
+   };
+   $('diagBox').textContent=JSON.stringify(safe,null,2);$('diagBox').classList.remove('hidden')
  }catch(e){
-  $('conn').textContent='ERROR';$('conn').className='r';$('bot').textContent='DISCONNECTED';$('health').textContent=e.message.slice(0,120);
-  $('connBox').classList.remove('hidden');
+   $('diagBox').textContent='Diagnostic endpoint unavailable: '+e.message;$('diagBox').classList.remove('hidden')
  }
 }
-setInterval(load,5000);load();
+async function load(){
+ try{
+   const [d,h]=await Promise.all([
+     req('/api/dashboard'),
+     fetch(base+'/health').then(r=>r.ok?r.json():({}))
+   ]);
+   $('connState').textContent='CONNECTED';$('connState').className='g';$('connBox').classList.add('hidden');
+   $('dot').className='dot '+(d.bot_enabled&&!d.killed?'on':'');
+   $('botState').textContent=d.killed?'KILLED':d.bot_enabled?'RUNNING':'STOPPED';
+   $('cloudHealth').textContent=`Backend ${d.version||h.version||'—'} • ${d.system_health?.status||'UP'}`;
+   $('liveLock').textContent=d.live_execution_locked?'LIVE LOCKED':'CHECK LIVE LOCK';
+   $('liveLock').className='badge '+(d.live_execution_locked?'ok':'bad');
+   renderMode(d.mode);
+
+   const m=d.metrics||{};
+   $('equity').textContent=money(m.equity);$('pnl').textContent=(Number(m.pnl||0)>=0?'+':'')+money(m.pnl);
+   $('pnl').className='v '+(Number(m.pnl||0)>=0?'g':'r');$('wr').textContent=Number(m.win_rate||0).toFixed(1)+'%';$('positionsN').textContent=m.open_positions||0;
+
+   const tg=d.daily_target||{},risk=d.risk_status||{};
+   $('todayPnl').textContent=(Number(m.today_pnl||0)>=0?'+':'')+money(m.today_pnl||0);$('todayPnl').className=Number(m.today_pnl||0)>=0?'g':'r';
+   $('dailyLimit').textContent=money(m.loss_limit_usd||0);$('targetPct').textContent=Number(tg.target_pct||0).toFixed(1)+'%';$('openRisk').textContent=Number(risk.open_risk_pct||0).toFixed(2)+'%';
+   const prog=Math.max(0,Math.min(100,Number(tg.progress_pct||0)));$('targetBar').style.width=prog+'%';
+   const blocked=!!m.blocked||!!m.equity_guard?.blocked;$('guardBadge').textContent=blocked?'BLOCKED':tg.locked?'TARGET LOCKED':'ACTIVE';$('guardBadge').className='badge '+(blocked?'bad':'ok');
+   $('targetText').textContent=tg.locked?'هدف روزانه Secure شده و ورود جدید قفل است.':tg.de_risk?'NOVA وارد حالت De-Risk شده تا سود حفظ شود.':'هدف روزانه Objective است؛ معامله ضعیف یا Martingale اجباری انجام نمی‌شود.';
+
+   const s=d.settings||{};if(s.risk_pct!=null)$('risk').value=s.risk_pct;if(s.stop_loss_pct!=null)$('sl').value=s.stop_loss_pct;if(s.max_positions!=null)$('maxPos').value=s.max_positions;if(s.perp_leverage!=null)$('lev').value=String(s.perp_leverage);
+
+   const rt=d.entry_router||{},rs=rt.states||{};$('routerReady').textContent=rs.READY||0;$('routerSoft').textContent=rs.SOFT_PASS||0;$('routerBlocked').textContent=rs.BLOCKED||0;
+   $('routerHour').textContent=`${rt.soft_entries_last_hour||0}/${rt.max_soft_entries_per_hour||0}`;$('routerBadge').textContent=rt.enabled?'AUTO':'OFF';$('routerBadge').className='badge '+(rt.enabled?'ok':'warn');
+   $('routerText').textContent=rt.last_entry?`Last: ${rt.last_entry.symbol} • ${rt.last_entry.strategy} • ${rt.last_entry.mode}`:'READY = strict pass • CONTROLLED = reduced PAPER size • safety gates remain active.';
+
+   const ls=d.launch_sniper||{},lb=ls.best||null;$('launchNew').textContent=ls.new_tokens||0;$('launchWatching').textContent=ls.watching||0;$('launchTrades').textContent=ls.trades_seen||0;$('launchEntries').textContent=ls.entries||0;
+   $('launchBadge').textContent=ls.enabled?'ACTIVE':'OFF';$('launchBadge').className='badge '+(ls.enabled?'ok':'warn');
+   if(lb){$('launchBest').textContent=`${lb.symbol||'TOKEN'} • SCORE ${Number(lb.score||0).toFixed(0)} • ${Number(lb.age_sec||0).toFixed(1)}s`; $('launchMeta').textContent=`2s ${lb.events_2s||0} trades • Buyers ${lb.unique_buyers_2s||0} • Buy ${Number(lb.buy_pressure_2s||0).toFixed(0)}% • Flow ${Number(lb.buy_sol_2s||0).toFixed(2)} SOL • ${lb.status||'WATCHING'}`}
+   else{$('launchBest').textContent='Waiting for new token…';$('launchMeta').textContent='No first-seconds burst yet.'}
+
+   const lite=d.free_lite||{};$('liteSubs').textContent=lite.pulse_subscriptions??0;$('liteBuffers').textContent=lite.pulse_buffers??0;$('liteLaunch').textContent=lite.launch_watch_objects??0;$('liteCleanup').textContent=lite.cleanup_runs??0;
+
+   const eg=d.edge_governor||{},gs=eg.strategies||{},sv=d.survival_guard||{};
+   const st=k=>(gs[k]||{}).state||'—';$('govLaunch').textContent=st('LAUNCH_SNIPER');$('govSniper').textContent=st('SNIPER_LONG');$('govScalp').textContent=st('SCALP_LONG');$('govPump').textContent=st('PUMP_LONG');
+   const pl=st('PERP_LONG'),ps=st('PERP_SHORT');$('govPerp').textContent=pl===ps?pl:`${pl}/${ps}`;$('recoveryState').textContent=sv.blocked?'BLOCKED':'ACTIVE';$('recoveryState').className=sv.blocked?'r':'g';
+   const states=Object.values(gs).map(x=>x.state);$('edgeBadge').textContent=states.includes('PAUSED')?'PROTECTING':states.includes('PROBATION')?'LEARNING':'EDGE OK';$('edgeBadge').className='badge '+(states.includes('PAUSED')?'warn':'ok');
+
+   renderRealtime(d,h);renderDecision(d);renderPositions(d.positions||[]);renderSignals(d.candidates||[]);renderTrades(d.trades||[])
+ }catch(e){
+   $('connState').textContent='ERROR';$('connState').className='r';$('botState').textContent='DISCONNECTED';$('cloudHealth').textContent=e.message.slice(0,130);$('connBox').classList.remove('hidden')
+ }
+}
+setInterval(load,5000);
+load();
 </script>
 </body>
 </html>
