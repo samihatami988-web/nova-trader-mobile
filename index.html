@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.4 SIMPLE+</title>
+<title>NOVA TRADER V5.5 SIMPLE+</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.4</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V5.5</b></div><div class="sub">Simple Control • Smart Decision</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -148,7 +148,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div><div class="k">Portfolio</div><b id="port">—</b></div>
       <div><div class="k">Adaptive</div><b id="adapt">—</b></div>
     </div>
-    <div class="notice" style="margin-top:10px"><b>CAPITAL SHIELD ACTIVE</b><br>استاپ داخلی سخت‌تر، Scratch Exit، Early Break-even، Profit Lock و Global Equity Guard پشت صحنه فعال‌اند.</div>
+    <div class="notice" style="margin-top:10px"><b>CAPITAL SHIELD + FAST POSITION WATCHER</b><br><span id="watcherText">Watcher checking...</span><br>استاپ داخلی، Scratch Exit، Early Break-even، Profit Lock و Liquidity Emergency پشت صحنه فعال‌اند.</div>
     <div class="small" style="margin-top:10px">LIVE execution remains locked. این صفحه فقط PAPER / SHADOW را کنترل می‌کند.</div>
   </div>
 
@@ -260,7 +260,11 @@ function friendlyReason(reason){
   'CAPITAL_SHIELD_STOP':'Capital Shield معامله ضعیف را قبل از Stop اصلی بست.',
   'SCRATCH_EXIT':'معامله بعد از ورود حرکت کافی نکرد؛ NOVA با ضرر کوچک خارج شد.',
   'EARLY_BREAK_EVEN':'معامله وارد سود شد و NOVA نزدیک سر‌به‌سر از آن محافظت کرد.',
-  'GLOBAL_EQUITY_GUARD':'ریسک مجموع پوزیشن‌ها بالا رفت؛ NOVA برای محافظت از سرمایه خروج اضطراری زد.'
+  'GLOBAL_EQUITY_GUARD':'ریسک مجموع پوزیشن‌ها بالا رفت؛ NOVA برای محافظت از سرمایه خروج اضطراری زد.',
+  'LIQUIDITY_EMERGENCY':'نقدینگی بازار شدیداً ضعیف شد؛ NOVA خروج اضطراری زد.',
+  'spot move too extreme':'حرکت ۵ دقیقه‌ای بیش از حد شدید است؛ NOVA از تعقیب این حرکت خودداری کرد.',
+  'low spot liquidity':'نقدینگی برای Capital Shield کافی نیست و ورود رد شد.',
+  'low spot market quality':'کیفیت بازار برای ورود محافظت‌شده کافی نیست.'
  };
  return map[reason]||reason||'NOVA در حال اسکن بازار است.';
 }
@@ -393,6 +397,8 @@ async function load(){
   $('exec').textContent=d.execution?.fills>=0?'ACTIVE':'—';$('exec').className='g';
   $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
   $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
+  let fw=d.fast_watcher||{};
+  $('watcherText').textContent=fw.alive?`Fast Watcher ACTIVE • ${fw.interval_sec||4}s position checks${fw.last_watch_age_sec!=null?' • last '+Number(fw.last_watch_age_sec).toFixed(1)+'s ago':''}`:'Fast Watcher warming up';
  }catch(e){
   $('conn').textContent='ERROR';$('conn').className='r';$('bot').textContent='DISCONNECTED';$('health').textContent=e.message.slice(0,120);
   $('connBox').classList.remove('hidden');
