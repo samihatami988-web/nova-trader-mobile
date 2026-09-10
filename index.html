@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.6 SIMPLE+</title>
+<title>NOVA TRADER V5.6.1 SIMPLE+</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.6</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V5.6.1</b></div><div class="sub">Simple Control • Smart Decision</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -412,7 +412,13 @@ async function load(){
   let sn=d.sniper||{};
   $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
   let fw=d.fast_watcher||{};
-  $('watcherText').textContent=fw.alive?`Fast Watcher ACTIVE • ${fw.interval_sec||4}s position checks${fw.last_watch_age_sec!=null?' • last '+Number(fw.last_watch_age_sec).toFixed(1)+'s ago':''}`:'Fast Watcher warming up';
+  if(!fw.alive){
+    $('watcherText').textContent='Fast Watcher warming up';
+  }else if(Number(fw.open_positions||0)===0){
+    $('watcherText').textContent=`Fast Watcher ACTIVE • ${fw.interval_sec||4}s • IDLE — no open positions`;
+  }else{
+    $('watcherText').textContent=`Fast Watcher ACTIVE • ${fw.interval_sec||4}s position checks${fw.last_watch_age_sec!=null?' • last '+Number(fw.last_watch_age_sec).toFixed(1)+'s ago':''}`;
+  }
  }catch(e){
   $('conn').textContent='ERROR';$('conn').className='r';$('bot').textContent='DISCONNECTED';$('health').textContent=e.message.slice(0,120);
   $('connBox').classList.remove('hidden');
