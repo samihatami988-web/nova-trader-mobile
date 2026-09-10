@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.1 REALTIME PULSE</title>
+<title>NOVA TRADER V6.2 EVENT EXIT</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.1</b></div><div class="sub">Realtime Pulse Sniper • Multi-Engine</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.2</b></div><div class="sub">Realtime Entry + Event-Driven Exit</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -161,6 +161,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div class="mini"><div class="k">Pulse Entries</div><b id="pulseEntries">0</b></div>
     </div>
     <div id="pulseText" class="small" style="margin-top:9px">Realtime feed checking...</div>
+    <div class="notice" style="margin-top:10px"><b>REALTIME EXIT</b><br><span id="realtimeExitText">Exit engine checking...</span></div>
     <div style="margin-top:12px" class="row"><div><b>Sniper Signals</b><div class="small">فرصت‌های Sniper معمولی و fallback</div></div><span id="sniperSignalCount" class="badge">0</span></div>
     <div id="sniperSignals"><div class="small" style="margin-top:9px">Waiting for sniper candidates...</div></div>
   </div>
@@ -490,6 +491,10 @@ async function load(){
     pulse.mode==='KEY_READY_TRADE_STREAM_OFF'?
     'API key detected but metered trade stream is OFF. Polling Sniper remains active.':
     'Realtime trade stream unavailable; 8s polling Sniper remains active as fallback.';
+  let rx=d.realtime_exit||{};
+  $('realtimeExitText').textContent=rx.enabled?
+    `${rx.mode||'—'} • armed ${rx.armed_positions||0} • checks ${rx.checks||0} • direct ${rx.direct_marks||0} • REST backup ${rx.rest_checks||0}${rx.last_event_age_sec!=null?' • last '+Number(rx.last_event_age_sec).toFixed(2)+'s ago':''}`:
+    'Realtime Exit OFF';
   let sn=d.sniper||{};
   $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
   let snCands=sn.candidates||[];
