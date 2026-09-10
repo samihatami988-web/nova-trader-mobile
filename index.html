@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.2 EVENT EXIT</title>
+<title>NOVA TRADER V6.3 PULSE INTELLIGENCE</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.2</b></div><div class="sub">Realtime Entry + Event-Driven Exit</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.3</b></div><div class="sub">Pulse Intelligence • Event-Driven Entry/Exit</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -162,6 +162,27 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
     </div>
     <div id="pulseText" class="small" style="margin-top:9px">Realtime feed checking...</div>
     <div class="notice" style="margin-top:10px"><b>REALTIME EXIT</b><br><span id="realtimeExitText">Exit engine checking...</span></div>
+
+    <div class="notice" style="margin-top:10px">
+      <div class="row"><b>BEST LIVE PULSE</b><span id="pulseAdaptiveBadge" class="badge">AUTO</span></div>
+      <div id="bestPulseTitle" style="font-size:19px;font-weight:900;margin-top:7px">Waiting...</div>
+      <div id="bestPulseMeta" class="small" style="margin-top:5px">No micro-burst observed yet.</div>
+      <div id="pulseThresholds" class="small" style="margin-top:7px"></div>
+    </div>
+
+    <div style="margin-top:12px"><b>Pulse Diagnostics • 5 min</b></div>
+    <div class="grid" style="margin-top:8px">
+      <div class="mini"><div class="k">Observed</div><b id="diagObserved">0</b></div>
+      <div class="mini"><div class="k">Front Pass</div><b id="diagPass">0</b></div>
+      <div class="mini"><div class="k">Low Events</div><b id="diagEvents">0</b></div>
+      <div class="mini"><div class="k">Low Buy Pressure</div><b id="diagPressure">0</b></div>
+      <div class="mini"><div class="k">Low Buyers</div><b id="diagBuyers">0</b></div>
+      <div class="mini"><div class="k">Low Score</div><b id="diagScore">0</b></div>
+      <div class="mini"><div class="k">Late Chase</div><b id="diagLate">0</b></div>
+      <div class="mini"><div class="k">Final Gate Pass</div><b id="diagFinal">0</b></div>
+    </div>
+    <div id="adaptiveAction" class="small" style="margin-top:8px">Adaptive Pulse waiting for enough data.</div>
+
     <div style="margin-top:12px" class="row"><div><b>Sniper Signals</b><div class="small">فرصت‌های Sniper معمولی و fallback</div></div><span id="sniperSignalCount" class="badge">0</span></div>
     <div id="sniperSignals"><div class="small" style="margin-top:9px">Waiting for sniper candidates...</div></div>
   </div>
@@ -307,6 +328,10 @@ function friendlyReason(reason){
   'pulse unique buyers':'تعداد خریداران مستقل در موج فعلی کافی نیست.',
   'pulse late chase':'حرکت بیش از حد جلو رفته؛ NOVA برای جلوگیری از خرید در سقف وارد نشد.',
   'REALTIME_PULSE_ENTRY':'Pulse لحظه‌ای تأیید شد و Real-time Sniper وارد Paper/Shadow شد.',
+  'pulse event count':'موج هنوز تعداد معامله کافی در پنجره ۵ ثانیه‌ای ندارد.',
+  'pulse buy pressure':'فشار خرید لحظه‌ای هنوز کافی نیست.',
+  'pulse unique buyers':'تعداد خریداران مستقل هنوز کافی نیست.',
+  'pulse score':'امتیاز ترکیبی Pulse هنوز به Gate ورود نرسیده.',
   'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
   'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
   'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
@@ -495,6 +520,33 @@ async function load(){
   $('realtimeExitText').textContent=rx.enabled?
     `${rx.mode||'—'} • armed ${rx.armed_positions||0} • checks ${rx.checks||0} • direct ${rx.direct_marks||0} • REST backup ${rx.rest_checks||0}${rx.last_event_age_sec!=null?' • last '+Number(rx.last_event_age_sec).toFixed(2)+'s ago':''}`:
     'Realtime Exit OFF';
+  let pi=d.pulse_intelligence||{};
+  let pc=pi.counts||{},best=pi.best_live||null,th=pi.effective_thresholds||{};
+  $('diagObserved').textContent=pi.observed_bursts||0;
+  $('diagPass').textContent=pi.front_gate_pass||0;
+  $('diagEvents').textContent=pc.LOW_EVENTS||0;
+  $('diagPressure').textContent=pc.LOW_BUY_PRESSURE||0;
+  $('diagBuyers').textContent=pc.LOW_UNIQUE_BUYERS||0;
+  $('diagScore').textContent=pc.LOW_SCORE||0;
+  $('diagLate').textContent=pc.LATE_CHASE||0;
+  $('diagFinal').textContent=pi.final_pass||0;
+  $('pulseAdaptiveBadge').textContent=pi.adaptive_enabled?'AUTO':'FIXED';
+  $('pulseAdaptiveBadge').className='badge '+(pi.adaptive_enabled?'g':'y');
+
+  if(best){
+    let label=best.symbol||((best.mint||'').slice(0,5)+'…'+(best.mint||'').slice(-4));
+    $('bestPulseTitle').textContent=`${label} • SCORE ${Number(best.score||0).toFixed(0)}`;
+    $('bestPulseMeta').textContent=`5s ${best.events_5s||0} events • Buy ${Number(best.buy_pressure_5s||0).toFixed(0)}% • Buyers ${best.unique_buyers_10s||0} • Accel ${Number(best.acceleration_score||0).toFixed(0)}`;
+  }else{
+    $('bestPulseTitle').textContent='Waiting...';
+    $('bestPulseMeta').textContent='No recent micro-burst observed.';
+  }
+
+  $('pulseThresholds').textContent=th.score!=null?
+    `Adaptive gates → Score ${th.score} • 5s Events ${th.events_5s} • Buy ${th.buy_pressure_5s}% • Buyers ${th.unique_buyers_10s}`:'';
+  let acts=pi.actions||[];
+  $('adaptiveAction').textContent=acts.length?`Last adaptive action: ${acts[acts.length-1].message}`:'Adaptive Pulse is collecting data; Capital Shield/Security never auto-relax.';
+
   let sn=d.sniper||{};
   $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
   let snCands=sn.candidates||[];
