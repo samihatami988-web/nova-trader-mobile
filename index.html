@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.3 SIMPLE+</title>
+<title>NOVA TRADER V5.4 SIMPLE+</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.3</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V5.4</b></div><div class="sub">Simple Control • Smart Decision</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -148,6 +148,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div><div class="k">Portfolio</div><b id="port">—</b></div>
       <div><div class="k">Adaptive</div><b id="adapt">—</b></div>
     </div>
+    <div class="notice" style="margin-top:10px"><b>CAPITAL SHIELD ACTIVE</b><br>استاپ داخلی سخت‌تر، Scratch Exit، Early Break-even، Profit Lock و Global Equity Guard پشت صحنه فعال‌اند.</div>
     <div class="small" style="margin-top:10px">LIVE execution remains locked. این صفحه فقط PAPER / SHADOW را کنترل می‌کند.</div>
   </div>
 
@@ -255,7 +256,11 @@ function friendlyReason(reason){
   'position too small':'اندازه پوزیشن بعد از کنترل ریسک خیلی کوچک شده.',
   'cash':'موجودی Paper آزاد برای این پوزیشن کافی نیست.',
   'entry accepted':'تمام Gateهای ورود تأیید شدند.',
-  'PROFIT_LOCK':'محافظ سود فعال شد؛ NOVA اجازه نداد سود دیده‌شده به ضرر تبدیل شود.'
+  'PROFIT_LOCK':'محافظ سود فعال شد؛ NOVA اجازه نداد سود دیده‌شده به ضرر تبدیل شود.',
+  'CAPITAL_SHIELD_STOP':'Capital Shield معامله ضعیف را قبل از Stop اصلی بست.',
+  'SCRATCH_EXIT':'معامله بعد از ورود حرکت کافی نکرد؛ NOVA با ضرر کوچک خارج شد.',
+  'EARLY_BREAK_EVEN':'معامله وارد سود شد و NOVA نزدیک سر‌به‌سر از آن محافظت کرد.',
+  'GLOBAL_EQUITY_GUARD':'ریسک مجموع پوزیشن‌ها بالا رفت؛ NOVA برای محافظت از سرمایه خروج اضطراری زد.'
  };
  return map[reason]||reason||'NOVA در حال اسکن بازار است.';
 }
@@ -326,9 +331,12 @@ function renderDailyGuard(m){
  $('dailyLimit').textContent=money(m.loss_limit_usd||0);
  $('dailyGuardBadge').textContent=blocked?'BLOCKED':'ACTIVE';
  $('dailyGuardBadge').className='badge '+(blocked?'r':'g');
- $('dailyGuardText').textContent=blocked?
+ let eg=m.equity_guard||{};
+ $('dailyGuardText').textContent=eg.blocked?
+  'GLOBAL EQUITY GUARD فعال است؛ مجموع ضرر باز + بسته به حد محافظتی رسیده و ورود جدید متوقف می‌شود.':
+  blocked?
   'حد ضرر روزانه فعال شده؛ NOVA تا Reset تست یا شروع روز جدید پوزیشن تازه باز نمی‌کند.':
-  'ورود جدید مجاز است و محافظ ضرر روزانه در پس‌زمینه فعال است.';
+  'ورود جدید مجاز است؛ Daily Guard و Capital Shield هر دو فعال‌اند.';
 }
 async function resetPaper(){
  if(!confirm('Paper test reset شود؟ Equity و معاملات Paper پاک می‌شوند و موجودی به Start Balance برمی‌گردد.'))return;
