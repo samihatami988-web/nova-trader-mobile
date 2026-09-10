@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.0 ALPHA CORE</title>
+<title>NOVA TRADER V6.1 REALTIME PULSE</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.0</b></div><div class="sub">Alpha Core • Multi-Engine Trader</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.1</b></div><div class="sub">Realtime Pulse Sniper • Multi-Engine</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -153,7 +153,15 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   </div>
 
   <div class="card">
-    <div class="row"><div><b>Sniper Signals</b><div class="small">فقط فرصت‌های مخصوص Micro-Pump Sniper</div></div><span id="sniperSignalCount" class="badge">0</span></div>
+    <div class="row"><div><b>Realtime Sniper</b><div class="small">Pulse Stream + Micro-Pump Sniper</div></div><span id="pulseBadge" class="badge">CHECKING</span></div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">Feed</div><b id="pulseMode">—</b></div>
+      <div class="mini"><div class="k">Last Event</div><b id="pulseLast">—</b></div>
+      <div class="mini"><div class="k">Hot Pulses</div><b id="pulseHot">0</b></div>
+      <div class="mini"><div class="k">Pulse Entries</div><b id="pulseEntries">0</b></div>
+    </div>
+    <div id="pulseText" class="small" style="margin-top:9px">Realtime feed checking...</div>
+    <div style="margin-top:12px" class="row"><div><b>Sniper Signals</b><div class="small">فرصت‌های Sniper معمولی و fallback</div></div><span id="sniperSignalCount" class="badge">0</span></div>
     <div id="sniperSignals"><div class="small" style="margin-top:9px">Waiting for sniper candidates...</div></div>
   </div>
 
@@ -292,6 +300,12 @@ function friendlyReason(reason){
   'daily profit target locked':'هدف سود روزانه Secure شده؛ ورود جدید برای حفظ سود متوقف است.',
   'portfolio open risk cap':'ریسک مجموع پوزیشن‌های باز به سقف محافظتی رسیده.',
   'DAILY_TARGET_SECURE':'هدف روزانه به محدوده Secure رسید؛ NOVA سود را بانکی کرد و ورود جدید را قفل کرد.',
+  'pulse score':'شتاب لحظه‌ای هنوز به حد ورود Real-time Sniper نرسیده.',
+  'pulse event count':'تعداد معاملات در پنجره ۵ ثانیه‌ای هنوز کافی نیست.',
+  'pulse buy pressure':'فشار خرید لحظه‌ای کافی نیست.',
+  'pulse unique buyers':'تعداد خریداران مستقل در موج فعلی کافی نیست.',
+  'pulse late chase':'حرکت بیش از حد جلو رفته؛ NOVA برای جلوگیری از خرید در سقف وارد نشد.',
+  'REALTIME_PULSE_ENTRY':'Pulse لحظه‌ای تأیید شد و Real-time Sniper وارد Paper/Shadow شد.',
   'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
   'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
   'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
@@ -464,6 +478,18 @@ async function load(){
   $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
   $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
   renderDailyTarget(d.daily_target||{},d.risk_status||{});
+  let pulse=d.realtime_pulse||{};
+  $('pulseMode').textContent=pulse.mode||'—';
+  $('pulseLast').textContent=pulse.last_event_age_sec==null?'—':Number(pulse.last_event_age_sec).toFixed(2)+'s ago';
+  $('pulseHot').textContent=(pulse.hot||[]).length;
+  $('pulseEntries').textContent=pulse.entries||0;
+  $('pulseBadge').textContent=pulse.connected?'LIVE':(pulse.mode==='FALLBACK_ONLY'?'FALLBACK':'OFF');
+  $('pulseBadge').className='badge '+(pulse.connected?'g':'y');
+  $('pulseText').textContent=pulse.connected?
+    `Event-driven stream LIVE • ${pulse.subscribed_tokens||0} token subscriptions • ${pulse.events_total||0} events processed`:
+    pulse.mode==='KEY_READY_TRADE_STREAM_OFF'?
+    'API key detected but metered trade stream is OFF. Polling Sniper remains active.':
+    'Realtime trade stream unavailable; 8s polling Sniper remains active as fallback.';
   let sn=d.sniper||{};
   $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
   let snCands=sn.candidates||[];
