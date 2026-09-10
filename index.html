@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.3 PULSE INTELLIGENCE</title>
+<title>NOVA TRADER V6.4 EDGE RECOVERY</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.3</b></div><div class="sub">Pulse Intelligence • Event-Driven Entry/Exit</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.4</b></div><div class="sub">Edge Recovery • Quality First</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -185,6 +185,21 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 
     <div style="margin-top:12px" class="row"><div><b>Sniper Signals</b><div class="small">فرصت‌های Sniper معمولی و fallback</div></div><span id="sniperSignalCount" class="badge">0</span></div>
     <div id="sniperSignals"><div class="small" style="margin-top:9px">Waiting for sniper candidates...</div></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><b>Edge Governor</b><div class="small">موتور زیان‌ده خودکار محدود یا Pause می‌شود.</div></div><span id="edgeBadge" class="badge">LEARNING</span></div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">SNIPER</div><b id="govSniper">—</b></div>
+      <div class="mini"><div class="k">SCALP</div><b id="govScalp">—</b></div>
+      <div class="mini"><div class="k">PUMP</div><b id="govPump">—</b></div>
+      <div class="mini"><div class="k">PERP L/S</div><b id="govPerp">—</b></div>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">Survival Loss Limit</div><b id="survivalLimit">—</b></div>
+      <div class="mini"><div class="k">Recovery State</div><b id="recoveryState">ACTIVE</b></div>
+    </div>
+    <div class="small" style="margin-top:8px">در مرحله PROBATION حجم خودکار کوچک است؛ فقط موتور دارای Edge مثبت اجازه Scale-up می‌گیرد.</div>
   </div>
 
   <div class="card">
@@ -332,6 +347,11 @@ function friendlyReason(reason){
   'pulse buy pressure':'فشار خرید لحظه‌ای هنوز کافی نیست.',
   'pulse unique buyers':'تعداد خریداران مستقل هنوز کافی نیست.',
   'pulse score':'امتیاز ترکیبی Pulse هنوز به Gate ورود نرسیده.',
+  'edge governor paused strategy':'Edge این موتور منفی شده؛ Strategy Governor موقتاً ورود جدید را متوقف کرده.',
+  'survival loss guard':'سقف ضرر Recovery فعال شده و ورود جدید برای حفظ سرمایه متوقف است.',
+  'SURVIVAL_GUARD':'سقف ضرر Recovery فعال شد؛ NOVA پوزیشن‌های باز را برای حفظ سرمایه بست.',
+  'SCALP_SCRATCH_EXIT':'Scalp حرکت کافی نکرد؛ NOVA با ضرر کوچک زود خارج شد.',
+  'PUMP_SCRATCH_EXIT':'Pump ادامه پیدا نکرد؛ NOVA قبل از Stop کامل خارج شد.',
   'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
   'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
   'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
@@ -536,7 +556,7 @@ async function load(){
   if(best){
     let label=best.symbol||((best.mint||'').slice(0,5)+'…'+(best.mint||'').slice(-4));
     $('bestPulseTitle').textContent=`${label} • SCORE ${Number(best.score||0).toFixed(0)}`;
-    $('bestPulseMeta').textContent=`5s ${best.events_5s||0} events • Buy ${Number(best.buy_pressure_5s||0).toFixed(0)}% • Buyers ${best.unique_buyers_10s||0} • Accel ${Number(best.acceleration_score||0).toFixed(0)}`;
+    $('bestPulseMeta').textContent=`5s ${best.events_5s||0} events • Buy ${Number(best.buy_pressure_5s||0).toFixed(0)}% • Buyers ${best.unique_buyers_10s||0} • Confidence ${Number(best.sample_confidence||0).toFixed(0)}% • Accel ${Number(best.acceleration_score||0).toFixed(0)}`;
   }else{
     $('bestPulseTitle').textContent='Waiting...';
     $('bestPulseMeta').textContent='No recent micro-burst observed.';
@@ -557,6 +577,20 @@ async function load(){
   $('sniperEntries').textContent=sn.entries||0;
   $('sniperSignalCount').textContent=snCands.length;
   $('sniperSignals').innerHTML=snCands.length?snCands.map(sniperSignalCard).join(''):'<div class="small" style="margin-top:9px">No sniper setup right now.</div>';
+  let eg=d.edge_governor||{},gs=eg.strategies||{},sv=d.survival_guard||{};
+  function gstate(k){return (gs[k]||{}).state||'—'}
+  $('govSniper').textContent=gstate('SNIPER_LONG');
+  $('govScalp').textContent=gstate('SCALP_LONG');
+  $('govPump').textContent=gstate('PUMP_LONG');
+  let pl=gstate('PERP_LONG'),ps=gstate('PERP_SHORT');
+  $('govPerp').textContent=pl===ps?pl:`${pl}/${ps}`;
+  let states=Object.values(gs).map(x=>x.state);
+  $('edgeBadge').textContent=states.includes('PAUSED')?'PROTECTING':states.includes('PROBATION')?'LEARNING':'EDGE OK';
+  $('edgeBadge').className='badge '+(states.includes('PAUSED')?'y':'g');
+  $('survivalLimit').textContent=money(Math.abs(Number(sv.combined_limit_usd||0)));
+  $('recoveryState').textContent=sv.blocked?'BLOCKED':'ACTIVE';
+  $('recoveryState').className=sv.blocked?'r':'g';
+
   let fw=d.fast_watcher||{};
   if(!fw.alive){
     $('watcherText').textContent='Fast Watcher warming up';
