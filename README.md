@@ -1,20 +1,34 @@
-# NOVA TRADER V5.1 SIMPLE CONTROL
+# NOVA TRADER V5.1 ENGINE HOTFIX
 
-This is a simplified mobile dashboard for the existing NOVA V5.0 Ultimate backend.
+Main correction:
+- Spot and Perp no longer share the same Market Quality hard gate.
 
-The backend stays powerful and unchanged. The mobile UI exposes only:
-- PAPER / SHADOW mode
-- START / STOP / KILL
-- Trading sensitivity profile: SAFE / BALANCED / FAST
-- Risk per trade
-- Stop loss
-- Maximum open positions
-- Perp leverage
-- Top 5 signals
-- Core safety status
+Spot entry gates:
+- Pump/Scalp strategy threshold
+- Minimum liquidity
+- Spot Market Quality floor (default 55)
+- On-chain token security when available
+- Route Quality
+- Portfolio/Correlation limits
+- Execution-cost gate
 
-All advanced engines remain automatic in the V5.0 backend:
-Adaptive Optimizer, Portfolio Brain, Correlation Guard, Token Security,
-Execution Reality Engine, Research Lab, LONG/SHORT Perp engine and watchdog.
+Perp entry gates:
+- LONG/SHORT strategy threshold
+- Open Interest
+- Direction Edge
+- Funding
+- Volatility
+- Primary perp source in SHADOW
+- Route Quality
+- Portfolio/Correlation limits
+- Execution-cost gate
 
-Recommended starting profile: BALANCED.
+Other fixes:
+- Security that has not been scanned is displayed as UNKNOWN, not 50.
+- Unknown security is neutral in PAPER mode.
+- SHADOW can still require a completed security scan.
+- Dashboard wording now uses Market Quality instead of Risk for that score.
+
+FAST remains:
+Pump 68 / Scalp 70 / Long 68 / Short 68.
+It is intended for quick PAPER testing, not final performance validation.
