@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.6 LAUNCH SNIPER</title>
+<title>NOVA TRADER V6.6.1 FREE-LITE</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -52,7 +52,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.6</b></div><div class="sub">First-Seconds Launch Sniper • Edge Recovery</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.6.1</b></div><div class="sub">Free-Lite • First-Seconds Launch Sniper</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -166,6 +166,17 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   <div class="card">
     <div class="row"><div><b>Best Signals</b><div class="small">NOVA فقط مهم‌ترین گزینه‌ها را نشان می‌دهد.</div></div><button class="dark" onclick="load()">REFRESH</button></div>
     <div id="signals"><div class="small" style="margin-top:10px">Waiting for data...</div></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><b>Render Free-Lite</b><div class="small">0.1 CPU protection • bounded realtime workload</div></div><span class="badge g">ACTIVE</span></div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">Subscriptions</div><b id="liteSubs">0</b></div>
+      <div class="mini"><div class="k">Pulse Buffers</div><b id="liteBuffers">0</b></div>
+      <div class="mini"><div class="k">Launch Objects</div><b id="liteLaunch">0</b></div>
+      <div class="mini"><div class="k">Cleanup Runs</div><b id="liteCleanup">0</b></div>
+    </div>
+    <div class="small" style="margin-top:8px">Free-Lite بار همزمان WebSocket/DB را محدود می‌کند تا روی Render Free پایدارتر بماند؛ PAPER Launch Sniper و Event-Driven Exit حفظ شده.</div>
   </div>
 
   <div class="card">
@@ -610,6 +621,12 @@ async function load(){
   $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
   $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
   renderDailyTarget(d.daily_target||{},d.risk_status||{});
+
+  let lite=d.free_lite||{};
+  if($('liteSubs')) $('liteSubs').textContent=lite.pulse_subscriptions??0;
+  if($('liteBuffers')) $('liteBuffers').textContent=lite.pulse_buffers??0;
+  if($('liteLaunch')) $('liteLaunch').textContent=lite.launch_watch_objects??0;
+  if($('liteCleanup')) $('liteCleanup').textContent=lite.cleanup_runs??0;
 
   let ls=d.launch_sniper||{},ld=ls.diag||{},lb=ls.best||null,lr=ls.rules||{};
   $('launchNew').textContent=ls.new_tokens||0;
