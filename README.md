@@ -1,34 +1,15 @@
-# NOVA TRADER V5.1 ENGINE HOTFIX
+# NOVA TRADER V5.1 SIMPLE+
 
-Main correction:
-- Spot and Perp no longer share the same Market Quality hard gate.
+Frontend-only upgrade for the V5.1 Engine Hotfix backend.
 
-Spot entry gates:
-- Pump/Scalp strategy threshold
-- Minimum liquidity
-- Spot Market Quality floor (default 55)
-- On-chain token security when available
-- Route Quality
-- Portfolio/Correlation limits
-- Execution-cost gate
+Adds:
+- NOVA Decision card with friendly reason for the latest OPENED/BLOCKED decision.
+- Current open positions and live paper return.
+- Recent closed-trade results.
+- FAST / BALANCED / SAFE auto-save immediately when selected.
+- Best Signals now show the exact strategy score and current base threshold.
+- SIGNAL PASS vs WAIT is explicit.
+- `Market Quality` terminology remains; unknown on-chain security remains `UNKNOWN`.
+- Simplified Engine Protection replaces confusing Live Readiness display.
 
-Perp entry gates:
-- LONG/SHORT strategy threshold
-- Open Interest
-- Direction Edge
-- Funding
-- Volatility
-- Primary perp source in SHADOW
-- Route Quality
-- Portfolio/Correlation limits
-- Execution-cost gate
-
-Other fixes:
-- Security that has not been scanned is displayed as UNKNOWN, not 50.
-- Unknown security is neutral in PAPER mode.
-- SHADOW can still require a completed security scan.
-- Dashboard wording now uses Market Quality instead of Risk for that score.
-
-FAST remains:
-Pump 68 / Scalp 70 / Long 68 / Short 68.
-It is intended for quick PAPER testing, not final performance validation.
+The backend remains V5.1.0 and all advanced engines continue automatically.
