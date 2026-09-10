@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.1 SIMPLE+</title>
+<title>NOVA TRADER V5.2 SIMPLE+</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.1</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V5.2</b></div><div class="sub">Simple Control • Smart Decision</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -78,6 +78,15 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div class="mini"><div class="k">Best Opportunity</div><b id="bestOpp">—</b></div>
       <div class="mini"><div class="k">Last Update</div><b id="lastUpdate">—</b></div>
     </div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><b>Daily Guard</b><div class="small">محافظ ضرر روزانه</div></div><span id="dailyGuardBadge" class="badge">—</span></div>
+    <div class="grid" style="margin-top:10px">
+      <div><div class="k">Today P&L</div><b id="todayPnl">—</b></div>
+      <div><div class="k">Daily Loss Limit</div><b id="dailyLimit">—</b></div>
+    </div>
+    <div id="dailyGuardText" class="small" style="margin-top:9px"></div>
   </div>
 
   <div id="openPositionsCard" class="card hidden">
@@ -145,6 +154,8 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   <div class="card">
     <div class="row"><div><b>Recent Results</b><div class="small">آخرین معاملات بسته‌شده</div></div><span id="recentCount" class="badge">0</span></div>
     <div id="recentTrades"><div class="small" style="margin-top:9px">No trades yet.</div></div>
+    <button class="full dark" style="margin-top:12px" onclick="resetPaper()">RESET PAPER TEST</button>
+    <div class="small" style="margin-top:7px">برای شروع تست تمیز؛ Equity و تاریخچه معاملات Paper پاک می‌شود، تنظیمات ربات باقی می‌ماند.</div>
   </div>
 </div>
 
@@ -303,6 +314,28 @@ function renderRecentTrades(rows){
  $('recentTrades').innerHTML=rows.length?rows.map(t=>`<div class="traderow"><div class="row"><div><b>${t.symbol}</b> <span class="pill ${t.side==='SHORT'?'dirShort':'dirLong'}">${t.side}</span></div><b class="${t.pnl>=0?'g':'r'}">${t.pnl>=0?'+':''}${money(t.pnl)} • ${Number(t.pnl_pct||0).toFixed(2)}%</b></div><div class="small">${t.strategy} • ${t.reason}</div></div>`).join(''):'<div class="small" style="margin-top:9px">No closed trades yet.</div>';
 }
 
+
+function renderDailyGuard(m){
+ let blocked=!!m.blocked;
+ $('todayPnl').textContent=(Number(m.today_pnl||0)>=0?'+':'')+money(m.today_pnl||0);
+ $('todayPnl').className=Number(m.today_pnl||0)>=0?'g':'r';
+ $('dailyLimit').textContent=money(m.loss_limit_usd||0);
+ $('dailyGuardBadge').textContent=blocked?'BLOCKED':'ACTIVE';
+ $('dailyGuardBadge').className='badge '+(blocked?'r':'g');
+ $('dailyGuardText').textContent=blocked?
+  'حد ضرر روزانه فعال شده؛ NOVA تا Reset تست یا شروع روز جدید پوزیشن تازه باز نمی‌کند.':
+  'ورود جدید مجاز است و محافظ ضرر روزانه در پس‌زمینه فعال است.';
+}
+async function resetPaper(){
+ if(!confirm('Paper test reset شود؟ Equity و معاملات Paper پاک می‌شوند و موجودی به Start Balance برمی‌گردد.'))return;
+ if(!confirm('تأیید نهایی: RESET PAPER TEST؟'))return;
+ try{
+   await req('/api/control/reset-paper',{method:'POST'});
+   await load();
+   alert('Paper test reset شد. برای شروع دوباره START را بزن.');
+ }catch(e){alert(e.message)}
+}
+
 function signalCard(c,s){
  let strategy=c.best_strategy||((c.perp_eligible&&c.direction==='SHORT')?'PERP_SHORT':c.perp_eligible?'PERP_LONG':(c.pump_score>=c.scalp_score?'PUMP_LONG':'SCALP_LONG'));
  let score=strategyScore(c,strategy),th=thresholdFor(strategy,s||{});
@@ -311,7 +344,7 @@ function signalCard(c,s){
  let sec=c.perp_eligible?'PERP':(sObj.status==='UNKNOWN'||sObj.score==null?'UNKNOWN':Number(sObj.score).toFixed(0));
  let marketQ=Number(c.market_risk||0).toFixed(0);
  return `<div class="signal">
-  <div class="row"><div><b>${c.symbol}</b><span class="pill">${strategy}</span></div><div><span class="signalState ${passed?'pass':'wait'}">${passed?'SIGNAL PASS':'WAIT'}</span> <span class="score ${dir==='SHORT'?'dirShort':'dirLong'}">${score.toFixed(0)}</span></div></div>
+  <div class="row"><div><b>${c.symbol}</b><span class="pill">${strategy}</span></div><div><span class="signalState ${passed?'pass':'wait'}">${passed?'SCORE PASS':'WAIT'}</span> <span class="score ${dir==='SHORT'?'dirShort':'dirLong'}">${score.toFixed(0)}</span></div></div>
   <div class="small">${dir} • Base threshold ${th.toFixed(0)} • Market Quality ${marketQ} • Security ${sec}</div>
   <div class="bar"><div class="fill" style="width:${Math.min(100,score)}%"></div></div>
  </div>`;
@@ -325,6 +358,7 @@ async function load(){
   $('health').textContent=d.system_health?.status==='OK'?'System healthy':'System '+(d.system_health?.status||'warming');
   renderMode(d.mode);
   let m=d.metrics||{};
+  renderDailyGuard(m);
   $('equity').textContent=money(m.equity);
   $('pnl').textContent=(m.pnl>=0?'+':'')+money(m.pnl);$('pnl').className='v '+(m.pnl>=0?'g':'r');
   $('wr').textContent=Number(m.win_rate||0).toFixed(1)+'%';

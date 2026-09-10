@@ -1,15 +1,25 @@
-# NOVA TRADER V5.1 SIMPLE+
+# NOVA TRADER V5.2 — POSITION PROTECTION HOTFIX
 
-Frontend-only upgrade for the V5.1 Engine Hotfix backend.
+Critical fixes discovered during FAST paper testing:
 
-Adds:
-- NOVA Decision card with friendly reason for the latest OPENED/BLOCKED decision.
-- Current open positions and live paper return.
-- Recent closed-trade results.
-- FAST / BALANCED / SAFE auto-save immediately when selected.
-- Best Signals now show the exact strategy score and current base threshold.
-- SIGNAL PASS vs WAIT is explicit.
-- `Market Quality` terminology remains; unknown on-chain security remains `UNKNOWN`.
-- Simplified Engine Protection replaces confusing Live Readiness display.
+1. Open Position Watcher
+- Open spot positions are fetched independently of the discovery/candidate ranking.
+- A token falling out of the scanner can no longer silently remove it from normal stop/trailing monitoring.
+- Stale open-position prices generate a watchdog warning.
 
-The backend remains V5.1.0 and all advanced engines continue automatically.
+2. Daily Guard visibility
+- Dashboard shows today's realized P&L and daily loss limit.
+- Clearly shows ACTIVE vs BLOCKED.
+
+3. Clean Paper Reset
+- Dashboard adds RESET PAPER TEST with double confirmation.
+- Resets paper equity, positions, trades, adaptive trade-feature history and execution-event history.
+- Strategy/risk settings remain.
+- Market snapshot research history remains.
+
+4. UI wording
+- `SIGNAL PASS` renamed to `SCORE PASS`.
+- Passing the base score does not imply all final safety gates passed.
+
+Important:
+A configured stop is a trigger, not a guaranteed fill price. Gaps, stale quotes and simulated slippage can still make a realized exit worse than the stop trigger. V5.2 specifically fixes one major source of excessive stop deviation: losing price monitoring when a spot token leaves the scanner list.
