@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.5 SIMPLE+</title>
+<title>NOVA TRADER V5.6 SIMPLE+</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.5</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V5.6</b></div><div class="sub">Simple Control • Smart Decision</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -148,7 +148,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       <div><div class="k">Portfolio</div><b id="port">—</b></div>
       <div><div class="k">Adaptive</div><b id="adapt">—</b></div>
     </div>
-    <div class="notice" style="margin-top:10px"><b>CAPITAL SHIELD + FAST POSITION WATCHER</b><br><span id="watcherText">Watcher checking...</span><br>استاپ داخلی، Scratch Exit، Early Break-even، Profit Lock و Liquidity Emergency پشت صحنه فعال‌اند.</div>
+    <div class="notice" style="margin-top:10px"><b>SNIPER + CAPITAL SHIELD</b><br><span id="sniperText">Sniper checking...</span><br><span id="watcherText">Watcher checking...</span><br>Sniper، استاپ داخلی، Profit Lock، Early Break-even و Liquidity Emergency پشت صحنه فعال‌اند.</div>
     <div class="small" style="margin-top:10px">LIVE execution remains locked. این صفحه فقط PAPER / SHADOW را کنترل می‌کند.</div>
   </div>
 
@@ -176,9 +176,9 @@ let profile=localStorage.getItem('nova_simple_profile')||'BALANCED';
 $('server').value=base;$('key').value=key;
 
 const profiles={
- SAFE:{pump:78,scalp:80,long:78,short:78,text:'SAFE: ورود کمتر، فیلتر سخت‌تر، مناسب وقتی می‌خواهی محافظه‌کارتر باشد.'},
- BALANCED:{pump:72,scalp:74,long:72,short:72,text:'BALANCED: تعادل بین حساسیت و کیفیت سیگنال. برای شروع همین مناسب است.'},
- FAST:{pump:68,scalp:70,long:68,short:68,text:'FAST: حساس‌تر و سریع‌تر؛ معاملات بیشتری می‌گیرد ولی نویز و ریسک سیگنال هم بیشتر می‌شود.'}
+ SAFE:{sniper:84,pump:78,scalp:80,long:78,short:78,text:'SAFE: ورود کمتر، فیلتر سخت‌تر، مناسب وقتی می‌خواهی محافظه‌کارتر باشد.'},
+ BALANCED:{sniper:78,pump:72,scalp:74,long:72,short:72,text:'BALANCED: تعادل بین حساسیت و کیفیت سیگنال. برای شروع همین مناسب است.'},
+ FAST:{sniper:72,pump:68,scalp:70,long:68,short:68,text:'FAST: حساس‌تر و سریع‌تر؛ معاملات بیشتری می‌گیرد ولی نویز و ریسک سیگنال هم بیشتر می‌شود.'}
 };
 
 function toggleConn(){$('connBox').classList.toggle('hidden')}
@@ -220,6 +220,7 @@ async function saveSettings(silent=false){
    stop_loss_pct:+$('sl').value,
    max_positions:+$('maxPos').value,
    perp_leverage:+$('lev').value,
+   min_sniper_score:p.sniper,
    min_pump_score:p.pump,
    min_scalp_score:p.scalp,
    min_long_score:p.long,
@@ -264,7 +265,16 @@ function friendlyReason(reason){
   'LIQUIDITY_EMERGENCY':'نقدینگی بازار شدیداً ضعیف شد؛ NOVA خروج اضطراری زد.',
   'spot move too extreme':'حرکت ۵ دقیقه‌ای بیش از حد شدید است؛ NOVA از تعقیب این حرکت خودداری کرد.',
   'low spot liquidity':'نقدینگی برای Capital Shield کافی نیست و ورود رد شد.',
-  'low spot market quality':'کیفیت بازار برای ورود محافظت‌شده کافی نیست.'
+  'low spot market quality':'کیفیت بازار برای ورود محافظت‌شده کافی نیست.',
+  'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
+  'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
+  'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
+  'sniper momentum too weak':'حرکت قیمت هنوز برای Sniper شروع نشده.',
+  'sniper late chase':'پامپ زیادی جلو رفته؛ NOVA برای جلوگیری از خرید در سقف وارد نمی‌شود.',
+  'sniper market too old':'این بازار برای Launch Sniper قدیمی شده.',
+  'SNIPER_SCRATCH_EXIT':'حرکت سریع ادامه پیدا نکرد؛ Sniper با ضرر بسیار کوچک خارج شد.',
+  'SNIPER_MOMENTUM_FADE':'شتاب پامپ ضعیف شد؛ Sniper سریع خارج شد.',
+  'SNIPER_TAKE_PROFIT':'هدف سریع Sniper گرفته شد و باقی پوزیشن بسته شد.'
  };
  return map[reason]||reason||'NOVA در حال اسکن بازار است.';
 }
@@ -276,6 +286,7 @@ function ageText(iso){
  return Math.round(s/3600)+'h ago';
 }
 function strategyScore(c,strategy){
+ if(strategy==='SNIPER_LONG')return Number(c.sniper_score||0);
  if(strategy==='PUMP_LONG')return Number(c.pump_score||0);
  if(strategy==='SCALP_LONG')return Number(c.scalp_score||0);
  if(strategy==='PERP_LONG')return Number(c.long_score||0);
@@ -283,6 +294,7 @@ function strategyScore(c,strategy){
  return 0;
 }
 function thresholdFor(strategy,s){
+ if(strategy==='SNIPER_LONG')return Number(s.min_sniper_score||78);
  if(strategy==='PUMP_LONG')return Number(s.min_pump_score||0);
  if(strategy==='SCALP_LONG')return Number(s.min_scalp_score||0);
  if(strategy==='PERP_LONG')return Number(s.min_long_score||0);
@@ -397,6 +409,8 @@ async function load(){
   $('exec').textContent=d.execution?.fills>=0?'ACTIVE':'—';$('exec').className='g';
   $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
   $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
+  let sn=d.sniper||{};
+  $('sniperText').textContent=sn.enabled?(sn.alive?`Sniper ACTIVE • ${sn.interval_sec||8}s scans • entries ${sn.entries||0}`:'Sniper warming up'):'Sniper OFF';
   let fw=d.fast_watcher||{};
   $('watcherText').textContent=fw.alive?`Fast Watcher ACTIVE • ${fw.interval_sec||4}s position checks${fw.last_watch_age_sec!=null?' • last '+Number(fw.last_watch_age_sec).toFixed(1)+'s ago':''}`:'Fast Watcher warming up';
  }catch(e){
