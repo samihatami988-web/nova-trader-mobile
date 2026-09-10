@@ -1,31 +1,16 @@
-NOVA Trader Dashboard V6.7.0 FINAL
-====================================
+NOVA Dashboard V6.7.1 FINAL
+===========================
 
-Upload index.html to:
+Replace index.html in:
 samihatami988-web/nova-trader-mobile
 
-Replace the old index.html.
+New realtime visibility:
+- CREATE / BUY / SELL counters
+- Provider control-message counter
+- subscribeTokenTrade error counter
+- last real trade age
+- real trade events separated from token-create events
+- V6.7.1 backend compatibility
 
-Default backend:
-https://p01--nova-trader-cloud-v2--snkzwswjqkdc.code.run
-
-Compatible backend:
-NOVA Trader V6.7.0 FINAL
-
-Key additions:
-- Northflank naming instead of Render
-- V6.7 backend version display
-- Realtime Core panel
-- PumpPortal HTTP handshake status
-- Realtime retry/attempt counters
-- Dedicated /api/diagnostics/pumpportal viewer
-- Event-driven exit state
-- Launch Sniper
-- Selective Entry Router
-- Edge Governor
-- Daily Guard/Target
-- PAPER/SHADOW controls
-- LIVE execution lock status
-
-Never paste PumpPortal API key or wallet private key into the dashboard.
-Only NOVA Admin Key belongs in the Admin Key field.
+The dashboard still uses the existing Northflank backend URL and NOVA Admin Key.
+Never enter PumpPortal API key or wallet private key into the dashboard.

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V6.7.0 FINAL</title>
+<title>NOVA TRADER V6.7.1 FINAL</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -97,7 +97,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="brand">NOVA TRADER <b>V6.7.0</b></div>
+      <div class="brand">NOVA TRADER <b>V6.7.1</b></div>
       <div class="sub">FINAL MOBILE DASHBOARD • Northflank • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
@@ -143,7 +143,13 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
       <div class="mini"><div class="k">LAST EVENT</div><b id="rtLast">—</b></div>
       <div class="mini"><div class="k">ATTEMPTS</div><b id="rtAttempts">0</b></div>
       <div class="mini"><div class="k">SUBSCRIPTIONS</div><b id="rtSubs">0</b></div>
-      <div class="mini"><div class="k">EVENTS</div><b id="rtEvents">0</b></div>
+      <div class="mini"><div class="k">REAL TRADE EVENTS</div><b id="rtEvents">0</b></div>
+      <div class="mini"><div class="k">CREATE</div><b id="rtCreate">0</b></div>
+      <div class="mini"><div class="k">BUY</div><b id="rtBuy">0</b></div>
+      <div class="mini"><div class="k">SELL</div><b id="rtSell">0</b></div>
+      <div class="mini"><div class="k">PROVIDER MSG</div><b id="rtProvider">0</b></div>
+      <div class="mini"><div class="k">SUB ERRORS</div><b id="rtSubErrors">0</b></div>
+      <div class="mini"><div class="k">LAST REAL TRADE</div><b id="rtTradeAge">—</b></div>
     </div>
     <div id="rtText" class="notice">Checking realtime connection…</div>
     <div class="grid2" style="margin-top:9px">
@@ -418,10 +424,19 @@ function renderRealtime(d,h){
  $('rtMode').textContent=mode;$('rtHttp').textContent=http;
  $('rtLast').textContent=p.last_event_age_sec==null?'—':Number(p.last_event_age_sec).toFixed(2)+'s ago';
  $('rtAttempts').textContent=h?.pulse_attempts??'—';$('rtSubs').textContent=p.subscribed_tokens||0;$('rtEvents').textContent=p.events_total||0;
+ const mc=p.message_counts||{};
+ $('rtCreate').textContent=mc.create||0;
+ $('rtBuy').textContent=mc.buy||0;
+ $('rtSell').textContent=mc.sell||0;
+ $('rtProvider').textContent=mc.provider||0;
+ $('rtSubErrors').textContent=p.subscription_errors||0;
+ $('rtTradeAge').textContent=p.last_trade_event_age_sec==null?'—':Number(p.last_trade_event_age_sec).toFixed(2)+'s ago';
  $('rtExit').textContent=rx.enabled?(rx.mode||'ON'):'OFF';
  $('rtRetry').textContent=h?.pulse_retry_sec==null?'—':Number(h.pulse_retry_sec)+'s';
  $('rtText').textContent=connected?
-   `Realtime stream LIVE • Event-driven Sniper/Exit فعال است.`:
+   ((Number((p.message_counts||{}).buy||0)+Number((p.message_counts||{}).sell||0))>0
+    ? `Realtime LIVE • Token Trade stream confirmed • Event-driven Sniper/Exit فعال است.`
+    : `Realtime LIVE • New-token stream active • منتظر اولین BUY/SELL واقعی از subscribeTokenTrade...`):
    String(mode).startsWith('REJECTED_HTTP_')?
    `PumpPortal handshake را رد کرده (${mode}). NOVA طبق cooldown دوباره تلاش می‌کند؛ polling fallback فعال می‌ماند.`:
    mode==='AUTH_REJECTED'?'PumpPortal authentication رد شده؛ API key/wallet association باید بررسی شود.':
@@ -438,7 +453,11 @@ async function loadDiagnostics(){
      last_attempt:x.last_attempt,last_connected:x.last_connected,stream_enabled:x.stream_enabled,
      api_key_present:x.api_key_present,api_key_length:x.api_key_length,
      env_has_outer_whitespace:x.env_has_outer_whitespace,env_looks_quoted:x.env_looks_quoted,
-     response_headers:x.response_headers,response_body:x.response_body,events_total:x.events_total
+     response_headers:x.response_headers,response_body:x.response_body,events_total:x.events_total,
+     message_counts:x.message_counts,subscription_requests:x.subscription_requests,
+     unsubscription_requests:x.unsubscription_requests,trade_subscription_errors:x.trade_subscription_errors,
+     last_provider_message:x.last_provider_message,last_trade_event_age_sec:x.last_trade_event_age_sec,
+     launch_trades_seen:x.launch_trades_seen
    };
    $('diagBox').textContent=JSON.stringify(safe,null,2);$('diagBox').classList.remove('hidden')
  }catch(e){
