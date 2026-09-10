@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.5 SELECTIVE ENTRY</title>
+<title>NOVA TRADER V6.6 LAUNCH SNIPER</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -52,7 +52,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.5</b></div><div class="sub">Selective Entry • Quality + Execution</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.6</b></div><div class="sub">First-Seconds Launch Sniper • Edge Recovery</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -169,6 +169,33 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   </div>
 
   <div class="card">
+    <div class="row">
+      <div><b>Launch Sniper</b><div class="small">توکن‌های تازه‌ساخته‌شده • First-Seconds PAPER Engine</div></div>
+      <span id="launchBadge" class="badge">WATCHING</span>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">New Tokens</div><b id="launchNew">0</b></div>
+      <div class="mini"><div class="k">Watching</div><b id="launchWatching">0</b></div>
+      <div class="mini"><div class="k">Trade Events</div><b id="launchTrades">0</b></div>
+      <div class="mini"><div class="k">Entries</div><b id="launchEntries">0</b></div>
+    </div>
+    <div class="notice" style="margin-top:10px">
+      <div class="row"><b>BEST FIRST-SECONDS SETUP</b><span id="launchState" class="badge">—</span></div>
+      <div id="launchBestTitle" style="font-size:19px;font-weight:900;margin-top:7px">Waiting for new token...</div>
+      <div id="launchBestMeta" class="small" style="margin-top:5px">No launch burst yet.</div>
+      <div id="launchBestReason" class="small" style="margin-top:6px"></div>
+    </div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">Gate Pass</div><b id="launchGatePass">0</b></div>
+      <div class="mini"><div class="k">Confirmed</div><b id="launchConfirmed">0</b></div>
+      <div class="mini"><div class="k">Creator Sell</div><b id="launchCreatorSell">0</b></div>
+      <div class="mini"><div class="k">Spam/Duplicate</div><b id="launchSpam">0</b></div>
+    </div>
+    <div id="launchRules" class="small" style="margin-top:8px"></div>
+    <div class="small" style="margin-top:7px">Launch Sniper فقط در PAPER فعال است؛ توکن بدون چند خریدار مستقل یا با Creator/Concentration مشکوک خریده نمی‌شود.</div>
+  </div>
+
+  <div class="card">
     <div class="row"><div><b>Realtime Sniper</b><div class="small">Pulse Stream + Micro-Pump Sniper</div></div><span id="pulseBadge" class="badge">CHECKING</span></div>
     <div class="grid" style="margin-top:10px">
       <div class="mini"><div class="k">Feed</div><b id="pulseMode">—</b></div>
@@ -206,6 +233,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
   <div class="card">
     <div class="row"><div><b>Edge Governor</b><div class="small">موتور زیان‌ده خودکار محدود یا Pause می‌شود.</div></div><span id="edgeBadge" class="badge">LEARNING</span></div>
     <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">LAUNCH</div><b id="govLaunch">—</b></div>
       <div class="mini"><div class="k">SNIPER</div><b id="govSniper">—</b></div>
       <div class="mini"><div class="k">SCALP</div><b id="govScalp">—</b></div>
       <div class="mini"><div class="k">PUMP</div><b id="govPump">—</b></div>
@@ -377,6 +405,22 @@ function friendlyReason(reason){
   'soft router weak buy pressure':'فشار خرید برای ورود کنترل‌شده کافی نیست.',
   'soft router momentum unsafe':'Momentum برای ورود Near-miss مناسب نیست.',
   'soft-entry hourly limit':'سقف ورودهای کنترل‌شده این ساعت پر شده.',
+  'FIRST_SECONDS_ENTRY':'Launch Burst دو بار تأیید شد و ورود PAPER انجام شد.',
+  'launch low events':'در ۲ ثانیه هنوز تعداد معامله کافی نیست.',
+  'launch low buyers':'خریداران مستقل هنوز کافی نیستند.',
+  'launch low buy pressure':'فشار خرید First-Seconds کافی نیست.',
+  'launch low buy flow':'حجم SOL ورودی در ۲ ثانیه کافی نیست.',
+  'launch buyer concentration':'حجم خرید بیش از حد روی یک Wallet متمرکز است.',
+  'creator sold':'Creator شروع به فروش کرده؛ ورود ممنوع است.',
+  'creator spam':'Creator در زمان کوتاه توکن‌های زیادی ساخته.',
+  'duplicate ticker spam':'Ticker تکراری/اسپمی تشخیص داده شد.',
+  'launch late chase':'حرکت اولیه بیش از حد جلو رفته؛ NOVA در سقف تعقیب نمی‌کند.',
+  'launch already fading':'Market Cap از نقطه ایجاد در حال افت است.',
+  'LAUNCH_CREATOR_SELL':'Creator فروخت؛ خروج اضطراری First-Seconds.',
+  'LAUNCH_RAW_STOP':'حرکت خام Market Cap به Stop سریع رسید.',
+  'LAUNCH_SCRATCH_EXIT':'Launch ادامه نداد؛ خروج سریع برای محدودکردن ضرر.',
+  'LAUNCH_FLOW_REVERSAL':'جریان خرید به فروش برگشت؛ خروج Event-Driven.',
+  'LAUNCH_TIME_EXIT':'در پنجره First-Seconds ادامه حرکت کافی نبود؛ خروج زمانی.',
   'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
   'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
   'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
@@ -566,6 +610,35 @@ async function load(){
   $('port').textContent=d.portfolio?.enabled?'AUTO':'OFF';$('port').className=d.portfolio?.enabled?'g':'y';
   $('adapt').textContent=d.adaptive?.enabled?'AUTO':'OFF';$('adapt').className=d.adaptive?.enabled?'g':'y';
   renderDailyTarget(d.daily_target||{},d.risk_status||{});
+
+  let ls=d.launch_sniper||{},ld=ls.diag||{},lb=ls.best||null,lr=ls.rules||{};
+  $('launchNew').textContent=ls.new_tokens||0;
+  $('launchWatching').textContent=ls.watching||0;
+  $('launchTrades').textContent=ls.trades_seen||0;
+  $('launchEntries').textContent=ls.entries||0;
+  $('launchGatePass').textContent=ld.GATE_PASS||0;
+  $('launchConfirmed').textContent=ld.CONFIRMED||0;
+  $('launchCreatorSell').textContent=ld.CREATOR_SELL||0;
+  $('launchSpam').textContent=(ld.CREATOR_SPAM||0)+(ld.DUPLICATE_SYMBOL||0);
+  $('launchBadge').textContent=ls.enabled?'ACTIVE':'OFF';
+  $('launchBadge').className='badge '+(ls.enabled?'g':'y');
+
+  if(lb){
+    let sym=lb.symbol||((lb.mint||'').slice(0,5)+'…');
+    $('launchBestTitle').textContent=`${sym} • SCORE ${Number(lb.score||0).toFixed(0)} • ${Number(lb.age_sec||0).toFixed(1)}s`;
+    $('launchBestMeta').textContent=`2s ${lb.events_2s||0} trades • Buyers ${lb.unique_buyers_2s||0} • Buy ${Number(lb.buy_pressure_2s||0).toFixed(0)}% • Flow ${Number(lb.buy_sol_2s||0).toFixed(2)} SOL • Top ${Number(lb.top_buyer_share_pct||0).toFixed(0)}%`;
+    $('launchBestReason').textContent=`${lb.status||'WATCHING'} • ${lb.reason||''}${lb.mcap_multiple!=null?' • MC x'+Number(lb.mcap_multiple).toFixed(2):''}`;
+    $('launchState').textContent=lb.status||'WATCHING';
+    $('launchState').className='badge '+(lb.status==='READY'?'g':lb.status==='BLOCKED'?'r':'y');
+  }else{
+    $('launchBestTitle').textContent='Waiting for new token...';
+    $('launchBestMeta').textContent='No launch burst yet.';
+    $('launchBestReason').textContent='';
+    $('launchState').textContent='—';
+  }
+  $('launchRules').textContent=lr.score!=null?
+    `Gate → Score ${lr.score} • ${lr.events_2s} trades/2s • ${lr.buyers_2s} buyers • Buy ${lr.buy_pressure_2s}% • ≥${lr.min_buy_sol_2s} SOL • age ≤${lr.max_age_sec}s`:'';
+
   let pulse=d.realtime_pulse||{};
   $('pulseMode').textContent=pulse.mode||'—';
   $('pulseLast').textContent=pulse.last_event_age_sec==null?'—':Number(pulse.last_event_age_sec).toFixed(2)+'s ago';
@@ -621,6 +694,7 @@ async function load(){
   $('sniperSignals').innerHTML=snCands.length?snCands.map(sniperSignalCard).join(''):'<div class="small" style="margin-top:9px">No sniper setup right now.</div>';
   let eg=d.edge_governor||{},gs=eg.strategies||{},sv=d.survival_guard||{};
   function gstate(k){return (gs[k]||{}).state||'—'}
+  $('govLaunch').textContent=gstate('LAUNCH_SNIPER');
   $('govSniper').textContent=gstate('SNIPER_LONG');
   $('govScalp').textContent=gstate('SCALP_LONG');
   $('govPump').textContent=gstate('PUMP_LONG');

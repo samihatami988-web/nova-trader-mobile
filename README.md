@@ -1,43 +1,78 @@
-# NOVA TRADER V6.5 — SELECTIVE ENTRY ROUTER
+# NOVA TRADER V6.6 — LAUNCH SNIPER / FIRST-SECONDS ENGINE
 
-PAPER / SHADOW ONLY. LIVE execution remains hard-locked.
+PAPER / SHADOW platform, with LAUNCH_SNIPER deliberately restricted to PAPER.
+LIVE execution remains hard-locked.
 
-V6.5 addresses a practical testing problem: if every near-miss signal is rejected, NOVA cannot collect enough forward trades to learn which strategies actually have edge.
+## Why Launch Sniper is separate
+A newly created Pump.fun coin starts on a bonding curve and can trade immediately. It may not yet have the mature DEX liquidity/security metadata required by the normal SCALP/PUMP router.
 
-## FINAL GATE status
-Every Best Signal now shows:
-- READY TO ENTER — strict gates pass.
-- CONTROLLED ENTRY — PAPER-only strong near-miss, entered at reduced risk.
-- BLOCKED — exact reason is displayed.
+Launch Sniper therefore uses an event-native behavioral risk model for the first seconds.
 
-## Controlled PAPER Entry
-The router may soften only two SPOT filters:
-- Capital-Shield market-quality floor: down to 62 for a strong signal.
-- Capital-Shield liquidity floor: down to $35k for a strong signal.
+## First-Seconds flow
+1. `subscribeNewToken` receives the creation event.
+2. NOVA registers creator/ticker history and opens a short metered TokenTrade watch.
+3. Rolling 1s/2s/5s windows measure:
+   - trade frequency
+   - independent buyers
+   - Bayesian-smoothed buy pressure
+   - SOL buy/sell flow
+   - acceleration
+   - market-cap movement
+   - top-buyer concentration
+4. Hard behavioral blocks:
+   - creator sell
+   - creator spam
+   - repeated ticker spam
+   - excessive single-wallet concentration
+   - fading immediately after creation
+   - late chase
+5. Entry must pass twice inside ~1.6 seconds.
+6. PAPER position is tiny during Edge Governor probation.
+7. The same PumpPortal trade events drive the exit engine.
 
-A controlled entry also requires:
-- SCALP_LONG or PUMP_LONG only.
-- Signal >= normal threshold + 2.
-- Buy pressure >= 55%.
-- 5-minute momentum between roughly -2% and +12%.
-- No more than 2 controlled entries per hour.
-- Reduced risk multiplier (0.50 on top of the existing Governor/Portfolio risk controls).
+## Default launch gate
+- Score >= 74
+- >= 3 trades in 2 seconds
+- >= 2 independent buyers in 2 seconds
+- Smoothed buy pressure >= 68%
+- >= 0.15 SOL buy flow in 2 seconds
+- Largest buyer <= 65% of short-window buy flow
+- Entry age <= 18 seconds
+- Market-cap move must not already be an extreme chase
 
-The following are NEVER bypassed:
-- Kill / stop state.
-- Stale data.
-- Edge Governor pause.
-- Token-security rejection / SHADOW requirements.
-- Extreme move protection.
-- Route quality.
-- Portfolio/correlation guard.
-- Execution-cost limit.
-- Position / cooldown limits.
-- Daily, global-equity and Survival guards.
+## Position sizing
+- Maximum launch position is 0.50% of equity.
+- Edge Governor still applies. In PROBATION the actual size is much smaller.
+- One Launch position at a time.
+- Maximum 4 launch entries/hour by default.
+- No martingale.
 
-SHADOW remains strict: Controlled Entry is PAPER-only.
+## PAPER execution realism
+The default first-seconds simulator assumes:
+- Pump.fun bonding-curve fee: 1.25% per trade.
+- Future PumpPortal Local API interface fee proxy: 0.50% per trade.
+- Additional simulated slippage, impact and latency.
 
-## Why this is safer than simply lowering all thresholds
-V6.5 creates a small exploration channel for strong near-misses while preserving the hard safety stack. It should produce enough paper trades to measure expectancy without turning the bot into an indiscriminate buyer.
+Because friction is large, tiny gross scalps are not treated as meaningful net profit.
 
-Profit is not guaranteed. The goal is to discover positive edge from forward data while keeping losses bounded.
+## Event-driven exits
+Launch exits can trigger on:
+- Creator Sell
+- Raw market-cap stop
+- Flow reversal
+- Scratch / no follow-through
+- Net Capital Shield
+- Early break-even
+- Profit Lock
+- Partial TPs
+- First-seconds time exit
+
+Default net TP ladder:
+- +5%
+- +10%
+- +18%
+
+These are PAPER model targets, not guaranteed live fills or returns.
+
+## Important
+First-seconds memecoin trading is extremely volatile. Event-driven software cannot guarantee a fixed loss cap because a token can gap, lose tradability, or reverse between observable trades.
