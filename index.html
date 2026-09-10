@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#06101e">
-<title>NOVA TRADER V4.5 PORTFOLIO BRAIN</title>
+<title>NOVA TRADER V5.0 ULTIMATE</title>
 <style>
 :root{--bg:#06101e;--p:#0c1a2d;--l:#183552;--t:#edf7ff;--m:#90a5ba;--c:#36c7ff;--g:#31d47f;--r:#ff5c74;--y:#f4c754;--v:#bd7cff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -24,15 +24,22 @@ body{margin:0;background:radial-gradient(circle at 50% -10%,#123157,#071225 35%,
 .reasons{font-size:10px;color:#9cb0c7;margin-top:6px}.switchline{display:flex;justify-content:space-between;align-items:center;gap:10px}.switch{appearance:none;width:48px;height:28px;border-radius:99px;background:#24364a;position:relative;outline:none}.switch:checked{background:#126a43}.switch:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:white;transition:.2s}.switch:checked:after{left:23px}
 canvas{display:block;width:100%;height:160px;background:#06101b;border:1px solid #17324d;border-radius:13px;margin-top:9px}
 .researchGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.portGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.weightbar{height:7px;background:#06101b;border-radius:99px;overflow:hidden;margin-top:6px}.weightfill{height:100%;background:#36c7ff}.exposureLine{height:8px;background:#06101b;border-radius:99px;overflow:hidden;margin-top:6px}.exposureFill{height:100%;background:#31d47f}.regime{font-size:24px;font-weight:950}.blockBox{margin-top:9px;border:1px dashed #34516d;border-radius:12px;padding:9px;font-size:10px;color:#9fb3c9}.researchCard{background:#071322;border:1px solid #173752;border-radius:14px;padding:10px}.researchTitle{font-size:11px;font-weight:900}.metricRow{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px}.metricBox{background:#081827;border:1px solid #18364f;border-radius:9px;padding:6px;font-size:9px}.ready{color:var(--g)}.notready{color:var(--y)}
+.portGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.execGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.execCard{background:#071322;border:1px solid #173752;border-radius:14px;padding:10px}.execBig{font-size:22px;font-weight:950}.fillLine{font-size:10px;padding:7px 0;border-bottom:1px dashed #18314c}.execBreakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.execBreakdown div{background:#071322;border:1px solid #173752;border-radius:9px;padding:6px;text-align:center;font-size:9px}.weightbar{height:7px;background:#06101b;border-radius:99px;overflow:hidden;margin-top:6px}.weightfill{height:100%;background:#36c7ff}.exposureLine{height:8px;background:#06101b;border-radius:99px;overflow:hidden;margin-top:6px}.exposureFill{height:100%;background:#31d47f}.regime{font-size:24px;font-weight:950}.blockBox{margin-top:9px;border:1px dashed #34516d;border-radius:12px;padding:9px;font-size:10px;color:#9fb3c9}.researchCard{background:#071322;border:1px solid #173752;border-radius:14px;padding:10px}.researchTitle{font-size:11px;font-weight:900}.metricRow{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px}.metricBox{background:#081827;border:1px solid #18364f;border-radius:9px;padding:6px;font-size:9px}.ready{color:var(--g)}.notready{color:var(--y)}
+
+.modeBtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:10px}.modeBtn.active{outline:2px solid #36c7ff}.lockedBtn{opacity:.5;background:#40212b}
+.readinessScore{font-size:42px;font-weight:950;line-height:1}.check{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed #18314c;font-size:10px}.check:last-child{border-bottom:0}
+.healthBadge{display:inline-block;padding:4px 8px;border-radius:99px;border:1px solid #285071;font-size:10px}.secRow{padding:9px 0;border-bottom:1px solid #18314c}.secScore{font-size:18px;font-weight:900}
+.logBox{max-height:270px;overflow:auto}.auditLine{padding:7px 0;border-bottom:1px dashed #18314c;font-size:10px;line-height:1.4}
+.routeLine{font-size:9px;color:#91a9c1;margin-top:5px}.lockedNotice{background:#3a1720;border:1px solid #7b2b3e;color:#ff9bad;border-radius:12px;padding:10px;font-size:11px;line-height:1.55}
 @media(min-width:700px){.grid4{grid-template-columns:repeat(4,1fr)}.health{grid-template-columns:repeat(4,1fr)}}@media(max-width:420px){.scores{grid-template-columns:repeat(5,1fr)}.score{font-size:9px}.intel{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <div class="w">
 <div class="top">
-  <div><div class="title">NOVA TRADER <b>V4.5</b></div><div class="small">Portfolio Allocator • Correlation Guard • Regime Brain • Paper</div></div>
-  <div class="badge">NO REAL MONEY</div>
+  <div><div class="title">NOVA TRADER <b>V5.0</b></div><div class="small">Ultimate Paper + Shadow Trading OS • Live Hard-Locked</div></div>
+  <div class="badge">PAPER / SHADOW ONLY</div>
 </div>
 
 <div class="card">
@@ -54,7 +61,43 @@ canvas{display:block;width:100%;height:160px;background:#06101b;border:1px solid
   <div class="status"><span id="dot" class="dot"></span><div><b>Cloud Auto Trader</b><div id="bot" class="small">UNKNOWN</div></div></div>
   <div><div id="vel" class="small">Velocity: —</div><div id="refresh" class="small">—</div></div>
 </div>
-<div class="notice" style="margin-top:10px">Adaptive Mode فقط داخل Paper Trading کار می‌کند. V4.3 از نتایج واقعی Forward Test برای سخت‌تر/آسان‌تر کردن محدود آستانه‌ها و کم‌کردن ریسک در Drawdown استفاده می‌کند؛ سود را تضمین نمی‌کند.</div>
+<div class="notice" style="margin-top:10px">V5.0 تمام موتورهای Pump, Scalp, Perp LONG/SHORT, Adaptive, Portfolio, Execution و Research را یکجا نگه می‌دارد. LIVE execution عمداً در کد قفل است.</div>
+</div>
+
+<div class="card">
+<div class="row"><div><b>Operating Mode</b><div class="small">PAPER یا SHADOW؛ هیچ سفارش واقعی ارسال نمی‌شود.</div></div><span id="modeBadge" class="badge">PAPER</span></div>
+<div class="modeBtns">
+<button id="paperBtn" class="modeBtn" onclick="setMode('PAPER')">PAPER</button>
+<button id="shadowBtn" class="modeBtn cyan" onclick="setMode('SHADOW')">SHADOW</button>
+<button class="lockedBtn" onclick="alert('LIVE execution is hard-locked in V5.0')">🔒 LIVE</button>
+</div>
+<div class="lockedNotice" style="margin-top:10px">LIVE HARD-LOCKED — حتی اگر Readiness به 100 برسد، V5.0 transaction واقعی نمی‌سازد یا امضا نمی‌کند.</div>
+</div>
+
+<div class="card">
+<div class="row"><div><b>Live Readiness Gate</b><div class="small">آمادگی آماری/اجرایی؛ نه تضمین سود</div></div><span id="readinessStatus" class="healthBadge">NOT READY</span></div>
+<div class="grid" style="margin-top:10px">
+<div class="sidebox"><div class="k">Readiness Score</div><div id="readinessScore" class="readinessScore">0</div></div>
+<div class="sidebox"><div class="k">Shadow Observation</div><div id="shadowHours" style="font-size:24px;font-weight:900">0h</div><div class="small">continuous current session</div></div>
+</div>
+<div id="readinessChecks" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<div class="row"><div><b>System Watchdog</b><div class="small">Data freshness • source health • engine errors</div></div><span id="systemStatus" class="healthBadge">—</span></div>
+<div class="grid" style="margin-top:10px">
+<div class="sidebox"><div class="k">Loop Age</div><b id="loopAge">—</b></div>
+<div class="sidebox"><div class="k">Spot Age</div><b id="spotAge">—</b></div>
+<div class="sidebox"><div class="k">Perp Age</div><b id="perpAge">—</b></div>
+<div class="sidebox"><div class="k">Error Streak</div><b id="errorStreak">0</b></div>
+</div>
+<div id="healthReasons" class="small" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<div class="row"><div><b>Solana Token Security</b><div class="small">Mint/Freeze Authority + Largest-holder concentration</div></div><span id="secCoverage" class="healthBadge">0%</span></div>
+<div class="notice" style="margin-top:10px">این لایه از Solana RPC داده on-chain می‌خواند. تمرکز Largest Accounts تقریبی است و ممکن است LP، خزانه یا Burn account را هم شامل شود؛ جای audit کامل قرارداد نیست.</div>
+<div id="securityRows"></div>
 </div>
 
 <div class="card">
@@ -96,6 +139,28 @@ canvas{display:block;width:100%;height:160px;background:#06101b;border:1px solid
 </div>
 <div id="weights" class="portGrid"></div>
 <div id="portfolioBlock" class="blockBox">No portfolio blocks yet.</div>
+</div>
+
+<div class="card">
+<div class="row">
+  <div><b>Execution Reality Engine</b><div class="small">Fee • Spread • Slippage • Market Impact • Latency</div></div>
+  <input id="executionEnabled" class="switch" type="checkbox">
+</div>
+<div class="notice" style="margin-top:10px">این مدل هزینه اجرا را شبیه‌سازی می‌کند؛ quote واقعی صرافی نیست. اگر All-in Cost از سقف تنظیم‌شده بیشتر شود، ورود Block می‌شود.</div>
+<div class="execGrid">
+  <div class="execCard"><div class="k">Average All-in Cost</div><div id="avgExecCost" class="execBig">0 bp</div></div>
+  <div class="execCard"><div class="k">Execution Blocks</div><div id="execBlocks" class="execBig">0</div></div>
+  <div class="execCard"><div class="k">Average Market Impact</div><div id="avgImpact" class="execBig">0 bp</div></div>
+  <div class="execCard"><div class="k">Average Latency Cost</div><div id="avgLatencyCost" class="execBig">0 bp</div></div>
+</div>
+<div class="execBreakdown">
+  <div>Fills<br><b id="execFills">0</b></div>
+  <div>Entries<br><b id="entryFills">0</b></div>
+  <div>Exits<br><b id="exitFills">0</b></div>
+  <div>Avg Fee<br><b id="avgFee">0 bp</b></div>
+</div>
+<div id="executionBlock" class="blockBox">No execution blocks yet.</div>
+<div style="margin-top:10px"><div class="small">Recent simulated fills</div><div id="executionFills"></div></div>
 </div>
 
 <div class="card">
@@ -142,8 +207,35 @@ canvas{display:block;width:100%;height:160px;background:#06101b;border:1px solid
 <label class="small">Correlation Threshold<input id="corrTh" type="number" value=".80" min=".3" max=".99" step=".01"></label>
 <label class="small">Correlation Lookback<input id="corrLb" type="number" value="20" min="8" max="120"></label>
 <label class="small">Min Portfolio Weight<input id="minWeight" type="number" value=".35" min=".1" max="1" step=".05"></label>
+<label class="small">Spot Fee bp<input id="spotFee" type="number" value="30" min="0" step="1"></label>
+<label class="small">Perp Fee bp<input id="perpFee" type="number" value="10" min="0" step="1"></label>
+<label class="small">Base Spread bp<input id="spreadBp" type="number" value="8" min="0" step="1"></label>
+<label class="small">Slippage Floor bp<input id="slipFloor" type="number" value="2" min="0" step=".5"></label>
+<label class="small">Impact Coefficient<input id="impactCoef" type="number" value="40" min="0" step="1"></label>
+<label class="small">Simulated Latency ms<input id="latencyMs" type="number" value="450" min="0" step="50"></label>
+<label class="small">Max Execution Cost bp<input id="maxExecCost" type="number" value="120" min="10" step="5"></label>
+<label class="small">Max Data Age sec<input id="maxDataAge" type="number" value="90" min="30"></label>
+<label class="small">Min Token Security<input id="minSec" type="number" value="60" min="0" max="100"></label>
+<label class="small">Security Scan Top N<input id="secTopN" type="number" value="5" min="1" max="12"></label>
+<label class="small">Min Route Quality<input id="minRoute" type="number" value="55" min="0" max="100"></label>
+<label class="small">Spot Max Hold min<input id="spotHold" type="number" value="120" min="5"></label>
+<label class="small">Perp Max Hold min<input id="perpHold" type="number" value="240" min="5"></label>
+<label class="small">Reversal Exit Edge<input id="revEdge" type="number" value="15" min="1"></label>
+<label class="small">Break-even Trigger %<input id="beTrigger" type="number" value="6" min="1" step=".5"></label>
+<label class="small">Break-even Exit %<input id="beExit" type="number" value=".5" min="0" step=".1"></label>
+<label class="small">Readiness Min Trades<input id="readyTrades" type="number" value="100" min="20"></label>
+<label class="small">Readiness Min PF<input id="readyPF" type="number" value="1.15" min=".5" step=".05"></label>
+<label class="small">Shadow Min Hours<input id="readyShadow" type="number" value="24" min="1"></label>
+<label class="small">Readiness Max DD %<input id="readyDD" type="number" value="10" min="1"></label>
+<label class="small">Readiness Max Exec bp<input id="readyExec" type="number" value="80" min="10"></label>
 </div>
 <button class="full" style="margin-top:9px" onclick="saveSettings()">SAVE SETTINGS</button>
+</div>
+
+<div class="card">
+<div class="row"><div><b>Decision & Audit Trail</b><div class="small">Why NOVA opened or blocked a trade</div></div><span class="small">latest</span></div>
+<div id="decisionLog" class="logBox"></div>
+<div style="margin-top:10px"><b class="small">System Events</b><div id="eventLog" class="logBox"></div></div>
 </div>
 
 <div class="card"><div class="row"><b>Recent Trades</b><span class="small">latest</span></div><div id="trades"></div></div>
@@ -180,6 +272,66 @@ function weightCard(name,w){
   let pct=Math.max(0,Math.min(100,Number(w||0)*100));
   return `<div class="researchCard"><div class="row"><span class="researchTitle">${name}</span><b>${pct.toFixed(0)}%</b></div><div class="weightbar"><div class="weightfill" style="width:${pct}%"></div></div></div>`;
 }
+
+
+function passIcon(v){return v?'✅':'⛔'}
+function renderReadiness(r){
+  if(!r)return;
+  $('readinessScore').textContent=Number(r.score||0).toFixed(0);
+  $('readinessScore').className='readinessScore '+(r.score>=90?'g':r.score>=55?'y':'r');
+  $('readinessStatus').textContent=(r.status||'NOT_READY').replaceAll('_',' ');
+  $('readinessStatus').className='healthBadge '+(r.status==='READY_FOR_MANUAL_REVIEW'?'g':r.status==='OBSERVING'?'y':'r');
+  $('shadowHours').textContent=Number(r.shadow_hours||0).toFixed(1)+'h';
+  $('readinessChecks').innerHTML=(r.checks||[]).map(x=>`<div class="check"><span>${passIcon(x.pass)} ${x.name}</span><span class="${x.pass?'g':'r'}">${x.value} <span class="small">/ ${x.target}</span></span></div>`).join('');
+}
+function renderSystem(h){
+  if(!h)return;
+  $('systemStatus').textContent=h.status||'—';
+  $('systemStatus').className='healthBadge '+(h.status==='OK'?'g':h.status==='WARN'?'y':'r');
+  $('loopAge').textContent=Number(h.last_loop_age_sec||0).toFixed(0)+'s';
+  $('spotAge').textContent=Number(h.spot_age_sec||0).toFixed(0)+'s';
+  $('perpAge').textContent=Number(h.perp_age_sec||0).toFixed(0)+'s';
+  $('errorStreak').textContent=h.engine_error_streak||0;
+  $('healthReasons').textContent=(h.reasons||[]).join(' • ')||'All monitored systems normal';
+}
+function renderSecurity(s){
+  if(!s)return;
+  let cv=(s.coverage||{}).coverage_pct||0;
+  $('secCoverage').textContent=Number(cv).toFixed(0)+'% scanned';
+  $('secCoverage').className='healthBadge '+(cv>=60?'g':'y');
+  $('securityRows').innerHTML=(s.tokens||[]).slice(0,12).map(x=>`<div class="secRow">
+    <div class="row"><div><b>${x.symbol}</b> <span class="pill">${x.status||'UNKNOWN'}</span></div><span class="secScore ${x.status==='PASS'?'g':x.status==='BLOCK'?'r':'y'}">${Number(x.score||0).toFixed(0)}</span></div>
+    <div class="small">Top1 ${x.top1_pct==null?'—':Number(x.top1_pct).toFixed(1)+'%'} • Top5 ${x.top5_pct==null?'—':Number(x.top5_pct).toFixed(1)+'%'} • MintAuth ${x.mint_authority_active==null?'—':x.mint_authority_active?'ON':'OFF'} • Freeze ${x.freeze_authority_active==null?'—':x.freeze_authority_active?'ON':'OFF'}</div>
+    <div class="routeLine">${(x.flags||[]).join(' • ')||'no flagged condition in current scan'}</div>
+  </div>`).join('')||'<div class="small">Security scanner warming up.</div>';
+}
+function renderAudit(decisions,events){
+  $('decisionLog').innerHTML=(decisions||[]).slice(0,15).map(x=>`<div class="auditLine"><div class="row"><span><b>${x.symbol}</b> • ${x.strategy}</span><span class="${x.outcome==='OPENED'?'g':'y'}">${x.outcome}</span></div><div class="small">${x.mode} • ${x.reason} • signal ${Number(x.signal_score||0).toFixed(1)} • quality ${Number(x.quality_score||0).toFixed(1)} • route ${Number(x.route_quality||0).toFixed(1)} • security ${Number(x.security_score||0).toFixed(0)}</div></div>`).join('')||'<div class="small">No decisions logged yet.</div>';
+  $('eventLog').innerHTML=(events||[]).slice(0,15).map(x=>`<div class="auditLine"><span class="${x.level==='ERROR'?'r':x.level==='WARN'?'y':'c'}">${x.level}</span> • <b>${x.code}</b> • ${x.message}</div>`).join('')||'<div class="small">No system events yet.</div>';
+}
+function renderMode(mode){
+  mode=(mode||'PAPER').toUpperCase();
+  $('modeBadge').textContent=mode;
+  $('paperBtn').classList.toggle('active',mode==='PAPER');
+  $('shadowBtn').classList.toggle('active',mode==='SHADOW');
+}
+async function setMode(mode){
+  try{await req('/api/mode/'+mode,{method:'POST'});await load()}catch(e){alert(e.message)}
+}
+
+function renderExecution(e){
+  if(!e)return;
+  $('avgExecCost').textContent=Number(e.avg_all_in_bps||0).toFixed(1)+' bp';
+  $('execBlocks').textContent=e.blocks||0;
+  $('avgImpact').textContent=Number(e.avg_impact_bps||0).toFixed(1)+' bp';
+  $('avgLatencyCost').textContent=Number(e.avg_latency_bps||0).toFixed(1)+' bp';
+  $('execFills').textContent=e.fills||0;$('entryFills').textContent=e.entry_fills||0;$('exitFills').textContent=e.exit_fills||0;
+  $('avgFee').textContent=Number(e.avg_fee_bps||0).toFixed(1)+' bp';
+  let b=e.last_block;
+  $('executionBlock').innerHTML=b?`Last block • <b>${b.symbol||'?'}</b> • ${b.strategy||''} • <span class="y">${b.reason||''}</span><br>Estimated cost ${Number((b.estimate||{}).all_in_bps||0).toFixed(1)} bp • ${b.time?new Date(b.time).toLocaleTimeString():''}`:'No execution blocks yet.';
+  $('executionFills').innerHTML=(e.recent||[]).slice(0,8).map(x=>`<div class="fillLine"><div class="row"><span><b>${x.symbol}</b> ${x.phase} • ${x.side}</span><b class="c">${Number(x.all_in_bps||0).toFixed(1)} bp</b></div><div class="small">${money(x.notional_usd)} notional • impact ${Number(x.impact_bps||0).toFixed(1)} • latency ${Number(x.latency_bps||0).toFixed(1)} • fee ${Number(x.fee_bps||0).toFixed(1)} bp</div></div>`).join('')||'<div class="small">No simulated fills yet</div>';
+}
+
 function renderPortfolio(p){
   if(!p)return;
   let r=p.regime||{},e=p.exposure||{},lim=p.limits||{};
@@ -246,14 +398,24 @@ async function runResearch(){
 async function load(){
 try{
  let d=await req('/api/dashboard');$('conn').textContent='CONNECTED';$('conn').className='g';$('dot').className='dot '+(d.bot_enabled?'on':'');$('bot').textContent=d.killed?'KILLED':d.bot_enabled?'RUNNING':'STOPPED';$('refresh').textContent=d.last_refresh?new Date(d.last_refresh).toLocaleTimeString():'waiting';$('vel').textContent=d.velocity_source_ok?'Velocity: LIVE':'Velocity: FALLBACK';$('vel').className='small '+(d.velocity_source_ok?'g':'y');
+ renderMode(d.mode);renderReadiness(d.readiness||{});renderSystem(d.system_health||{});renderSecurity(d.security||{});renderAudit(d.decisions||[],d.events||[]);
  let m=d.metrics,ad=d.adaptive||{};$('equity').textContent=money(m.equity);$('pnl').textContent=(m.pnl>=0?'+':'')+money(m.pnl);$('pnl').className='v '+(m.pnl>=0?'g':'r');$('exp').textContent=(m.expectancy>=0?'+':'')+money(m.expectancy);$('exp').className='v '+(m.expectancy>=0?'g':'r');$('mdd').textContent=Number(m.max_drawdown_pct||0).toFixed(2)+'%';$('pf').textContent='PF '+(m.profit_factor>100?'∞':Number(m.profit_factor||0).toFixed(2));$('avgWin').textContent=money(m.avg_win);$('avgLoss').textContent=money(m.avg_loss);$('payoff').textContent=m.payoff_ratio>100?'∞':Number(m.payoff_ratio||0).toFixed(2);$('tradesN').textContent=m.trades;$('pc').textContent=m.open_positions;drawCurve(d.equity_curve||[]);
  renderPortfolio(d.portfolio||{});
+ renderExecution(d.execution||{});
  $('adaptiveEnabled').checked=!!ad.enabled;$('riskMult').textContent=Number(ad.risk_multiplier||1).toFixed(2)+'x';$('health').innerHTML=healthCards(ad);
  let rs=d.research_status||{};$('snapshots').textContent=rs.snapshots||0;$('coverage').textContent=Number(rs.coverage_hours||0).toFixed(1)+'h';$('replayReady').textContent=rs.replay_ready?'READY':'COLLECTING';$('replayReady').className=rs.replay_ready?'ready':'notready';$('walkReady').textContent=rs.walk_forward_ready?'READY':'COLLECTING';$('walkReady').className=rs.walk_forward_ready?'ready':'notready';
- let s=d.settings;$('sampleMin').textContent=Number(s.optimizer_min_samples||20).toFixed(0);$('risk').value=s.risk_pct;$('sl').value=s.stop_loss_pct;$('pump').value=s.min_pump_score;$('scalp').value=s.min_scalp_score;$('longScore').value=s.min_long_score;$('shortScore').value=s.min_short_score;$('shift').value=s.max_adaptive_shift;$('minSamples').value=s.optimizer_min_samples;$('softDD').value=s.drawdown_soft_cut_pct;$('hardDD').value=s.drawdown_hard_cut_pct;$('lev').value=s.perp_leverage;$('edge').value=s.min_direction_edge;$('snapInt').value=s.snapshot_interval_sec||60;$('holdMin').value=s.replay_hold_minutes||15;$('replayTP').value=s.replay_take_profit_pct||8;$('mcRuns').value=s.monte_carlo_runs||1000;$('portfolioEnabled').checked=!!s.portfolio_brain_enabled;$('maxTotalExp').value=s.max_total_exposure_pct||35;$('maxStratExp').value=s.max_strategy_exposure_pct||18;$('maxDirExp').value=s.max_direction_exposure_pct||25;$('corrTh').value=s.correlation_threshold||.8;$('corrLb').value=s.correlation_lookback_points||20;$('minWeight').value=s.min_portfolio_weight||.35;
+ let s=d.settings;$('sampleMin').textContent=Number(s.optimizer_min_samples||20).toFixed(0);$('risk').value=s.risk_pct;$('sl').value=s.stop_loss_pct;$('pump').value=s.min_pump_score;$('scalp').value=s.min_scalp_score;$('longScore').value=s.min_long_score;$('shortScore').value=s.min_short_score;$('shift').value=s.max_adaptive_shift;$('minSamples').value=s.optimizer_min_samples;$('softDD').value=s.drawdown_soft_cut_pct;$('hardDD').value=s.drawdown_hard_cut_pct;$('lev').value=s.perp_leverage;$('edge').value=s.min_direction_edge;$('snapInt').value=s.snapshot_interval_sec||60;$('holdMin').value=s.replay_hold_minutes||15;$('replayTP').value=s.replay_take_profit_pct||8;$('mcRuns').value=s.monte_carlo_runs||1000;$('portfolioEnabled').checked=!!s.portfolio_brain_enabled;$('maxTotalExp').value=s.max_total_exposure_pct||35;$('maxStratExp').value=s.max_strategy_exposure_pct||18;$('maxDirExp').value=s.max_direction_exposure_pct||25;$('corrTh').value=s.correlation_threshold||.8;$('corrLb').value=s.correlation_lookback_points||20;$('minWeight').value=s.min_portfolio_weight||.35;$('executionEnabled').checked=!!s.execution_simulator_enabled;$('spotFee').value=s.spot_fee_bps||30;$('perpFee').value=s.perp_fee_bps||10;$('spreadBp').value=s.base_spread_bps||8;$('slipFloor').value=s.slippage_floor_bps||2;$('impactCoef').value=s.impact_coefficient_bps||40;$('latencyMs').value=s.simulated_latency_ms||450;$('maxExecCost').value=s.max_execution_cost_bps||120;
+ $('maxDataAge').value=s.max_data_age_sec||90;$('minSec').value=s.min_token_security_score||60;$('secTopN').value=s.security_scan_top_n||5;$('minRoute').value=s.min_route_quality||55;$('spotHold').value=s.spot_max_hold_minutes||120;$('perpHold').value=s.perp_max_hold_minutes||240;$('revEdge').value=s.reversal_exit_edge||15;$('beTrigger').value=s.breakeven_trigger_pct||6;$('beExit').value=s.breakeven_exit_pct||.5;$('readyTrades').value=s.readiness_min_trades||100;$('readyPF').value=s.readiness_min_pf||1.15;$('readyShadow').value=s.readiness_min_shadow_hours||24;$('readyDD').value=s.readiness_max_drawdown_pct||10;$('readyExec').value=s.readiness_max_exec_bps||80;
  $('positions').innerHTML=d.positions.length?d.positions.map(p=>`<div class="pos"><div class="row"><div><b>${p.symbol}</b><span class="pill ${p.side==='SHORT'?'shortPill':'longPill'}">${p.side}</span>${p.strategy.startsWith('PERP_')?'<span class="pill perpPill">PERP '+p.leverage+'x</span>':''}</div><b class="${p.return_pct>=0?'g':'r'}">${p.return_pct>=0?'+':''}${p.return_pct.toFixed(2)}%</b></div><div class="small">Entry ${Number(p.entry).toPrecision(6)} • Now ${Number(p.price).toPrecision(6)} • Value ${money(p.market_value)}</div></div>`).join(''):'<div class="small">No open positions</div>';
- $('cands').innerHTML=d.candidates.slice(0,20).map(c=>`<div class="candidate"><div class="row"><div><b>${c.symbol} <span class="small">${c.name}</span></b>${c.data_source==='VELOCITY'?'<span class="pill sourcePill">VELOCITY</span>':c.perp_eligible?'<span class="pill perpPill">PERP</span>':'<span class="pill">SPOT</span>'}</div><span class="${c.direction==='SHORT'?'r':c.direction==='LONG'?'g':'y'}">${c.direction||'WAIT'}</span></div><div class="scores"><div class="score">PUMP<br><b class="c">${c.pump_score}</b></div><div class="score">SCALP<br><b>${c.scalp_score}</b></div><div class="score">LONG<br><b class="g">${c.long_score}</b></div><div class="score">SHORT<br><b class="r">${c.short_score}</b></div><div class="score">RISK<br><b>${c.market_risk}</b></div></div>${c.data_source==='VELOCITY'?`<div class="intel"><div>Funding<br><b>${Number(c.funding_bps||0).toFixed(3)} bp</b></div><div>OI<br><b>${money((c.open_interest_usd||0)/1000000)}M</b></div><div>OI Δ<br><b>${Number(c.oi_change_pct||0).toFixed(2)}%</b></div><div>Vol<br><b>${c.volatility_regime}</b></div></div>`:`<div class="small" style="margin-top:6px">${money(c.liquidity||0)} liquidity • 5m ${Number(c.m5||0).toFixed(2)}%</div>`}</div>`).join('');
- $('trades').innerHTML=d.trades.length?d.trades.slice(0,20).map(t=>`<div class="logline"><b>${t.symbol}</b><span class="pill ${t.side==='SHORT'?'shortPill':'longPill'}">${t.side}</span>${t.strategy} • <span class="${t.pnl>=0?'g':'r'}">${t.pnl>=0?'+':''}${money(t.pnl)} (${t.pnl_pct.toFixed(2)}%)</span> • ${t.reason}</div>`).join(''):'<div class="small">No closed trades yet</div>';
+ $('cands').innerHTML=d.candidates.slice(0,20).map(c=>{
+   let sec=c.security||{},route=c.route||{};
+   return `<div class="candidate">
+    <div class="row"><div><b>${c.symbol} <span class="small">${c.name}</span></b>${c.data_source==='VELOCITY'?'<span class="pill sourcePill">VELOCITY</span>':c.perp_eligible?'<span class="pill perpPill">PERP</span>':'<span class="pill">SPOT</span>'}</div><span class="${c.direction==='SHORT'?'r':c.direction==='LONG'?'g':'y'}">${c.direction||'WAIT'}</span></div>
+    <div class="scores"><div class="score">PUMP<br><b class="c">${c.pump_score}</b></div><div class="score">SCALP<br><b>${c.scalp_score}</b></div><div class="score">LONG<br><b class="g">${c.long_score}</b></div><div class="score">SHORT<br><b class="r">${c.short_score}</b></div><div class="score">RISK<br><b>${c.market_risk}</b></div></div>
+    ${c.data_source==='VELOCITY'?`<div class="intel"><div>Funding<br><b>${Number(c.funding_bps||0).toFixed(3)} bp</b></div><div>OI<br><b>${money((c.open_interest_usd||0)/1000000)}M</b></div><div>OI Δ<br><b>${Number(c.oi_change_pct||0).toFixed(2)}%</b></div><div>Vol<br><b>${c.volatility_regime}</b></div></div>`:`<div class="small" style="margin-top:6px">${money(c.liquidity||0)} liquidity • 5m ${Number(c.m5||0).toFixed(2)}% • 1h ${Number(c.h1||0).toFixed(2)}% • 6h ${Number(c.h6||0).toFixed(2)}% • 24h ${Number(c.h24||0).toFixed(2)}%</div>`}
+    <div class="routeLine">Best ${c.best_strategy||'—'} • Quality <b>${Number(c.quality_score||0).toFixed(1)}</b> • Route <b>${Number(route.quality||0).toFixed(1)}</b> (${route.venue||'warming'}) • Security <b class="${sec.status==='BLOCK'?'r':sec.status==='PASS'?'g':'y'}">${c.perp_eligible?'N/A':Number(sec.score||0).toFixed(0)}</b></div>
+   </div>`;
+ }).join(''); $('trades').innerHTML=d.trades.length?d.trades.slice(0,20).map(t=>`<div class="logline"><b>${t.symbol}</b><span class="pill ${t.side==='SHORT'?'shortPill':'longPill'}">${t.side}</span>${t.strategy} • <span class="${t.pnl>=0?'g':'r'}">${t.pnl>=0?'+':''}${money(t.pnl)} (${t.pnl_pct.toFixed(2)}%)</span> • ${t.reason}</div>`).join(''):'<div class="small">No closed trades yet</div>';
 }catch(e){$('conn').textContent='ERROR';$('conn').className='r';$('bot').textContent=e.message.slice(0,140)}
 }
 async function control(a){try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}}
@@ -268,9 +430,20 @@ try{await req('/api/settings',{method:'POST',body:JSON.stringify({
  portfolio_brain_enabled:$('portfolioEnabled').checked,max_total_exposure_pct:+$('maxTotalExp').value,
  max_strategy_exposure_pct:+$('maxStratExp').value,max_direction_exposure_pct:+$('maxDirExp').value,
  correlation_threshold:Math.max(.3,Math.min(.99,+$('corrTh').value)),correlation_lookback_points:Math.max(8,+$('corrLb').value),
- min_portfolio_weight:Math.max(.1,Math.min(1,+$('minWeight').value))
+ min_portfolio_weight:Math.max(.1,Math.min(1,+$('minWeight').value)),
+ execution_simulator_enabled:$('executionEnabled').checked,spot_fee_bps:Math.max(0,+$('spotFee').value),
+ perp_fee_bps:Math.max(0,+$('perpFee').value),base_spread_bps:Math.max(0,+$('spreadBp').value),
+ slippage_floor_bps:Math.max(0,+$('slipFloor').value),impact_coefficient_bps:Math.max(0,+$('impactCoef').value),
+ simulated_latency_ms:Math.max(0,+$('latencyMs').value),max_execution_cost_bps:Math.max(10,+$('maxExecCost').value),
+ max_data_age_sec:Math.max(30,+$('maxDataAge').value),min_token_security_score:Math.max(0,Math.min(100,+$('minSec').value)),
+ security_scan_top_n:Math.max(1,Math.min(12,+$('secTopN').value)),min_route_quality:Math.max(0,Math.min(100,+$('minRoute').value)),
+ spot_max_hold_minutes:Math.max(5,+$('spotHold').value),perp_max_hold_minutes:Math.max(5,+$('perpHold').value),
+ reversal_exit_edge:Math.max(1,+$('revEdge').value),breakeven_trigger_pct:Math.max(1,+$('beTrigger').value),breakeven_exit_pct:Math.max(0,+$('beExit').value),
+ readiness_min_trades:Math.max(20,+$('readyTrades').value),readiness_min_pf:Math.max(.5,+$('readyPF').value),
+ readiness_min_shadow_hours:Math.max(1,+$('readyShadow').value),readiness_max_drawdown_pct:Math.max(1,+$('readyDD').value),
+ readiness_max_exec_bps:Math.max(10,+$('readyExec').value)
 })});await load()}catch(e){alert(e.message)}
 }
-$('adaptiveEnabled').addEventListener('change',saveSettings);$('portfolioEnabled').addEventListener('change',saveSettings);window.addEventListener('resize',()=>drawCurve([]));setInterval(load,5000);if(base)load();
+$('adaptiveEnabled').addEventListener('change',saveSettings);$('portfolioEnabled').addEventListener('change',saveSettings);$('executionEnabled').addEventListener('change',saveSettings);window.addEventListener('resize',()=>drawCurve([]));setInterval(load,5000);if(base)load();
 </script>
 </body></html>
