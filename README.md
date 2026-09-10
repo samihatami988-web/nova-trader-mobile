@@ -1,57 +1,43 @@
-# NOVA TRADER V6.1 — REALTIME PULSE SNIPER
+# NOVA TRADER V6.5 — SELECTIVE ENTRY ROUTER
 
 PAPER / SHADOW ONLY. LIVE execution remains hard-locked.
 
-## Why V6.1 exists
-An 8-second REST scanner can miss a meme token that pumps and dumps in a few seconds.
-V6.1 adds an optional event-driven WebSocket pulse engine while retaining the old scanner as fallback.
+V6.5 addresses a practical testing problem: if every near-miss signal is rejected, NOVA cannot collect enough forward trades to learn which strategies actually have edge.
 
-## Realtime Pulse logic
-Rolling windows:
-- 2 seconds: event-frequency burst
-- 5 seconds: buy pressure, event count, SOL buy flow
-- 10 seconds: unique buyers
-- 30 seconds: baseline activity used to measure acceleration
+## FINAL GATE status
+Every Best Signal now shows:
+- READY TO ENTER — strict gates pass.
+- CONTROLLED ENTRY — PAPER-only strong near-miss, entered at reduced risk.
+- BLOCKED — exact reason is displayed.
 
-A pulse candidate must pass:
-- Pulse score
-- Minimum events in 5 seconds
-- Minimum buy pressure
-- Minimum unique buyers
-- Anti-chase price filter
-- Existing Capital Shield liquidity and Market Quality
-- Token security
-- Execution-cost gate
-- Portfolio/risk gates
+## Controlled PAPER Entry
+The router may soften only two SPOT filters:
+- Capital-Shield market-quality floor: down to 62 for a strong signal.
+- Capital-Shield liquidity floor: down to $35k for a strong signal.
 
-The pulse signal NEVER bypasses Capital Shield.
+A controlled entry also requires:
+- SCALP_LONG or PUMP_LONG only.
+- Signal >= normal threshold + 2.
+- Buy pressure >= 55%.
+- 5-minute momentum between roughly -2% and +12%.
+- No more than 2 controlled entries per hour.
+- Reduced risk multiplier (0.50 on top of the existing Governor/Portfolio risk controls).
 
-## Data feed
-Optional PumpPortal WebSocket support:
-- One WebSocket connection only
-- New-token / migration subscriptions
-- Dynamic token-trade subscriptions
-- Automatic reconnect
-- Bounded subscription set
-- Existing 8-second Sniper remains active if realtime data is unavailable
+The following are NEVER bypassed:
+- Kill / stop state.
+- Stale data.
+- Edge Governor pause.
+- Token-security rejection / SHADOW requirements.
+- Extreme move protection.
+- Route quality.
+- Portfolio/correlation guard.
+- Execution-cost limit.
+- Position / cooldown limits.
+- Daily, global-equity and Survival guards.
 
-Environment:
-`PUMPPORTAL_API_KEY`
-`PUMPPORTAL_TRADE_STREAM_ENABLED=true`
+SHADOW remains strict: Controlled Entry is PAPER-only.
 
-The trade stream is deliberately OFF by default because the provider meters token-trade events.
+## Why this is safer than simply lowering all thresholds
+V6.5 creates a small exploration channel for strong near-misses while preserving the hard safety stack. It should produce enough paper trades to measure expectancy without turning the bot into an indiscriminate buyer.
 
-## Exit behavior
-Realtime entries use the same protected SNIPER_LONG execution:
-- Fast Position Watcher
-- Capital Shield stop
-- Sniper scratch exit
-- Early break-even
-- Profit lock
-- Momentum-fade exit
-- Fast partial TP / final TP
-- Daily/Global equity guards
-
-## Security
-Never commit API keys, wallet private keys, or admin keys to GitHub.
-V6.1 does not contain wallet signing or live transaction submission.
+Profit is not guaranteed. The goal is to discover positive edge from forward data while keeping losses bounded.

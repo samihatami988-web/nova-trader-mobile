@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V6.4 EDGE RECOVERY</title>
+<title>NOVA TRADER V6.5 SELECTIVE ENTRY</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -42,12 +42,17 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 .signalState{font-size:9px;border-radius:99px;padding:3px 7px;border:1px solid #28526e}.pass{color:#75edaa;border-color:#267a51}.wait{color:#f1c857;border-color:#745f1e}
 .dirLong{color:#32d17d}.dirShort{color:#ff7185}.autosaved{color:#32d17d;font-size:10px;margin-top:7px;text-align:center;min-height:14px}
 @media(max-width:420px){.v{font-size:23px}.controls{grid-template-columns:1fr 1fr}}
+
+.entryLine{margin-top:7px;font-size:12px;font-weight:800}
+.entryReady{color:#56e39f}
+.entrySoft{color:#ffd166}
+.entryBlock{color:#ff6b81}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V6.4</b></div><div class="sub">Edge Recovery • Quality First</div></div>
+    <div><div class="brand">NOVA TRADER <b>V6.5</b></div><div class="sub">Selective Entry • Quality + Execution</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -145,6 +150,17 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
       </label>
     </div>
     <button class="full" onclick="saveSettings()">SAVE SETTINGS</button>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><b>Selective Entry Router</b><div class="small">سیگنال خوب را وارد می‌کند؛ Near-miss امن را در PAPER با حجم کوچک تست می‌کند.</div></div><span id="routerBadge" class="badge">AUTO</span></div>
+    <div class="grid" style="margin-top:10px">
+      <div class="mini"><div class="k">READY</div><b id="routerReady">0</b></div>
+      <div class="mini"><div class="k">CONTROLLED</div><b id="routerSoft">0</b></div>
+      <div class="mini"><div class="k">BLOCKED</div><b id="routerBlocked">0</b></div>
+      <div class="mini"><div class="k">Soft Entries / Hour</div><b id="routerHour">0/2</b></div>
+    </div>
+    <div id="routerText" class="small" style="margin-top:8px">Waiting for entry assessment...</div>
   </div>
 
   <div class="card">
@@ -352,6 +368,15 @@ function friendlyReason(reason){
   'SURVIVAL_GUARD':'سقف ضرر Recovery فعال شد؛ NOVA پوزیشن‌های باز را برای حفظ سرمایه بست.',
   'SCALP_SCRATCH_EXIT':'Scalp حرکت کافی نکرد؛ NOVA با ضرر کوچک زود خارج شد.',
   'PUMP_SCRATCH_EXIT':'Pump ادامه پیدا نکرد؛ NOVA قبل از Stop کامل خارج شد.',
+  'signal below threshold':'امتیاز سیگنال هنوز کافی نیست.',
+  'all final gates passed':'تمام Gateهای ورود تأیید شده.',
+  'strong signal; controlled paper exploration':'سیگنال قوی است؛ با حجم کوچک در PAPER وارد می‌شود.',
+  'soft router needs stronger signal':'برای Controlled Entry باید Signal از Threshold فاصله امن داشته باشد.',
+  'liquidity below soft floor':'نقدینگی حتی برای Controlled Entry کافی نیست.',
+  'market quality below soft floor':'کیفیت بازار برای Controlled Entry پایین است.',
+  'soft router weak buy pressure':'فشار خرید برای ورود کنترل‌شده کافی نیست.',
+  'soft router momentum unsafe':'Momentum برای ورود Near-miss مناسب نیست.',
+  'soft-entry hourly limit':'سقف ورودهای کنترل‌شده این ساعت پر شده.',
   'sniper score':'امتیاز Sniper هنوز برای ورود کافی نیست.',
   'sniper buy pressure':'فشار خرید برای Sniper کافی نیست.',
   'sniper volume acceleration':'شتاب حجم هنوز برای ورود لحظه‌ای کافی نیست.',
@@ -485,12 +510,19 @@ function signalCard(c,s){
  let sObj=c.security||{};
  let sec=c.perp_eligible?'PERP':(sObj.status==='UNKNOWN'||sObj.score==null?'UNKNOWN':Number(sObj.score).toFixed(0));
  let marketQ=Number(c.market_risk||0).toFixed(0);
+ let er=c.entry_router||{};
+ let state=er.state||(passed?'CHECKING':'BLOCKED');
+ let stateClass=state==='READY'?'entryReady':state==='SOFT_PASS'?'entrySoft':'entryBlock';
+ let stateLabel=state==='READY'?'READY TO ENTER':state==='SOFT_PASS'?'CONTROLLED ENTRY':'BLOCKED';
+ let reason=er.reason||(!passed?'Signal below threshold':'Final gates checking');
  return `<div class="signal">
   <div class="row"><div><b>${c.symbol}</b><span class="pill">${strategy}</span></div><div><span class="signalState ${passed?'pass':'wait'}">${passed?'SCORE PASS':'WAIT'}</span> <span class="score ${dir==='SHORT'?'dirShort':'dirLong'}">${score.toFixed(0)}</span></div></div>
   <div class="small">${dir} • Base threshold ${th.toFixed(0)} • Market Quality ${marketQ} • Security ${sec}</div>
+  <div class="entryLine ${stateClass}">FINAL GATE: ${stateLabel} • ${reason}</div>
   <div class="bar"><div class="fill" style="width:${Math.min(100,score)}%"></div></div>
  </div>`;
 }
+
 async function load(){
  try{
   let d=await req('/api/dashboard');
@@ -513,6 +545,16 @@ async function load(){
   if(s.perp_leverage!=null)$('lev').value=String(s.perp_leverage);
 
   renderDecision(d);renderPositions(d.positions||[]);renderRecentTrades(d.trades||[]);
+  let router=d.entry_router||{},rs=router.states||{};
+  $('routerReady').textContent=rs.READY||0;
+  $('routerSoft').textContent=rs.SOFT_PASS||0;
+  $('routerBlocked').textContent=rs.BLOCKED||0;
+  $('routerHour').textContent=`${router.soft_entries_last_hour||0}/${router.max_soft_entries_per_hour||2}`;
+  $('routerBadge').textContent=router.enabled?'AUTO':'OFF';
+  $('routerBadge').className='badge '+(router.enabled?'g':'y');
+  let le=router.last_entry;
+  $('routerText').textContent=le?`Last entry: ${le.symbol} • ${le.strategy} • ${le.mode}`:
+    'READY = strict gates passed. CONTROLLED = strong PAPER signal with reduced size. Hard safety gates are never bypassed.';
   let candidates=(d.candidates||[]).slice().sort((a,b)=>(b.quality_score||0)-(a.quality_score||0)).slice(0,5);
   $('signals').innerHTML=candidates.length?candidates.map(c=>signalCard(c,s)).join(''):'<div class="small" style="margin-top:10px">No strong signal right now.</div>';
 
