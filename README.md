@@ -1,25 +1,37 @@
-# NOVA TRADER V5.2 — POSITION PROTECTION HOTFIX
+# NOVA TRADER V5.3 — SMART PROFIT LOCK
 
-Critical fixes discovered during FAST paper testing:
+This hotfix was created after a paper trade showed a winner round-tripping into a stop loss.
 
-1. Open Position Watcher
-- Open spot positions are fetched independently of the discovery/candidate ranking.
-- A token falling out of the scanner can no longer silently remove it from normal stop/trailing monitoring.
-- Stale open-position prices generate a watchdog warning.
+Core change:
+- Exit decisions now use estimated NET close return after simulated execution friction.
+- Strategy-specific profit protection prevents meaningful unrealized gains from freely turning into losses.
 
-2. Daily Guard visibility
-- Dashboard shows today's realized P&L and daily loss limit.
-- Clearly shows ACTIVE vs BLOCKED.
+Profit-lock floors:
 
-3. Clean Paper Reset
-- Dashboard adds RESET PAPER TEST with double confirmation.
-- Resets paper equity, positions, trades, adaptive trade-feature history and execution-event history.
-- Strategy/risk settings remain.
-- Market snapshot research history remains.
+SCALP_LONG
+- peak >= 1.5% -> protect ~ +0.35%
+- peak >= 3%   -> protect ~ +1.25%
+- peak >= 5%   -> protect ~ +2.5%
+- peak >= 8%   -> dynamic floor, roughly peak - 2.5%
 
-4. UI wording
-- `SIGNAL PASS` renamed to `SCORE PASS`.
-- Passing the base score does not imply all final safety gates passed.
+PUMP_LONG
+- peak >= 2%  -> protect ~ +0.50%
+- peak >= 4%  -> protect ~ +1.25%
+- peak >= 8%  -> protect ~ +3%
+- peak >= 12% -> protect ~ +5%
+- peak >= 20% -> protect ~ +9%
+- peak >= 30% -> dynamic wider trail
+
+PERP_LONG / PERP_SHORT
+- peak >= 1.5% -> protect ~ +0.30%
+- peak >= 3%   -> protect ~ +1%
+- peak >= 5%   -> protect ~ +2%
+- peak >= 8%   -> protect ~ +4%
+
+Strategy-specific partial take profits:
+SCALP: 2% / 3.5% / 5%
+PUMP: 6% / 12% / 20%
+PERP: 2.5% / 5% / 8%
 
 Important:
-A configured stop is a trigger, not a guaranteed fill price. Gaps, stale quotes and simulated slippage can still make a realized exit worse than the stop trigger. V5.2 specifically fixes one major source of excessive stop deviation: losing price monitoring when a spot token leaves the scanner list.
+These are paper-engine rules, not guaranteed live fill outcomes. Fast gaps and execution friction can still produce a worse realized fill than a trigger.

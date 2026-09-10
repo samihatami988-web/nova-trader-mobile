@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>NOVA TRADER V5.2 SIMPLE+</title>
+<title>NOVA TRADER V5.3 SIMPLE+</title>
 <style>
 :root{--bg:#07111f;--panel:#0b1a2e;--line:#1b3857;--text:#f4f8fc;--muted:#8fa5bb;--cyan:#38c8ff;--green:#32d17d;--red:#ff5f75;--yellow:#f1c857}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -47,7 +47,7 @@ input,select{width:100%;background:#06111e;border:1px solid #274762;color:white;
 <body>
 <div class="wrap">
   <div class="head">
-    <div><div class="brand">NOVA TRADER <b>V5.2</b></div><div class="sub">Simple Control • Smart Decision</div></div>
+    <div><div class="brand">NOVA TRADER <b>V5.3</b></div><div class="sub">Simple Control • Smart Decision</div></div>
     <div class="badge">PAPER / SHADOW</div>
   </div>
 
@@ -254,7 +254,8 @@ function friendlyReason(reason){
   'shadow requires primary perp source':'برای Perp در SHADOW منبع اصلی داده باید در دسترس باشد.',
   'position too small':'اندازه پوزیشن بعد از کنترل ریسک خیلی کوچک شده.',
   'cash':'موجودی Paper آزاد برای این پوزیشن کافی نیست.',
-  'entry accepted':'تمام Gateهای ورود تأیید شدند.'
+  'entry accepted':'تمام Gateهای ورود تأیید شدند.',
+  'PROFIT_LOCK':'محافظ سود فعال شد؛ NOVA اجازه نداد سود دیده‌شده به ضرر تبدیل شود.'
  };
  return map[reason]||reason||'NOVA در حال اسکن بازار است.';
 }
@@ -307,7 +308,10 @@ function renderPositions(rows){
  let card=$('openPositionsCard');
  if(!rows||!rows.length){card.classList.add('hidden');return}
  card.classList.remove('hidden');$('openCount').textContent=rows.length;
- $('openPositions').innerHTML=rows.map(p=>`<div class="posrow"><div class="row"><div><b>${p.symbol}</b> <span class="pill ${p.side==='SHORT'?'dirShort':'dirLong'}">${p.side}</span></div><b class="${p.return_pct>=0?'g':'r'}">${p.return_pct>=0?'+':''}${Number(p.return_pct||0).toFixed(2)}%</b></div><div class="small">${p.strategy} • Entry ${Number(p.entry||0).toPrecision(6)} • Value ${money(p.market_value||0)}</div></div>`).join('');
+ $('openPositions').innerHTML=rows.map(p=>{
+   let lock=p.profit_lock_armed?` • Profit Lock ≥ ${Number(p.profit_lock_floor_pct||0).toFixed(2)}%`:' • Profit Lock waiting';
+   return `<div class="posrow"><div class="row"><div><b>${p.symbol}</b> <span class="pill ${p.side==='SHORT'?'dirShort':'dirLong'}">${p.side}</span></div><b class="${p.return_pct>=0?'g':'r'}">${p.return_pct>=0?'+':''}${Number(p.return_pct||0).toFixed(2)}%</b></div><div class="small">${p.strategy} • Peak ${Number(p.peak_return_pct||0).toFixed(2)}%${lock}</div><div class="small">Entry ${Number(p.entry||0).toPrecision(6)} • Value ${money(p.market_value||0)}</div></div>`;
+ }).join('');
 }
 function renderRecentTrades(rows){
  rows=(rows||[]).slice(0,5);$('recentCount').textContent=rows.length;
