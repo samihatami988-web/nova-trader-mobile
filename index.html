@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V7.0.0 UNIVERSAL</title>
+<title>NOVA TRADER V7.1.0 UNIVERSAL</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -117,7 +117,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
   <div class="head">
     <div>
       <div class="brand">NOVA TRADER <b>V7.0.0</b></div>
-      <div class="sub">UNIVERSAL MULTI-MARKET • ALL CRYPTO / MEME • PAPER / SHADOW</div>
+      <div class="sub">UNIVERSAL MULTI-MARKET • CANDLE BRAIN • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
   </div>
@@ -166,7 +166,21 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <div id="universeChains" class="small" style="margin-top:9px">Waiting for universe…</div>
     <div id="universeTopMarkets" style="margin-top:5px"></div>
-    <div class="notice">NOVA V7 discovers every market exposed by connected providers. Execution remains PAPER/SHADOW and security/liquidity/risk gates can block unsafe assets.</div>
+    <div class="notice">NOVA V7.1 discovers every market exposed by connected providers. Execution remains PAPER/SHADOW and security/liquidity/risk gates can block unsafe assets.</div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><div class="sectionTitle">Candle Intelligence</div><div class="small">Multi-Timeframe OHLCV • EMA 20/50/200 • RSI • ATR • VWAP • Structure • Breakout / Retest</div></div><span id="candleBadge" class="badge warn">WARMING</span></div>
+    <div class="universeTop">
+      <div class="mini"><div class="k">TRACKED</div><b id="candleTracked">0</b></div>
+      <div class="mini"><div class="k">MAJORS</div><b id="candleMajors">0</b></div>
+      <div class="mini"><div class="k">BULL / BEAR</div><b id="candleBias">0 / 0</b></div>
+      <div class="mini"><div class="k">TIMEFRAMES</div><b id="candleTF">—</b></div>
+      <div class="mini"><div class="k">HARD GATE</div><b id="candleGate">—</b></div>
+      <div class="mini"><div class="k">ERRORS</div><b id="candleErrors">0</b></div>
+    </div>
+    <div id="candleTop" style="margin-top:7px"></div>
+    <div id="candleText" class="notice">Candle Brain is warming up. V7 flow/momentum logic remains active while OHLCV confirmation is unavailable.</div>
   </div>
 
   <div class="card">
@@ -593,6 +607,7 @@ function reasonFa(r){
   'all final gates passed':'تمام Gateهای ورود تأیید شده.','FIRST_SECONDS_ENTRY':'First-Seconds entry تأیید شد.',
   'pulse late chase':'حرکت زیادی جلو رفته؛ NOVA تعقیب نمی‌کند.','sniper late chase':'حرکت برای Sniper دیر شده.',
   'edge governor paused strategy':'Edge Governor این موتور را Pause کرده.','survival loss guard':'Survival Guard فعال است.',
+  'candle structure strongly contradicts entry':'ساختار چندتایم‌فریم کندل‌ها با جهت ورود تضاد قوی دارد؛ NOVA منتظر ستاپ بهتر می‌ماند.',
   'engine manually disabled':'این موتور از Engine Control Center خاموش شده است.'
  };return m[r]||r||'NOVA در حال اسکن بازار است.'
 }
@@ -612,6 +627,7 @@ function renderSignals(cands){
    return `<div class="signal">
     <div class="row"><div><b>${esc(c.symbol)}</b><span class="pill">${esc(st)}</span></div><span class="score ${st.includes('SHORT')?'r':'g'}">${sc.toFixed(0)}</span></div>
     <div class="small">Quality ${Number(c.quality_score||0).toFixed(0)} • Market ${Number(c.market_risk||0).toFixed(0)} • Liquidity ${money(c.liquidity||0)}</div>
+    ${c.candle_intelligence?`<div class="small">Candle MTF: ${esc(c.candle_intelligence.bias||'NEUTRAL')} • L${Number(c.candle_intelligence.long_score||0).toFixed(0)}/S${Number(c.candle_intelligence.short_score||0).toFixed(0)} • Conf ${Number(c.candle_intelligence.confidence||0).toFixed(0)}</div>`:''}
     <div class="state ${cls}" style="margin-top:5px">${esc(state)} • ${esc(er.reason||'final gates checking')}</div>
     <div class="bar"><div class="fill" style="width:${Math.min(100,sc)}%"></div></div>
    </div>`
@@ -661,6 +677,18 @@ function renderUniverse(u={}){
  const rows=(u.top||[]).slice(0,8);
  $('universeTopMarkets').innerHTML=rows.length?rows.map(x=>`<div class="marketRow"><b>${x.symbol||'?'}</b><span>${x.asset_class||'—'} • ${x.market_kind||'—'}</span><span>${x.source||'—'}</span><span class="marketDir ${String(x.direction||'').toLowerCase()}">${x.direction||'WAIT'} ${Number(x.score||0).toFixed(0)}</span></div>`).join(''):'<div class="small">Universe warming up…</div>';
  const errs=Object.keys(u.provider_errors||{}).length;$('universeBadge').textContent=errs?'PARTIAL':'DYNAMIC';$('universeBadge').className='badge '+(errs?'warn':'ok');
+}
+
+function renderCandle(ci={}){
+ const on=!!ci.enabled;$('candleTracked').textContent=ci.tracked??0;$('candleMajors').textContent=ci.majors??0;
+ $('candleBias').textContent=`${ci.bullish??0} / ${ci.bearish??0}`;$('candleTF').textContent=(ci.timeframes||[]).join(' • ')||'—';
+ $('candleGate').textContent=ci.hard_gate?'ON':'OBSERVE';$('candleErrors').textContent=ci.errors??0;
+ const ready=on&&Number(ci.tracked||0)>0;$('candleBadge').textContent=ready?'MTF ACTIVE':on?'WARMING':'OFF';$('candleBadge').className='badge '+(ready?'ok':'warn');
+ const rows=(ci.top||[]).slice(0,8);
+ $('candleTop').innerHTML=rows.length?rows.map(x=>`<div class="marketRow"><b>${esc(x.symbol||'?')}</b><span>${esc(x.h1_structure||x.structure||'—')} • RSI ${x.m15_rsi==null?'—':Number(x.m15_rsi).toFixed(0)}</span><span>L${Number(x.long_score||0).toFixed(0)} / S${Number(x.short_score||0).toFixed(0)}</span><span class="marketDir ${String(x.bias||'').toLowerCase()}">${esc(x.bias||'NEUTRAL')} ${Number(x.confidence||0).toFixed(0)}</span></div>`).join(''):'<div class="small">Waiting for Binance OHLCV history…</div>';
+ $('candleText').textContent=ready
+   ? `Candle Brain confirms top CEX markets on ${(ci.timeframes||[]).join(', ')}. Strong multi-timeframe contradiction can block a late/unsafe entry; V7 realtime flow and risk guards remain primary.`
+   : `Candle Brain is warming up. V7 flow/momentum logic remains active while OHLCV confirmation is unavailable.`;
 }
 
 function renderRealtime(d,h){
@@ -736,6 +764,7 @@ async function load(){
    renderMode(d.mode);
    renderEngineControls(d.engine_controls||{});
    renderUniverse(d.universe||{});
+   renderCandle(d.candle_intelligence||{});
 
    const m=d.metrics||{};
    $('equity').textContent=money(m.equity);$('pnl').textContent=(Number(m.pnl||0)>=0?'+':'')+money(m.pnl);
