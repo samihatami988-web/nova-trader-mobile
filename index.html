@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V6.8.2 FINAL</title>
+<title>NOVA TRADER V6.8.3 FINAL</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -111,7 +111,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="brand">NOVA TRADER <b>V6.8.2</b></div>
+      <div class="brand">NOVA TRADER <b>V6.8.3</b></div>
       <div class="sub">FINAL MOBILE DASHBOARD • Northflank • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
@@ -195,7 +195,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 
   <div class="card">
     <div class="row">
-      <div><div class="sectionTitle">Micro Profit Compounding</div><div class="small">سودهای کوچک متعدد؛ سودهای بزرگ زود بسته نمی‌شوند</div></div>
+      <div><div class="sectionTitle">Micro Profit Cycle</div><div class="small">Small-profit PAPER exits + fast capital recycling</div></div>
       <span id="profitBadge" class="badge warn">TESTING</span>
     </div>
     <div class="grid2" style="margin-top:10px">
@@ -208,10 +208,10 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <div class="bar"><div id="profitBar" class="fill"></div></div>
     <div class="grid2" style="margin-top:9px">
-      <div class="mini"><div class="k">SCALP PROFIT FLOOR</div><b id="microScalpTp">LOCK</b></div>
-      <div class="mini"><div class="k">PUMP PROFIT FLOOR</div><b id="microPumpTp">LOCK</b></div>
-      <div class="mini"><div class="k">SNIPER PROFIT FLOOR</div><b id="microSniperTp">LOCK</b></div>
-      <div class="mini"><div class="k">LAUNCH PROFIT FLOOR</div><b id="microLaunchTp">LOCK</b></div>
+      <div class="mini"><div class="k">SCALP TP</div><b id="microScalpTp">1.25%</b></div>
+      <div class="mini"><div class="k">PUMP TP</div><b id="microPumpTp">2.00%</b></div>
+      <div class="mini"><div class="k">SNIPER TP</div><b id="microSniperTp">1.00%</b></div>
+      <div class="mini"><div class="k">LAUNCH TP</div><b id="microLaunchTp">3.00%</b></div>
     </div>
     <div id="profitText" class="notice">Micro Profit Cycle در حال جمع‌آوری PAPER trades است.</div>
   </div>
@@ -363,20 +363,27 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 
 <script>
 const $=id=>document.getElementById(id);
-const money=n=>{
- const value=Number(n||0);
- return value<0?'-$'+Math.abs(value).toFixed(2):'$'+value.toFixed(2);
-};
+const money=n=>'$'+Number(n||0).toFixed(2);
 const DEFAULT_SERVER='https://p01--nova-trader-cloud-v2--snkzwswjqkdc.code.run';
-let base=localStorage.getItem('nova_final_server')||localStorage.getItem('nova_v4_server')||DEFAULT_SERVER;
-// Credentials are intentionally memory-only; never persist an admin key.
-let key='';
+
+function normalizeBase(value){
+ let v=String(value||'').trim();
+ if((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'")))v=v.slice(1,-1).trim();
+ v=v.replace(/\/+$/,'');
+ // Users sometimes paste a test endpoint instead of the API base URL.
+ v=v.replace(/\/(health|api\/dashboard|api\/auth-check)$/i,'');
+ return v.replace(/\/+$/,'')
+}
+function normalizeKey(value){
+ let v=String(value||'').trim();
+ if((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'")))v=v.slice(1,-1).trim();
+ return v
+}
+
+let base=normalizeBase(localStorage.getItem('nova_final_server')||localStorage.getItem('nova_v4_server')||DEFAULT_SERVER);
+let key=normalizeKey(localStorage.getItem('nova_final_admin')||localStorage.getItem('nova_v4_key')||'');
 let profile=localStorage.getItem('nova_final_profile')||localStorage.getItem('nova_simple_profile')||'FAST';
-if(!['SAFE','BALANCED','FAST'].includes(profile))profile='BALANCED';
 let engineControls={};
-let requestInFlight=false;
-let pollingTimer=null;
-let pollDelay=5000;
 
 const engineUi={
  scalp:'engScalp',pump:'engPump',sniper:'engSniper',launch:'engLaunch',
@@ -437,49 +444,93 @@ function ageText(iso){
  return s<60?Math.round(s)+'s ago':s<3600?Math.round(s/60)+'m ago':Math.round(s/3600)+'h ago'
 }
 function toggleConn(){$('connBox').classList.toggle('hidden')}
-function normalizeServerUrl(value){
- const raw=String(value||'').trim();
- if(!raw)return {error:'Server URL is required'};
- const candidate=/^[a-z][a-z0-9+.-]*:\/\//i.test(raw)?raw:`https://${raw}`;
- let parsed;
- try{parsed=new URL(candidate)}catch(_){return {error:'Invalid server URL'}}
- if(parsed.protocol.toLowerCase()!=='https:')return {error:'Server URL must use HTTPS'};
- if(parsed.username||parsed.password)return {error:'Credentials in URL are not allowed'};
- if(parsed.hash)return {error:'URL fragments are not allowed'};
- parsed.hash='';
- parsed.pathname=parsed.pathname.replace(/\/+$/,'');
- return {value:parsed.toString().replace(/\/$/,'')};
+
+function connectionErrorText(err){
+ const msg=String(err?.message||err||'Unknown connection error');
+ if(/Invalid NOVA admin key/i.test(msg)||/\b401\b/.test(msg))
+   return '401 • NOVA Admin Key با Northflank یکی نیست';
+ if(/not configured/i.test(msg)||/\b503\b/.test(msg))
+   return '503 • NOVA_ADMIN_KEY روی Northflank تنظیم نشده';
+ if(/AbortError|TIMEOUT/i.test(msg))
+   return 'TIMEOUT • Backend پاسخ نداد';
+ if(/Load failed|Failed to fetch|NetworkError|CORS|NETWORK/i.test(msg))
+   return 'CORS / NETWORK • مرورگر نتوانست به API درخواست cross-origin بفرستد';
+ return msg.slice(0,130)
 }
-function saveConnect(){
- const normalized=normalizeServerUrl($('server').value);
- if(normalized.error){alert(normalized.error);return}
- base=normalized.value;key=$('key').value;
- $('server').value=base;
- localStorage.setItem('nova_final_server',base);
- $('connBox').classList.add('hidden');load()
+
+async function fetchJson(url,opt={},timeoutMs=15000){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),timeoutMs);
+ try{
+   const r=await fetch(url,{...opt,signal:controller.signal,mode:'cors',cache:'no-store',redirect:'follow'});
+   const text=await r.text();
+   let data={};
+   if(text){
+     try{data=JSON.parse(text)}catch{data={raw:text}}
+   }
+   if(!r.ok){
+     const detail=data?.detail||data?.raw||r.statusText||'Request failed';
+     throw Error(`${r.status} ${detail}`)
+   }
+   return data
+ }catch(e){
+   if(e?.name==='AbortError')throw Error(`TIMEOUT after ${Math.round(timeoutMs/1000)}s`);
+   if(e instanceof TypeError)throw Error(`CORS/NETWORK: ${e.message||'Load failed'}`);
+   throw e
+ }finally{
+   clearTimeout(timer)
+ }
 }
+
+async function publicReq(path){
+ if(!base)throw Error('Server URL missing');
+ return fetchJson(base+path,{method:'GET',headers:{'Accept':'application/json'}})
+}
+
 async function req(path,opt={}){
  if(!base)throw Error('Server URL missing');
- const normalized=normalizeServerUrl(base);
- if(normalized.error)throw Error(normalized.error);
- base=normalized.value;
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),10000);
- opt.signal=controller.signal;
- opt.headers={...(opt.headers||{}),'Content-Type':'application/json','X-Requested-With':'NOVA-Dashboard'};
- if(key)opt.headers['X-NOVA-Key']=key;
+ const method=String(opt.method||'GET').toUpperCase();
+ const headers={...(opt.headers||{}),'Accept':'application/json'};
+ if(opt.body!=null && !headers['Content-Type'])headers['Content-Type']='application/json';
+ if(key)headers['X-NOVA-Key']=normalizeKey(key);
+ return fetchJson(base+path,{...opt,method,headers})
+}
+
+async function saveConnect(){
+ base=normalizeBase($('server').value);
+ key=normalizeKey($('key').value);
+ $('server').value=base;$('key').value=key;
+
+ if(!/^https:\/\/.+/i.test(base)){
+   $('cloudHealth').textContent='Northflank URL باید با https:// شروع شود';
+   $('connState').textContent='ERROR';$('connState').className='r';
+   $('connBox').classList.remove('hidden');
+   return
+ }
+ if(!key){
+   $('cloudHealth').textContent='NOVA Admin Key خالی است';
+   $('connState').textContent='ERROR';$('connState').className='r';
+   $('connBox').classList.remove('hidden');
+   return
+ }
+
+ localStorage.setItem('nova_final_server',base);
+ localStorage.setItem('nova_final_admin',key);
+ $('connState').textContent='CHECKING';$('connState').className='c';
+ $('botState').textContent='CONNECTING';$('cloudHealth').textContent='Health → Auth → Dashboard';
+
  try{
-   const r=await fetch(base+path,opt);
-   if(!r.ok){
-     if(r.status===401||r.status===403){$('connBox').classList.remove('hidden');throw Error('Authentication required or rejected');}
-     if(r.status===429)throw Error('Too many requests; please retry shortly');
-     throw Error(`Request failed (${r.status})`);
-   }
-   return r.json()
+   const h=await publicReq('/health');
+   if(!h?.ok)throw Error('Backend health check is not OK');
+   const a=await req('/api/auth-check');
+   if(!a?.authenticated)throw Error('Authentication check failed');
+   await load()
  }catch(e){
-   if(e.name==='AbortError')throw Error('Request timed out');
-   throw e;
- }finally{clearTimeout(timeout)}
+   $('connState').textContent='ERROR';$('connState').className='r';
+   $('botState').textContent='DISCONNECTED';
+   $('cloudHealth').textContent=connectionErrorText(e);
+   $('connBox').classList.remove('hidden')
+ }
 }
 function markProfile(){
  ['safe','balanced','fast'].forEach(x=>$(x+'Btn').classList.remove('sel'));
@@ -491,14 +542,8 @@ async function setProfile(p){
 }
 markProfile();
 
-async function setMode(mode){
- if(!confirm(`Switch trading mode to ${mode}?`))return;
- try{await req('/api/mode/'+mode,{method:'POST'});await load()}catch(e){alert(e.message)}
-}
-async function control(a){
- if((a==='kill'||a==='reset-paper')&&!confirm(a==='kill'?'Activate KILL SWITCH?':'Reset PAPER history and equity?'))return;
- try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}
-}
+async function setMode(mode){try{await req('/api/mode/'+mode,{method:'POST'});await load()}catch(e){alert(e.message)}}
+async function control(a){try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}}
 async function resetPaper(){
  if(!confirm('RESET PAPER TEST؟ Equity و تاریخچه Paper پاک می‌شود.'))return;
  try{await req('/api/control/reset-paper',{method:'POST'});await load()}catch(e){alert(e.message)}
@@ -642,17 +687,16 @@ async function loadDiagnostics(){
  }
 }
 async function load(){
- if(requestInFlight)return;
- requestInFlight=true;
  try{
-   const [d,h]=await Promise.all([
-     req('/api/dashboard'),
-     fetch(base+'/health').then(r=>r.ok?r.json():({}))
-   ]);
+   // First use a simple public GET. If this fails, the API/CORS route itself is unavailable.
+   const h=await publicReq('/health');
+   if(!h?.ok)throw Error('Backend health check is not OK');
+   // Then make the authenticated request. This isolates key/preflight failures from health failures.
+   const d=await req('/api/dashboard');
    $('connState').textContent='CONNECTED';$('connState').className='g';$('connBox').classList.add('hidden');
    $('dot').className='dot '+(d.bot_enabled&&!d.killed?'on':'');
    $('botState').textContent=d.killed?'KILLED':d.bot_enabled?'RUNNING':'STOPPED';
-   $('cloudHealth').textContent=`Backend ${d.version||h.version||'—'} • ${d.system_health?.status||'UP'}`;
+   $('cloudHealth').textContent=`Backend ${d.version||h.version||'—'} • AUTH OK • ${d.system_health?.status||'UP'}`;
    $('liveLock').textContent=d.live_execution_locked?'LIVE LOCKED':'CHECK LIVE LOCK';
    $('liveLock').className='badge '+(d.live_execution_locked?'ok':'bad');
    renderMode(d.mode);
@@ -700,11 +744,10 @@ async function load(){
    $('profitBadge').textContent=pnet>0?'POSITIVE':'TESTING';
    $('profitBadge').className='badge '+(pnet>0?'ok':'warn');
    const mp=pc.micro_profit||{};
-   const unlimited=!!mp.unlimited_profit;
-   $('microScalpTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.scalp_tp_pct||1.25).toFixed(2)+'%';
-   $('microPumpTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.pump_tp_pct||2).toFixed(2)+'%';
-   $('microSniperTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.sniper_tp_pct||1).toFixed(2)+'%';
-   $('microLaunchTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.launch_tp_pct||3).toFixed(2)+'%';
+   $('microScalpTp').textContent=Number(mp.scalp_tp_pct||1.25).toFixed(2)+'%';
+   $('microPumpTp').textContent=Number(mp.pump_tp_pct||2).toFixed(2)+'%';
+   $('microSniperTp').textContent=Number(mp.sniper_tp_pct||1).toFixed(2)+'%';
+   $('microLaunchTp').textContent=Number(mp.launch_tp_pct||3).toFixed(2)+'%';
    $('profitText').textContent=(pc.closed_trades||0)>0
      ? `Micro Profit Cycle net after estimated stream cost: ${pnet.toFixed(2)} USD`
      : `Micro Profit Cycle آماده است؛ هدف سود کوچک، خروج سریع و بازیافت سرمایه است.`;
@@ -729,16 +772,13 @@ async function load(){
      : `Cost Optimizer فعال است • ${co.events_remaining_this_hour??0} paid events تا سقف ساعتی باقی مانده.`;
    renderRealtime(d,h);renderDecision(d);renderPositions(d.positions||[]);renderSignals(d.candidates||[]);renderTrades(d.trades||[])
  }catch(e){
-   $('connState').textContent='ERROR';$('connState').className='r';$('botState').textContent='DISCONNECTED';$('cloudHealth').textContent=e.message.slice(0,130);$('connBox').classList.remove('hidden')
- }finally{
-   requestInFlight=false;
-   clearTimeout(pollingTimer);
-   pollingTimer=setTimeout(()=>{if(!document.hidden)load()},pollDelay);
+   $('connState').textContent='ERROR';$('connState').className='r';
+   $('botState').textContent='DISCONNECTED';
+   $('cloudHealth').textContent=connectionErrorText(e);
+   $('connBox').classList.remove('hidden')
  }
 }
-document.addEventListener('visibilitychange',()=>{
- if(!document.hidden){clearTimeout(pollingTimer);load()}
-});
+setInterval(load,5000);
 load();
 </script>
 </body>
