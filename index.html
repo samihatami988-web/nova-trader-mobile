@@ -437,16 +437,32 @@ function ageText(iso){
  return s<60?Math.round(s)+'s ago':s<3600?Math.round(s/60)+'m ago':Math.round(s/3600)+'h ago'
 }
 function toggleConn(){$('connBox').classList.toggle('hidden')}
+function normalizeServerUrl(value){
+ const raw=String(value||'').trim();
+ if(!raw)return {error:'Server URL is required'};
+ const candidate=/^[a-z][a-z0-9+.-]*:\/\//i.test(raw)?raw:`https://${raw}`;
+ let parsed;
+ try{parsed=new URL(candidate)}catch(_){return {error:'Invalid server URL'}}
+ if(parsed.protocol.toLowerCase()!=='https:')return {error:'Server URL must use HTTPS'};
+ if(parsed.username||parsed.password)return {error:'Credentials in URL are not allowed'};
+ if(parsed.hash)return {error:'URL fragments are not allowed'};
+ parsed.hash='';
+ parsed.pathname=parsed.pathname.replace(/\/+$/,'');
+ return {value:parsed.toString().replace(/\/$/,'')};
+}
 function saveConnect(){
- const candidate=$('server').value.trim().replace(/\/$/,'');
- if(!/^https:\/\//i.test(candidate)){alert('Server URL must use HTTPS');return}
- base=candidate;key=$('key').value;
+ const normalized=normalizeServerUrl($('server').value);
+ if(normalized.error){alert(normalized.error);return}
+ base=normalized.value;key=$('key').value;
+ $('server').value=base;
  localStorage.setItem('nova_final_server',base);
  $('connBox').classList.add('hidden');load()
 }
 async function req(path,opt={}){
  if(!base)throw Error('Server URL missing');
- if(!/^https:\/\//i.test(base))throw Error('Server URL must use HTTPS');
+ const normalized=normalizeServerUrl(base);
+ if(normalized.error)throw Error(normalized.error);
+ base=normalized.value;
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),10000);
  opt.signal=controller.signal;
