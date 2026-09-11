@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V6.8.1 FINAL</title>
+<title>NOVA TRADER V6.8.2 FINAL</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -78,6 +78,20 @@ input,select{
 .profile button{font-size:10px;padding:9px 5px}
 .profile button.sel{background:#175878;border-color:#47d2ff}
 .state{font-size:10px;font-weight:900}
+.engineGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.engineToggle{
+  min-height:66px;text-align:right;display:flex;align-items:center;justify-content:space-between;
+  gap:8px;background:#071725;border:1px solid #21435f;padding:10px 11px
+}
+.engineToggle .ename{font-size:12px;font-weight:950}
+.engineToggle .edesc{font-size:9px;color:var(--muted);font-weight:600;margin-top:3px}
+.engineToggle .estate{
+  min-width:46px;text-align:center;border-radius:999px;padding:5px 8px;font-size:9px;
+  border:1px solid #5e3340;color:#ff8091;background:rgba(255,99,121,.08)
+}
+.engineToggle.on{border-color:#246c4d;background:rgba(30,111,72,.10)}
+.engineToggle.on .estate{border-color:#2f8d63;color:#7af0ad;background:rgba(61,221,140,.08)}
+.engineToggle.busy{opacity:.65;pointer-events:none}
 .bottom{
   position:fixed;bottom:0;left:0;right:0;background:rgba(3,9,15,.95);
   backdrop-filter:blur(16px);border-top:1px solid #17314a;
@@ -97,7 +111,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="brand">NOVA TRADER <b>V6.8.1</b></div>
+      <div class="brand">NOVA TRADER <b>V6.8.2</b></div>
       <div class="sub">FINAL MOBILE DASHBOARD • Northflank • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
@@ -259,6 +273,28 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
   </div>
 
   <div class="card">
+    <div class="row">
+      <div><div class="sectionTitle">Engine Control Center</div><div class="small">هر موتور را جداگانه روشن یا خاموش کن.</div></div>
+      <span class="badge ok">MANUAL</span>
+    </div>
+    <div class="notice">
+      OFF فقط ورود جدید آن موتور را متوقف می‌کند. پوزیشن‌های باز همچنان توسط Stop / Profit Lock / Event-Driven Exit مدیریت می‌شوند.
+    </div>
+    <div class="engineGrid">
+      <button id="engScalp" class="engineToggle" onclick="toggleEngine('scalp')"><span><span class="ename">SCALP</span><span class="edesc">معاملات کوتاه Spot</span></span><span class="estate">—</span></button>
+      <button id="engPump" class="engineToggle" onclick="toggleEngine('pump')"><span><span class="ename">PUMP</span><span class="edesc">Momentum / Pump Spot</span></span><span class="estate">—</span></button>
+      <button id="engSniper" class="engineToggle" onclick="toggleEngine('sniper')"><span><span class="ename">SNIPER</span><span class="edesc">Sniper candidate engine</span></span><span class="estate">—</span></button>
+      <button id="engLaunch" class="engineToggle" onclick="toggleEngine('launch')"><span><span class="ename">LAUNCH</span><span class="edesc">First-Seconds launch engine</span></span><span class="estate">—</span></button>
+      <button id="engPerpLong" class="engineToggle" onclick="toggleEngine('perp_long')"><span><span class="ename">PERP LONG</span><span class="edesc">Perpetual Long</span></span><span class="estate">—</span></button>
+      <button id="engPerpShort" class="engineToggle" onclick="toggleEngine('perp_short')"><span><span class="ename">PERP SHORT</span><span class="edesc">Perpetual Short</span></span><span class="estate">—</span></button>
+      <button id="engRealtime" class="engineToggle" onclick="toggleEngine('realtime_pulse')"><span><span class="ename">REALTIME PULSE</span><span class="edesc">Realtime Sniper logic</span></span><span class="estate">—</span></button>
+      <button id="engPaid" class="engineToggle" onclick="toggleEngine('paid_stream')"><span><span class="ename">PAID STREAM</span><span class="edesc">PumpPortal BUY/SELL metered feed</span></span><span class="estate">—</span></button>
+      <button id="engRouter" class="engineToggle" onclick="toggleEngine('selective_router')" style="grid-column:1/-1"><span><span class="ename">SELECTIVE ROUTER</span><span class="edesc">Controlled near-threshold PAPER entries</span></span><span class="estate">—</span></button>
+    </div>
+    <div id="engineControlText" class="small" style="margin-top:9px">Safety systems مثل Capital Shield، Survival Guard و Exit Engine عمداً از این کنترل‌ها جدا هستند.</div>
+  </div>
+
+  <div class="card">
     <div class="row"><div><div class="sectionTitle">Selective Entry Router</div><div class="small">Strict entries + controlled PAPER exploration</div></div><span id="routerBadge" class="badge ok">AUTO</span></div>
     <div class="grid2" style="margin-top:10px">
       <div class="mini"><div class="k">READY</div><b id="routerReady">0</b></div>
@@ -332,6 +368,52 @@ const DEFAULT_SERVER='https://p01--nova-trader-cloud-v2--snkzwswjqkdc.code.run';
 let base=localStorage.getItem('nova_final_server')||localStorage.getItem('nova_v4_server')||DEFAULT_SERVER;
 let key=localStorage.getItem('nova_final_admin')||localStorage.getItem('nova_v4_key')||'';
 let profile=localStorage.getItem('nova_final_profile')||localStorage.getItem('nova_simple_profile')||'FAST';
+let engineControls={};
+
+const engineUi={
+ scalp:'engScalp',pump:'engPump',sniper:'engSniper',launch:'engLaunch',
+ perp_long:'engPerpLong',perp_short:'engPerpShort',realtime_pulse:'engRealtime',
+ paid_stream:'engPaid',selective_router:'engRouter'
+};
+
+function renderEngineControls(e={}){
+ engineControls={...e};
+ Object.entries(engineUi).forEach(([name,id])=>{
+   const el=$(id);if(!el)return;
+   const on=!!engineControls[name];
+   el.classList.toggle('on',on);
+   const state=el.querySelector('.estate');
+   if(state)state.textContent=on?'ON':'OFF';
+ });
+ const paid=!!engineControls.paid_stream,rt=!!engineControls.realtime_pulse;
+ $('engineControlText').textContent=!paid
+   ? 'Paid Stream خاموش است: subscribeTokenTrade متوقف می‌شود؛ NewToken/Migration رایگان و مدیریت ایمن پوزیشن‌های موجود باقی می‌ماند.'
+   : !rt
+   ? 'Paid Stream روشن است ولی Realtime Pulse خاموش است؛ Feed می‌تواند برای Launch و Event-Driven Exit استفاده شود.'
+   : 'Manual controls فعال‌اند. OFF فقط ورود جدید را می‌بندد؛ خروج‌های حفاظتی پوزیشن‌های باز همچنان فعال‌اند.';
+}
+
+async function toggleEngine(name){
+ if(!key){
+   alert('برای تغییر موتور، NOVA Admin Key را در Connection وارد کن.');
+   $('connBox').classList.remove('hidden');
+   return;
+ }
+ const id=engineUi[name],el=$(id);
+ if(!el)return;
+ const current=!!engineControls[name];
+ if(name==='paid_stream' && current){
+   const ok=confirm('PAID STREAM را خاموش کنیم؟ هزینه BUY/SELL metered متوقف می‌شود، اما Realtime trade events محدود می‌شوند. پوزیشن‌های باز با محافظ‌های fallback مدیریت می‌شوند.');
+   if(!ok)return;
+ }
+ el.classList.add('busy');
+ try{
+   const r=await req(`/api/engines/${name}/${current?'off':'on'}`,{method:'POST'});
+   renderEngineControls(r.controls||{});
+   await load();
+ }catch(e){alert(e.message)}
+ finally{el.classList.remove('busy')}
+}
 
 $('server').value=base;$('key').value=key;
 
@@ -400,7 +482,8 @@ function reasonFa(r){
   'portfolio open risk cap':'ریسک کل پورتفو به سقف رسیده.','signal below threshold':'امتیاز سیگنال هنوز کافی نیست.',
   'all final gates passed':'تمام Gateهای ورود تأیید شده.','FIRST_SECONDS_ENTRY':'First-Seconds entry تأیید شد.',
   'pulse late chase':'حرکت زیادی جلو رفته؛ NOVA تعقیب نمی‌کند.','sniper late chase':'حرکت برای Sniper دیر شده.',
-  'edge governor paused strategy':'Edge Governor این موتور را Pause کرده.','survival loss guard':'Survival Guard فعال است.'
+  'edge governor paused strategy':'Edge Governor این موتور را Pause کرده.','survival loss guard':'Survival Guard فعال است.',
+  'engine manually disabled':'این موتور از Engine Control Center خاموش شده است.'
  };return m[r]||r||'NOVA در حال اسکن بازار است.'
 }
 function strategyOf(c){
@@ -526,6 +609,7 @@ async function load(){
    $('liveLock').textContent=d.live_execution_locked?'LIVE LOCKED':'CHECK LIVE LOCK';
    $('liveLock').className='badge '+(d.live_execution_locked?'ok':'bad');
    renderMode(d.mode);
+   renderEngineControls(d.engine_controls||{});
 
    const m=d.metrics||{};
    $('equity').textContent=money(m.equity);$('pnl').textContent=(Number(m.pnl||0)>=0?'+':'')+money(m.pnl);
@@ -590,7 +674,9 @@ async function load(){
    $('costTtl').textContent=`${Number(co.token_ttl_sec||0).toFixed(0)}s`;
    $('costPruned').textContent=co.pruned_subscriptions??0;
    $('costBar').style.width=Math.min(100,Number(co.hour_budget_pct||0))+'%';
-   $('costText').textContent=co.block_reason
+   $('costText').textContent=co.block_reason==='manual_off'
+     ? `Paid Stream به‌صورت دستی OFF است • NewToken/Migration رایگان همچنان فعال می‌ماند.`
+     : co.block_reason
      ? `Paid stream محدود شده: ${co.block_reason}. NewToken رایگان همچنان فعال می‌ماند.`
      : `Cost Optimizer فعال است • ${co.events_remaining_this_hour??0} paid events تا سقف ساعتی باقی مانده.`;
    renderRealtime(d,h);renderDecision(d);renderPositions(d.positions||[]);renderSignals(d.candidates||[]);renderTrades(d.trades||[])
