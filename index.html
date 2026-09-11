@@ -363,12 +363,20 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 
 <script>
 const $=id=>document.getElementById(id);
-const money=n=>'$'+Number(n||0).toFixed(2);
+const money=n=>{
+ const value=Number(n||0);
+ return value<0?'-$'+Math.abs(value).toFixed(2):'$'+value.toFixed(2);
+};
 const DEFAULT_SERVER='https://p01--nova-trader-cloud-v2--snkzwswjqkdc.code.run';
 let base=localStorage.getItem('nova_final_server')||localStorage.getItem('nova_v4_server')||DEFAULT_SERVER;
-let key=localStorage.getItem('nova_final_admin')||localStorage.getItem('nova_v4_key')||'';
+// Credentials are intentionally memory-only; never persist an admin key.
+let key='';
 let profile=localStorage.getItem('nova_final_profile')||localStorage.getItem('nova_simple_profile')||'FAST';
+if(!['SAFE','BALANCED','FAST'].includes(profile))profile='BALANCED';
 let engineControls={};
+let requestInFlight=false;
+let pollingTimer=null;
+let pollDelay=5000;
 
 const engineUi={
  scalp:'engScalp',pump:'engPump',sniper:'engSniper',launch:'engLaunch',
@@ -430,17 +438,32 @@ function ageText(iso){
 }
 function toggleConn(){$('connBox').classList.toggle('hidden')}
 function saveConnect(){
- base=$('server').value.trim().replace(/\/$/,'');key=$('key').value;
- localStorage.setItem('nova_final_server',base);localStorage.setItem('nova_final_admin',key);
+ const candidate=$('server').value.trim().replace(/\/$/,'');
+ if(!/^https:\/\//i.test(candidate)){alert('Server URL must use HTTPS');return}
+ base=candidate;key=$('key').value;
+ localStorage.setItem('nova_final_server',base);
  $('connBox').classList.add('hidden');load()
 }
 async function req(path,opt={}){
  if(!base)throw Error('Server URL missing');
- opt.headers={...(opt.headers||{}),'Content-Type':'application/json'};
+ if(!/^https:\/\//i.test(base))throw Error('Server URL must use HTTPS');
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),10000);
+ opt.signal=controller.signal;
+ opt.headers={...(opt.headers||{}),'Content-Type':'application/json','X-Requested-With':'NOVA-Dashboard'};
  if(key)opt.headers['X-NOVA-Key']=key;
- const r=await fetch(base+path,opt);
- if(!r.ok)throw Error(`${r.status} ${await r.text()}`);
- return r.json()
+ try{
+   const r=await fetch(base+path,opt);
+   if(!r.ok){
+     if(r.status===401||r.status===403){$('connBox').classList.remove('hidden');throw Error('Authentication required or rejected');}
+     if(r.status===429)throw Error('Too many requests; please retry shortly');
+     throw Error(`Request failed (${r.status})`);
+   }
+   return r.json()
+ }catch(e){
+   if(e.name==='AbortError')throw Error('Request timed out');
+   throw e;
+ }finally{clearTimeout(timeout)}
 }
 function markProfile(){
  ['safe','balanced','fast'].forEach(x=>$(x+'Btn').classList.remove('sel'));
@@ -452,8 +475,14 @@ async function setProfile(p){
 }
 markProfile();
 
-async function setMode(mode){try{await req('/api/mode/'+mode,{method:'POST'});await load()}catch(e){alert(e.message)}}
-async function control(a){try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}}
+async function setMode(mode){
+ if(!confirm(`Switch trading mode to ${mode}?`))return;
+ try{await req('/api/mode/'+mode,{method:'POST'});await load()}catch(e){alert(e.message)}
+}
+async function control(a){
+ if((a==='kill'||a==='reset-paper')&&!confirm(a==='kill'?'Activate KILL SWITCH?':'Reset PAPER history and equity?'))return;
+ try{await req('/api/control/'+a,{method:'POST'});await load()}catch(e){alert(e.message)}
+}
 async function resetPaper(){
  if(!confirm('RESET PAPER TEST؟ Equity و تاریخچه Paper پاک می‌شود.'))return;
  try{await req('/api/control/reset-paper',{method:'POST'});await load()}catch(e){alert(e.message)}
@@ -597,6 +626,8 @@ async function loadDiagnostics(){
  }
 }
 async function load(){
+ if(requestInFlight)return;
+ requestInFlight=true;
  try{
    const [d,h]=await Promise.all([
      req('/api/dashboard'),
@@ -682,9 +713,15 @@ async function load(){
    renderRealtime(d,h);renderDecision(d);renderPositions(d.positions||[]);renderSignals(d.candidates||[]);renderTrades(d.trades||[])
  }catch(e){
    $('connState').textContent='ERROR';$('connState').className='r';$('botState').textContent='DISCONNECTED';$('cloudHealth').textContent=e.message.slice(0,130);$('connBox').classList.remove('hidden')
+ }finally{
+   requestInFlight=false;
+   clearTimeout(pollingTimer);
+   pollingTimer=setTimeout(()=>{if(!document.hidden)load()},pollDelay);
  }
 }
-setInterval(load,5000);
+document.addEventListener('visibilitychange',()=>{
+ if(!document.hidden){clearTimeout(pollingTimer);load()}
+});
 load();
 </script>
 </body>
