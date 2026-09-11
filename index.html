@@ -195,7 +195,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 
   <div class="card">
     <div class="row">
-      <div><div class="sectionTitle">Micro Profit Cycle</div><div class="small">Small-profit PAPER exits + fast capital recycling</div></div>
+      <div><div class="sectionTitle">Micro Profit Compounding</div><div class="small">سودهای کوچک متعدد؛ سودهای بزرگ زود بسته نمی‌شوند</div></div>
       <span id="profitBadge" class="badge warn">TESTING</span>
     </div>
     <div class="grid2" style="margin-top:10px">
@@ -208,10 +208,10 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <div class="bar"><div id="profitBar" class="fill"></div></div>
     <div class="grid2" style="margin-top:9px">
-      <div class="mini"><div class="k">SCALP TP</div><b id="microScalpTp">1.25%</b></div>
-      <div class="mini"><div class="k">PUMP TP</div><b id="microPumpTp">2.00%</b></div>
-      <div class="mini"><div class="k">SNIPER TP</div><b id="microSniperTp">1.00%</b></div>
-      <div class="mini"><div class="k">LAUNCH TP</div><b id="microLaunchTp">3.00%</b></div>
+      <div class="mini"><div class="k">SCALP PROFIT FLOOR</div><b id="microScalpTp">LOCK</b></div>
+      <div class="mini"><div class="k">PUMP PROFIT FLOOR</div><b id="microPumpTp">LOCK</b></div>
+      <div class="mini"><div class="k">SNIPER PROFIT FLOOR</div><b id="microSniperTp">LOCK</b></div>
+      <div class="mini"><div class="k">LAUNCH PROFIT FLOOR</div><b id="microLaunchTp">LOCK</b></div>
     </div>
     <div id="profitText" class="notice">Micro Profit Cycle در حال جمع‌آوری PAPER trades است.</div>
   </div>
@@ -684,10 +684,11 @@ async function load(){
    $('profitBadge').textContent=pnet>0?'POSITIVE':'TESTING';
    $('profitBadge').className='badge '+(pnet>0?'ok':'warn');
    const mp=pc.micro_profit||{};
-   $('microScalpTp').textContent=Number(mp.scalp_tp_pct||1.25).toFixed(2)+'%';
-   $('microPumpTp').textContent=Number(mp.pump_tp_pct||2).toFixed(2)+'%';
-   $('microSniperTp').textContent=Number(mp.sniper_tp_pct||1).toFixed(2)+'%';
-   $('microLaunchTp').textContent=Number(mp.launch_tp_pct||3).toFixed(2)+'%';
+   const unlimited=!!mp.unlimited_profit;
+   $('microScalpTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.scalp_tp_pct||1.25).toFixed(2)+'%';
+   $('microPumpTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.pump_tp_pct||2).toFixed(2)+'%';
+   $('microSniperTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.sniper_tp_pct||1).toFixed(2)+'%';
+   $('microLaunchTp').textContent=unlimited?'LOCK / TRAIL':Number(mp.launch_tp_pct||3).toFixed(2)+'%';
    $('profitText').textContent=(pc.closed_trades||0)>0
      ? `Micro Profit Cycle net after estimated stream cost: ${pnet.toFixed(2)} USD`
      : `Micro Profit Cycle آماده است؛ هدف سود کوچک، خروج سریع و بازیافت سرمایه است.`;
