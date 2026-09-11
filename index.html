@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V6.7.2 FINAL</title>
+<title>NOVA TRADER V6.7.3 FINAL</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -97,7 +97,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="brand">NOVA TRADER <b>V6.7.2</b></div>
+      <div class="brand">NOVA TRADER <b>V6.7.3</b></div>
       <div class="sub">FINAL MOBILE DASHBOARD • Northflank • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
@@ -161,6 +161,22 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <button class="full dark" onclick="loadDiagnostics()">REFRESH REALTIME DIAGNOSTICS</button>
     <div id="diagBox" class="pre hidden"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><div class="sectionTitle">Paid Stream Cost Optimizer</div><div class="small">PumpPortal metered BUY/SELL budget control</div></div><span id="costBadge" class="badge ok">ACTIVE</span></div>
+    <div class="grid2" style="margin-top:10px">
+      <div class="mini"><div class="k">PAID SUBS</div><b id="costSubs">0/3</b></div>
+      <div class="mini"><div class="k">EVENTS / HOUR</div><b id="costEvents">0/4000</b></div>
+      <div class="mini"><div class="k">BUDGET USED</div><b id="costPct">0%</b></div>
+      <div class="mini"><div class="k">EST. SESSION COST</div><b id="costSol">0 SOL</b></div>
+      <div class="mini"><div class="k">WALLET BALANCE</div><b id="costWallet">—</b></div>
+      <div class="mini"><div class="k">RESERVE FLOOR</div><b id="costFloor">0.025 SOL</b></div>
+      <div class="mini"><div class="k">TTL</div><b id="costTtl">12s</b></div>
+      <div class="mini"><div class="k">PRUNED</div><b id="costPruned">0</b></div>
+    </div>
+    <div class="bar"><div id="costBar" class="fill"></div></div>
+    <div id="costText" class="notice">Cost optimizer telemetry loading…</div>
   </div>
 
   <div class="card">
@@ -517,6 +533,22 @@ async function load(){
    const pl=st('PERP_LONG'),ps=st('PERP_SHORT');$('govPerp').textContent=pl===ps?pl:`${pl}/${ps}`;$('recoveryState').textContent=sv.blocked?'BLOCKED':'ACTIVE';$('recoveryState').className=sv.blocked?'r':'g';
    const states=Object.values(gs).map(x=>x.state);$('edgeBadge').textContent=states.includes('PAUSED')?'PROTECTING':states.includes('PROBATION')?'LEARNING':'EDGE OK';$('edgeBadge').className='badge '+(states.includes('PAUSED')?'warn':'ok');
 
+   const co=(d.realtime_pulse||{}).cost_optimizer||{};
+   const coState=co.state||'—';
+   $('costBadge').textContent=coState;
+   $('costBadge').className='badge '+(String(coState).startsWith('PAUSED')?'warn':'ok');
+   $('costSubs').textContent=`${co.active_paid_subscriptions??0}/${co.active_cap??0}`;
+   $('costEvents').textContent=`${co.events_this_hour??0}/${co.events_per_hour_limit??0}`;
+   $('costPct').textContent=`${Number(co.hour_budget_pct||0).toFixed(1)}%`;
+   $('costSol').textContent=`${Number(co.estimated_session_spend_sol||0).toFixed(5)} SOL`;
+   $('costWallet').textContent=co.wallet_balance_sol==null?'NOT SET':`${Number(co.wallet_balance_sol).toFixed(5)} SOL`;
+   $('costFloor').textContent=`${Number(co.wallet_floor_sol||0.025).toFixed(3)} SOL`;
+   $('costTtl').textContent=`${Number(co.token_ttl_sec||0).toFixed(0)}s`;
+   $('costPruned').textContent=co.pruned_subscriptions??0;
+   $('costBar').style.width=Math.min(100,Number(co.hour_budget_pct||0))+'%';
+   $('costText').textContent=co.block_reason
+     ? `Paid stream محدود شده: ${co.block_reason}. NewToken رایگان همچنان فعال می‌ماند.`
+     : `Cost Optimizer فعال است • ${co.events_remaining_this_hour??0} paid events تا سقف ساعتی باقی مانده.`;
    renderRealtime(d,h);renderDecision(d);renderPositions(d.positions||[]);renderSignals(d.candidates||[]);renderTrades(d.trades||[])
  }catch(e){
    $('connState').textContent='ERROR';$('connState').className='r';$('botState').textContent='DISCONNECTED';$('cloudHealth').textContent=e.message.slice(0,130);$('connBox').classList.remove('hidden')
