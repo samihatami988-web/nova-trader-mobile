@@ -1,6 +1,6 @@
-# NOVA Trader V7.2.1 — OpenAI AI Brain
+# NOVA Trader V7.2.2 — OpenAI AI Brain + Diagnostic Recovery
 
-V7.2.1 adds a real OpenAI Responses API analysis layer for major perpetual markets. Meme/launch execution remains event-driven and does not wait for an LLM. AI output is bounded confirmation only; deterministic Risk Guard, Daily Loss Guard, exposure controls, liquidity/security filters, and LIVE hard-lock remain authoritative.
+V7.2.2 adds a real OpenAI Responses API analysis layer for major perpetual markets. Meme/launch execution remains event-driven and does not wait for an LLM. AI output is bounded confirmation only; deterministic Risk Guard, Daily Loss Guard, exposure controls, liquidity/security filters, and LIVE hard-lock remain authoritative.
 
 ## Required Northflank secret
 
@@ -22,7 +22,7 @@ V7.2.1 adds a real OpenAI Responses API analysis layer for major perpetual marke
 
 - `/health` should report `version: 7.2.1`, `openai_ai_enabled: true`, and `openai_ai_configured: true`.
 - Authenticated `/api/ai-analysis` exposes AI state, model, counters, and recent structured major-perp assessments.
-- Dashboard contains an **OpenAI AI Brain** card.
+- Dashboard contains an **OpenAI AI Brain + Diagnostic Recovery** card.
 
 ## Safety
 

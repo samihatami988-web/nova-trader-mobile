@@ -166,7 +166,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <div id="universeChains" class="small" style="margin-top:9px">Waiting for universe…</div>
     <div id="universeTopMarkets" style="margin-top:5px"></div>
-    <div class="notice">NOVA V7.2.1 OpenAI AI Brain: meme/launch stays ultra-fast event-driven; majors combine Quant + MTF Candle + OpenAI structured confirmation.</div>
+    <div class="notice">NOVA V7.2.2 AI Diagnostic + Recovery: meme/launch stays ultra-fast event-driven; majors combine Quant + MTF Candle + OpenAI structured confirmation.</div>
   </div>
 
   <div class="card">
@@ -182,11 +182,14 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 
 
   <div class="card">
-    <div class="row"><div><div class="sectionTitle">OpenAI AI Brain</div><div class="small">REAL AI • MAJOR PERP ONLY • GPT structured LONG / SHORT / WAIT confirmation</div></div><span id="openaiBadge" class="badge warn">CHECKING</span></div>
+    <div class="row"><div><div class="sectionTitle">OpenAI AI Brain</div><div class="small">REAL AI • MAJOR PERP ONLY • HTTP / LATENCY / PARSE DIAGNOSTICS • structured LONG / SHORT / WAIT</div></div><span id="openaiBadge" class="badge warn">CHECKING</span></div>
     <div class="grid3" style="margin-top:10px">
       <div class="mini"><div class="k">MODEL</div><b id="openaiModel">—</b></div>
       <div class="mini"><div class="k">TRACKED</div><b id="openaiTracked">0</b></div>
-      <div class="mini"><div class="k">CALLS / ERRORS</div><b id="openaiCalls">0 / 0</b></div>
+      <div class="mini"><div class="k">SUCCESS / ATTEMPTS</div><b id="openaiCalls">0 / 0</b></div>
+      <div class="mini"><div class="k">HTTP</div><b id="openaiHttp">—</b></div>
+      <div class="mini"><div class="k">LATENCY</div><b id="openaiLatency">—</b></div>
+      <div class="mini"><div class="k">ERROR TYPE</div><b id="openaiErrorType">—</b></div>
     </div>
     <div id="openaiTop" style="margin-top:7px"></div>
     <div id="openaiText" class="notice">Add OPENAI_API_KEY to Northflank Secrets. The key is never exposed to this dashboard.</div>
@@ -743,9 +746,11 @@ function renderOpenAI(ai={}){
  const active=configured&&enabled&&(state==='ACTIVE'||state==='ANALYZING');
  $('openaiBadge').textContent=!enabled?'OFF':!configured?'NO API KEY':state;
  $('openaiBadge').className='badge '+(active?'ok':(state==='ERROR'||state==='DEGRADED'?'bad':'warn'));
- $('openaiModel').textContent=ai.model||'—';$('openaiTracked').textContent=ai.tracked??0;$('openaiCalls').textContent=`${ai.calls??0} / ${ai.errors??0}`;
+ $('openaiModel').textContent=ai.model||'—';$('openaiTracked').textContent=ai.tracked??0;$('openaiCalls').textContent=`${ai.calls??0} / ${ai.attempts??0}`;
+ $('openaiHttp').textContent=ai.last_http_status??'—';$('openaiLatency').textContent=ai.last_latency_ms==null?'—':`${Number(ai.last_latency_ms).toFixed(0)} ms`;$('openaiErrorType').textContent=ai.last_error_type||'—';
  const rows=ai.top||[];$('openaiTop').innerHTML=rows.length?rows.map(x=>`<div class="marketRow"><b>${esc(x.symbol||'?')}</b><span>${esc(x.regime||'—')} • ${esc(x.risk||'—')}</span><span>${esc((x.reasons||[])[0]||'AI assessment')}</span><span class="marketDir ${String(x.decision||'').toLowerCase()}">${esc(x.decision||'WAIT')} ${Number(x.confidence||0).toFixed(0)}</span></div>`).join(''):'<div class="small">Waiting for OpenAI major-market analysis…</div>';
- $('openaiText').textContent=!configured?'OPENAI_API_KEY is not configured. Add it only as a Northflank secret.':`OpenAI analyzes major perpetuals asynchronously (${ai.decision_scope||'confirmation'}). Meme hot path: ${ai.meme_hot_path||'no LLM latency'}. Risk Guard remains final.`;
+ const err=ai.last_error?` • LAST ERROR: ${ai.last_error}`:'';
+ $('openaiText').textContent=!configured?'OPENAI_API_KEY is not configured. Add it only as a Northflank secret.':`OpenAI major-perp async analyzer • success ${ai.calls??0}/${ai.attempts??0} • HTTP ${ai.last_http_status??'—'} • ${ai.last_latency_ms==null?'latency —':Math.round(ai.last_latency_ms)+' ms'}${err}. Meme hot path stays LLM-free; Risk Guard remains final.`;
 }
 
 function renderCandle(ci={}){
