@@ -1,20 +1,29 @@
-# NOVA TRADER V7.1.3 — PROFIT CORE RESTORE
+# NOVA Trader V7.2.1 — OpenAI AI Brain
 
-V7.1.3 keeps the version line moving forward while restoring the trading behavior that performed best in the user's V7.0 PAPER run.
+V7.2.1 adds a real OpenAI Responses API analysis layer for major perpetual markets. Meme/launch execution remains event-driven and does not wait for an LLM. AI output is bounded confirmation only; deterministic Risk Guard, Daily Loss Guard, exposure controls, liquidity/security filters, and LIVE hard-lock remain authoritative.
 
-## Locked trading core
-- Entry score / strategy thresholds: V7.0.0
-- PUMP / SCALP / SNIPER / LAUNCH / PERP strategy logic: V7.0.0
-- Micro Profit / protective exit ordering: V7.0.0
-- Candle Intelligence: MONITOR ONLY (no score overlay, no hard gate)
+## Required Northflank secret
 
-## Retained improvements
-- Universal CEX + DEX universe
-- BTC / ETH / majors / alts / memes
-- Perp LONG + SHORT
-- V7.1.1 connection-stability and independent Candle worker
-- V7.1.2 Global Loss Guard, restricted to risk sizing + cooldown/circuit breaker only
-- Existing PAPER/SHADOW database remains compatible
-- LIVE execution remains hard-locked
+- `OPENAI_API_KEY` — your OpenAI API key (server-side secret only; never put it in GitHub or index.html)
 
-Do not reset PAPER data and do not change DATABASE_URL during deployment.
+## Optional environment variables
+
+- `NOVA_OPENAI_AI_ENABLED=true`
+- `NOVA_OPENAI_MODEL=gpt-5.6-terra`
+- `NOVA_OPENAI_AI_REFRESH_SEC=75`
+- `NOVA_OPENAI_AI_CACHE_SEC=180`
+- `NOVA_OPENAI_AI_TOP_N=4`
+- `NOVA_OPENAI_AI_TIMEOUT_SEC=12`
+- `NOVA_OPENAI_AI_MAX_ADJUST=5`
+- `NOVA_OPENAI_AI_MIN_CONF=68`
+- `NOVA_OPENAI_AI_BLOCK_CONF=88`
+
+## Verification
+
+- `/health` should report `version: 7.2.1`, `openai_ai_enabled: true`, and `openai_ai_configured: true`.
+- Authenticated `/api/ai-analysis` exposes AI state, model, counters, and recent structured major-perp assessments.
+- Dashboard contains an **OpenAI AI Brain** card.
+
+## Safety
+
+PAPER/SHADOW only. Live execution remains hard-locked. AI analysis does not guarantee profit and is designed to fail closed/fallback to the deterministic engine when unavailable.
