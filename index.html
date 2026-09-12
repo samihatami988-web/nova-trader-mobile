@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V7.2.1 OPENAI AI BRAIN</title>
+<title>NOVA TRADER V7.2.3 FREE AI MODE</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -116,7 +116,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="brand">NOVA TRADER <b>V7.2.1</b></div>
+      <div class="brand">NOVA TRADER <b>V7.2.3</b></div>
       <div class="sub">HYBRID INTELLIGENCE • FAST MEME + MAJOR LONG/SHORT • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
@@ -166,7 +166,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <div id="universeChains" class="small" style="margin-top:9px">Waiting for universe…</div>
     <div id="universeTopMarkets" style="margin-top:5px"></div>
-    <div class="notice">NOVA V7.2.2 AI Diagnostic + Recovery: meme/launch stays ultra-fast event-driven; majors combine Quant + MTF Candle + OpenAI structured confirmation.</div>
+    <div class="notice">NOVA V7.2.3 Free AI Mode: meme/launch stays ultra-fast; majors always have Local Quant AI + MTF. OpenAI is optional and auto-suspends when credits are unavailable.</div>
   </div>
 
   <div class="card">
@@ -182,7 +182,7 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 
 
   <div class="card">
-    <div class="row"><div><div class="sectionTitle">OpenAI AI Brain</div><div class="small">REAL AI • MAJOR PERP ONLY • HTTP / LATENCY / PARSE DIAGNOSTICS • structured LONG / SHORT / WAIT</div></div><span id="openaiBadge" class="badge warn">CHECKING</span></div>
+    <div class="row"><div><div class="sectionTitle">AI Decision Layer</div><div class="small">FREE LOCAL QUANT AI • OPTIONAL OPENAI • MAJOR PERP LONG / SHORT / WAIT</div></div><span id="openaiBadge" class="badge warn">CHECKING</span></div>
     <div class="grid3" style="margin-top:10px">
       <div class="mini"><div class="k">MODEL</div><b id="openaiModel">—</b></div>
       <div class="mini"><div class="k">TRACKED</div><b id="openaiTracked">0</b></div>
@@ -192,7 +192,8 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
       <div class="mini"><div class="k">ERROR TYPE</div><b id="openaiErrorType">—</b></div>
     </div>
     <div id="openaiTop" style="margin-top:7px"></div>
-    <div id="openaiText" class="notice">Add OPENAI_API_KEY to Northflank Secrets. The key is never exposed to this dashboard.</div>
+    <div id="openaiText" class="notice">Free Local Quant AI is available with zero API cost. OpenAI is optional.</div>
+    <div id="freeAiText" class="notice">FREE AI: warming up…</div>
   </div>
 
   <div class="card">
@@ -503,7 +504,7 @@ async function toggleEngine(name){
 
 $('server').value=base;$('key').value=key;
 
-// V7.2.1 stability: single-flight polling + grace window; V7.0 profit core remains locked.
+// V7.2.3 stability: single-flight polling + free local AI fallback; V7.0 profit core remains locked.
 let loadInFlight=false;
 let pollTimer=null;
 let consecutiveLoadFailures=0;
@@ -741,16 +742,22 @@ function renderHybrid(hb={}){
 }
 
 
-function renderOpenAI(ai={}){
+function renderOpenAI(ai={},free={}){
  const configured=!!ai.configured, enabled=!!ai.enabled, state=String(ai.state||'STARTING');
- const active=configured&&enabled&&(state==='ACTIVE'||state==='ANALYZING');
- $('openaiBadge').textContent=!enabled?'OFF':!configured?'NO API KEY':state;
+ const fallback=!!ai.fallback_active || state==='FREE_LOCAL' || !configured || !enabled;
+ const active=(configured&&enabled&&(state==='ACTIVE'||state==='ANALYZING')) || (!!free.enabled&&fallback);
+ $('openaiBadge').textContent=fallback?(free.enabled?'FREE LOCAL':'OFF'):state;
  $('openaiBadge').className='badge '+(active?'ok':(state==='ERROR'||state==='DEGRADED'?'bad':'warn'));
- $('openaiModel').textContent=ai.model||'—';$('openaiTracked').textContent=ai.tracked??0;$('openaiCalls').textContent=`${ai.calls??0} / ${ai.attempts??0}`;
- $('openaiHttp').textContent=ai.last_http_status??'—';$('openaiLatency').textContent=ai.last_latency_ms==null?'—':`${Number(ai.last_latency_ms).toFixed(0)} ms`;$('openaiErrorType').textContent=ai.last_error_type||'—';
- const rows=ai.top||[];$('openaiTop').innerHTML=rows.length?rows.map(x=>`<div class="marketRow"><b>${esc(x.symbol||'?')}</b><span>${esc(x.regime||'—')} • ${esc(x.risk||'—')}</span><span>${esc((x.reasons||[])[0]||'AI assessment')}</span><span class="marketDir ${String(x.decision||'').toLowerCase()}">${esc(x.decision||'WAIT')} ${Number(x.confidence||0).toFixed(0)}</span></div>`).join(''):'<div class="small">Waiting for OpenAI major-market analysis…</div>';
- const err=ai.last_error?` • LAST ERROR: ${ai.last_error}`:'';
- $('openaiText').textContent=!configured?'OPENAI_API_KEY is not configured. Add it only as a Northflank secret.':`OpenAI major-perp async analyzer • success ${ai.calls??0}/${ai.attempts??0} • HTTP ${ai.last_http_status??'—'} • ${ai.last_latency_ms==null?'latency —':Math.round(ai.last_latency_ms)+' ms'}${err}. Meme hot path stays LLM-free; Risk Guard remains final.`;
+ $('openaiModel').textContent=fallback?'LOCAL_QUANT':(ai.model||'—');$('openaiTracked').textContent=fallback?(free.tracked??0):(ai.tracked??0);$('openaiCalls').textContent=`${ai.calls??0} / ${ai.attempts??0}`;
+ $('openaiHttp').textContent=ai.suspended?'SUSPENDED':(ai.last_http_status??'—');$('openaiLatency').textContent=fallback?'0 ms':(ai.last_latency_ms==null?'—':`${Number(ai.last_latency_ms).toFixed(0)} ms`);$('openaiErrorType').textContent=ai.suspend_reason||ai.last_error_type||'—';
+ const rows=fallback?(free.top||[]):(ai.top||[]);$('openaiTop').innerHTML=rows.length?rows.map(x=>`<div class="marketRow"><b>${esc(x.symbol||'?')}</b><span>${esc(x.regime||'—')} • ${esc(x.risk||'—')}</span><span>${esc((x.reasons||[])[0]||'assessment')}</span><span class="marketDir ${String(x.decision||'').toLowerCase()}">${esc(x.decision||'WAIT')} ${Number(x.confidence||0).toFixed(0)}</span></div>`).join(''):'<div class="small">Waiting for major-market analysis…</div>';
+ if(fallback){
+   $('openaiText').textContent=`FREE MODE ACTIVE • Local Quant AI • zero external API calls • ${free.tracked??0} majors tracked. OpenAI ${ai.suspended?'auto-suspended: '+(ai.suspend_reason||'quota'):(!configured?'not configured':'optional')}. Risk Guard remains final.`;
+ }else{
+   const err=ai.last_error?` • LAST ERROR: ${ai.last_error}`:'';
+   $('openaiText').textContent=`OpenAI async analyzer • success ${ai.calls??0}/${ai.attempts??0} • HTTP ${ai.last_http_status??'—'} • ${ai.last_latency_ms==null?'latency —':Math.round(ai.last_latency_ms)+' ms'}${err}.`;
+ }
+ $('freeAiText').textContent=free.enabled?`Local Quant AI: ACTIVE • FREE • network calls 0 • tracked ${free.tracked??0} • provider ${free.provider||'LOCAL_QUANT'}`:'Local Quant AI: OFF';
 }
 
 function renderCandle(ci={}){
@@ -845,7 +852,7 @@ async function load(force=false){
    renderEngineControls(d.engine_controls||{});
    renderUniverse(d.universe||{});
    renderHybrid(d.hybrid_brain||{});
-   renderOpenAI(d.openai_ai_brain||{});
+   renderOpenAI(d.openai_ai_brain||{},d.free_ai_brain||{});
    renderCandle(d.candle_intelligence||{});
 
    const m=d.metrics||{};
