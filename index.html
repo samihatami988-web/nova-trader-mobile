@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b13">
-<title>NOVA TRADER V7.1.2 UNIVERSAL</title>
+<title>NOVA TRADER V7.1.3 PROFIT CORE</title>
 <style>
 :root{
   --bg:#050b13;--panel:#0a1625;--panel2:#0d1d30;--line:#1a3854;
@@ -116,8 +116,8 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
 <div class="wrap">
   <div class="head">
     <div>
-      <div class="brand">NOVA TRADER <b>V7.1.2</b></div>
-      <div class="sub">UNIVERSAL MULTI-MARKET • CANDLE BRAIN • PAPER / SHADOW</div>
+      <div class="brand">NOVA TRADER <b>V7.1.3</b></div>
+      <div class="sub">V7.0 PROFIT CORE LOCKED • UNIVERSAL • PAPER / SHADOW</div>
     </div>
     <span id="liveLock" class="badge ok">LIVE LOCKED</span>
   </div>
@@ -166,17 +166,17 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
     </div>
     <div id="universeChains" class="small" style="margin-top:9px">Waiting for universe…</div>
     <div id="universeTopMarkets" style="margin-top:5px"></div>
-    <div class="notice">NOVA V7.1.2 discovers every market exposed by connected providers. Execution remains PAPER/SHADOW and security/liquidity/risk gates can block unsafe assets.</div>
+    <div class="notice">NOVA V7.1.3 keeps the V7.0 trading core locked. Universal discovery remains active; Candle Brain is monitoring-only and cannot change entries/exits.</div>
   </div>
 
   <div class="card">
-    <div class="row"><div><div class="sectionTitle">Candle Intelligence</div><div class="small">Multi-Timeframe OHLCV • EMA 20/50/200 • RSI • ATR • VWAP • Structure • Breakout / Retest</div></div><span id="candleBadge" class="badge warn">WARMING</span></div>
+    <div class="row"><div><div class="sectionTitle">Candle Intelligence</div><div class="small">MONITOR ONLY • MTF OHLCV • EMA • RSI • ATR • VWAP • Structure • does not change V7.0 trades</div></div><span id="candleBadge" class="badge warn">WARMING</span></div>
     <div class="universeTop">
       <div class="mini"><div class="k">TRACKED</div><b id="candleTracked">0</b></div>
       <div class="mini"><div class="k">MAJORS</div><b id="candleMajors">0</b></div>
       <div class="mini"><div class="k">BULL / BEAR</div><b id="candleBias">0 / 0</b></div>
       <div class="mini"><div class="k">TIMEFRAMES</div><b id="candleTF">—</b></div>
-      <div class="mini"><div class="k">HARD GATE</div><b id="candleGate">—</b></div>
+      <div class="mini"><div class="k">DECISION IMPACT</div><b id="candleGate">OFF</b></div>
       <div class="mini"><div class="k">ERRORS</div><b id="candleErrors">0</b></div>
     </div>
     <div id="candleTop" style="margin-top:7px"></div>
@@ -273,11 +273,11 @@ hr{border:0;border-top:1px solid #173149;margin:12px 0}
   </div>
 
   <div class="card">
-    <div class="row"><div><div class="sectionTitle">Global Loss Guard</div><div class="small">Cross-strategy circuit breaker + adaptive recovery</div></div><span id="globalLossBadge" class="badge ok">NORMAL</span></div>
+    <div class="row"><div><div class="sectionTitle">Global Loss Guard</div><div class="small">Risk / cooldown only • V7.0 signal thresholds untouched</div></div><span id="globalLossBadge" class="badge ok">NORMAL</span></div>
     <div class="grid2" style="margin-top:10px">
       <div class="mini"><div class="k">LOSS STREAK</div><b id="globalLossStreak">0</b></div>
       <div class="mini"><div class="k">RISK MULTIPLIER</div><b id="globalLossRisk">1.00×</b></div>
-      <div class="mini"><div class="k">THRESHOLD +</div><b id="globalLossThreshold">+0</b></div>
+      <div class="mini"><div class="k">SIGNAL CORE</div><b id="globalLossThreshold">V7.0</b></div>
       <div class="mini"><div class="k">COOLDOWN</div><b id="globalLossCooldown">0s</b></div>
     </div>
     <div id="globalLossText" class="notice">No global loss restriction active.</div>
@@ -477,7 +477,7 @@ async function toggleEngine(name){
 
 $('server').value=base;$('key').value=key;
 
-// V7.1.2 stability: single-flight polling + grace window prevents UI connect/disconnect flicker.
+// V7.1.3 stability: single-flight polling + grace window; V7.0 profit core remains locked.
 let loadInFlight=false;
 let pollTimer=null;
 let consecutiveLoadFailures=0;
@@ -635,7 +635,7 @@ function reasonFa(r){
   'edge governor paused strategy':'Edge Governor این موتور را Pause کرده.','survival loss guard':'Survival Guard فعال است.',
   'global loss cooldown':'Global Loss Guard بعد از ضررهای متوالی ورود جدید را موقتاً متوقف کرده.',
   'global recovery probe already active':'Recovery Probe فعال است؛ تا بسته‌شدن آن پوزیشن جدید باز نمی‌شود.',
-  'candle structure strongly contradicts entry':'ساختار چندتایم‌فریم کندل‌ها با جهت ورود تضاد قوی دارد؛ NOVA منتظر ستاپ بهتر می‌ماند.',
+  'candle structure strongly contradicts entry':'Legacy V7.1.x candle gate reason (V7.1.3 no longer blocks entries with candles).',
   'engine manually disabled':'این موتور از Engine Control Center خاموش شده است.'
  };return m[r]||r||'NOVA در حال اسکن بازار است.'
 }
@@ -710,13 +710,13 @@ function renderUniverse(u={}){
 function renderCandle(ci={}){
  const on=!!ci.enabled;$('candleTracked').textContent=ci.tracked??0;$('candleMajors').textContent=ci.majors??0;
  $('candleBias').textContent=`${ci.bullish??0} / ${ci.bearish??0}`;$('candleTF').textContent=(ci.timeframes||[]).join(' • ')||'—';
- $('candleGate').textContent=ci.hard_gate?'ON':'OBSERVE';$('candleErrors').textContent=ci.errors??0;
- const ready=on&&Number(ci.tracked||0)>0;$('candleBadge').textContent=ready?'MTF ACTIVE':on?'WARMING':'OFF';$('candleBadge').className='badge '+(ready?'ok':'warn');
+ $('candleGate').textContent=ci.decision_impact?'ON':'OFF';$('candleErrors').textContent=ci.errors??0;
+ const ready=on&&Number(ci.tracked||0)>0;$('candleBadge').textContent=ready?'MTF MONITOR':on?'WARMING':'OFF';$('candleBadge').className='badge '+(ready?'ok':'warn');
  const rows=(ci.top||[]).slice(0,8);
  $('candleTop').innerHTML=rows.length?rows.map(x=>`<div class="marketRow"><b>${esc(x.symbol||'?')}</b><span>${esc(x.h1_structure||x.structure||'—')} • RSI ${x.m15_rsi==null?'—':Number(x.m15_rsi).toFixed(0)}</span><span>L${Number(x.long_score||0).toFixed(0)} / S${Number(x.short_score||0).toFixed(0)}</span><span class="marketDir ${String(x.bias||'').toLowerCase()}">${esc(x.bias||'NEUTRAL')} ${Number(x.confidence||0).toFixed(0)}</span></div>`).join(''):'<div class="small">Waiting for Binance OHLCV history…</div>';
  $('candleText').textContent=ready
-   ? `Candle Brain confirms top CEX markets on ${(ci.timeframes||[]).join(', ')}. Strong multi-timeframe contradiction can block a late/unsafe entry; V7 realtime flow and risk guards remain primary.`
-   : `Candle Brain is warming up. V7 flow/momentum logic remains active while OHLCV confirmation is unavailable.`;
+   ? `Candle Brain is monitoring ${(ci.timeframes||[]).join(', ')} only. V7.0 Profit Core owns every entry/exit decision; candle data cannot alter scores or block trades.`
+   : `Candle monitor is warming up. V7.0 Profit Core continues independently.`;
 }
 
 function renderRealtime(d,h){
@@ -817,20 +817,20 @@ async function load(force=false){
    $('globalLossBadge').className='badge '+((gl.blocked||glState==='SAFE_MODE'||glState==='COOLDOWN')?'bad':(glState==='CAUTION'||glState==='RECOVERY_PROBE'||glState==='RECOVERING')?'warn':'ok');
    $('globalLossStreak').textContent=Number(gl.loss_streak||0).toFixed(0);
    $('globalLossRisk').textContent=Number(gl.risk_multiplier??1).toFixed(2)+'×';
-   $('globalLossThreshold').textContent='+'+Number(gl.threshold_add||0).toFixed(0);
+   $('globalLossThreshold').textContent='V7.0 LOCKED';
    const glSec=Number(gl.cooldown_remaining_sec||0);
    $('globalLossCooldown').textContent=glSec>=60?Math.ceil(glSec/60)+'m':Math.ceil(glSec)+'s';
    const lastGl=gl.latest_trade||null;
    $('globalLossText').textContent=glState==='NORMAL'
      ? 'Normal risk state • no consecutive global loss restriction.'
      : glState==='CAUTION'
-     ? `1 global loss • next entry is smaller and needs a stronger signal${lastGl?' • '+lastGl.symbol:''}.`
+     ? `1 global loss • next position is smaller; V7.0 signal logic is unchanged${lastGl?' • '+lastGl.symbol:''}.`
      : glState==='COOLDOWN'||glState==='SAFE_MODE'
      ? `${glState} • new entries blocked for ${$('globalLossCooldown').textContent}. Existing positions still use protective exits.`
      : glState==='RECOVERY_PROBE'
-     ? 'Cooldown finished • only one reduced-size recovery probe is allowed.'
+     ? 'Cooldown finished • only one reduced-size recovery probe is allowed; V7.0 signal logic is unchanged.'
      : glState==='RECOVERING'
-     ? 'A recovery win was recorded • risk returns gradually, not instantly.'
+     ? 'A recovery win was recorded • risk returns gradually; V7.0 signal logic remains locked.'
      : String(gl.message||'Global loss protection active.');
 
    const s=d.settings||{};if(s.risk_pct!=null)$('risk').value=s.risk_pct;if(s.stop_loss_pct!=null)$('sl').value=s.stop_loss_pct;if(s.max_positions!=null)$('maxPos').value=s.max_positions;if(s.perp_leverage!=null)$('lev').value=String(s.perp_leverage);
